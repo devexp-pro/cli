@@ -1,0 +1,8 @@
+{
+  "lock": false,
+  "license": "",
+  "tasks": {
+    "dev": "deno run --allow-all ./source/main.ts"
+  },
+  "importMap": "./import-map.json"
+}
