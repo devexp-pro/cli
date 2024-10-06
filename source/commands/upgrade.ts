@@ -16,6 +16,7 @@ export const upgrade = new Command()
         "install",
         "-r",
         "-f",
+        "-g",
         "--allow-net",
         "--allow-run",
         "--unstable-kv",
