@@ -12,10 +12,10 @@ export const entry = new Command()
     console.log(colors.rgb24(logo, 0xFFA500));
     console.log(introText);
 
-    // if (REMOTE_VERSION !== VERSION) {
-    //   upgrade.showHelp();
-    //   Deno.exit();
-    // }
+    if (REMOTE_VERSION !== VERSION) {
+      upgrade.showHelp();
+      Deno.exit();
+    }
 
     entry.showHelp();
     Deno.exit();

@@ -17,6 +17,8 @@ export const REMOTE_VERSION = remoteDenoJson["version"] || VERSION;
 
 export const ENTRYPOINT_SOURCE_URL =
   `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/develop/source/main.ts`;
+export const IMPORT_MAP_URL =
+  `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/develop/source/import-map.json`;
 
 export const SERVICE_DOMAIN = IS_DEVELOP ? "localhost:4000" : "devexp.cloud";
 

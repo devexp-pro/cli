@@ -1,4 +1,9 @@
-import { ENTRYPOINT_SOURCE_URL, REMOTE_VERSION, VERSION } from "$/constants";
+import {
+  ENTRYPOINT_SOURCE_URL,
+  IMPORT_MAP_URL,
+  REMOTE_VERSION,
+  VERSION,
+} from "$/constants";
 import { shelly } from "@vseplet/shelly";
 import { Command } from "@cliffy/command";
 
@@ -14,8 +19,9 @@ export const upgrade = new Command()
         "--allow-net",
         "--allow-run",
         "--unstable-kv",
+        "--import-map=" + IMPORT_MAP_URL,
         "-n",
-        "pp",
+        "dx",
         ENTRYPOINT_SOURCE_URL,
       ]);
       console.log(res.stderr || res.stderr);
