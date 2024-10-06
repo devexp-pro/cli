@@ -39,8 +39,6 @@ export const logo = `
    ░                 ░
 `;
 
-console.log(VERSION);
-
 export const introText = `
   Version ${colors.green(VERSION)}
   Crafted with ${colors.red("<3")} by DevExp Team
