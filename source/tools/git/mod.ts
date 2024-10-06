@@ -150,9 +150,6 @@ const tool = new Command()
   .action(() => {
     main();
   })
-  .description("Git manager")
-  
+  .description("Git manager");
 
 export default tool;
-
-

@@ -1,5 +1,3 @@
-
-
 const aboutText = `
 Text about programm.
 Beta.

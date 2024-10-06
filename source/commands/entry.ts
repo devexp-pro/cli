@@ -1,5 +1,11 @@
 import { colors } from "@std/colors";
-import { introText, logo, REMOTE_VERSION, VERSION } from "$/constants";
+import {
+  introText,
+  IS_DEVELOP,
+  logo,
+  REMOTE_VERSION,
+  VERSION,
+} from "$/constants";
 import tunnel from "$/tools/tunnel";
 import git from "$/tools/git";
 import { upgrade } from "./upgrade.ts";
@@ -13,7 +19,7 @@ export const entry = new Command()
     console.log(colors.rgb24(logo, 0xFFA500));
     console.log(introText);
 
-    if (REMOTE_VERSION !== VERSION) {
+    if (REMOTE_VERSION !== VERSION && !IS_DEVELOP) {
       upgrade.showHelp();
       Deno.exit();
     }
@@ -22,5 +28,5 @@ export const entry = new Command()
     Deno.exit();
   })
   .command("tunnel", tunnel)
-  .command("upgrade", upgrade)
-  .command("git", git);
+  .command("git", git)
+  .command("upgrade", upgrade);
