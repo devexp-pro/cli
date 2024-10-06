@@ -1,6 +1,7 @@
 import { colors } from "@std/colors";
 import { introText, logo, REMOTE_VERSION, VERSION } from "$/constants";
 import tunnel from "$/tools/tunnel";
+import git from "$/tools/git";
 import { upgrade } from "./upgrade.ts";
 import { Command } from "@cliffy/command";
 
@@ -21,4 +22,5 @@ export const entry = new Command()
     Deno.exit();
   })
   .command("tunnel", tunnel)
-  .command("upgrade", upgrade);
+  .command("upgrade", upgrade)
+  .command("git", git);
