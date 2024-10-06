@@ -1,5 +1,5 @@
 import { Table } from "https://deno.land/x/cliffy@v0.25.7/table/table.ts";
-import { Command } from "../../deps.ts";
+import { Command } from "@cliffy/command";
 import { kv } from "../kv.ts";
 import { set } from "./set.ts";
 

@@ -1,7 +1,7 @@
-import { Command } from "../../deps.ts";
+import { Command } from "@cliffy/command";
 import { connect } from "../connect.ts";
-import { WEBSOCKET_URL } from "../constants.ts";
 import { kv } from "../kv.ts";
+import { WEBSOCKET_URL } from "$/constants";
 
 export const start = new Command()
   .description("start subcommand description")

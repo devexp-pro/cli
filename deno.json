@@ -1,8 +1,9 @@
 {
   "lock": false,
+  "version": "late init",
   "license": "",
   "tasks": {
-    "dev": "deno run --allow-all ./source/main.ts"
+    "dev": "deno -A --unstable-kv ./source/main.ts"
   },
   "importMap": "./import-map.json"
 }

@@ -1,4 +1,4 @@
-import { Command } from "../../deps.ts";
+import { Command } from "@cliffy/command";
 import { kv } from "../kv.ts";
 
 export const set = new Command()

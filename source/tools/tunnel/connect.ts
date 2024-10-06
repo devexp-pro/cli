@@ -1,5 +1,5 @@
-import { base64 } from "../deps.ts";
-import { SERVICE_DOMAIN } from "./constants.ts";
+import * as base64 from "@std/encoding/base64";
+import { SERVICE_DOMAIN } from "$/constants";
 import { kv } from "./kv.ts";
 
 export const connect = async (
