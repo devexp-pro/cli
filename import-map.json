@@ -1,6 +1,7 @@
 {
   "imports": {
     "$deno-json": "./deno.json",
+    "$/kv": "./source/kv.ts",
     "$/tools/tunnel": "./source/tools/tunnel/mod.ts",
     "$/constants": "./source/constants.ts",
     "$/helpers": "./source/helpers.ts",

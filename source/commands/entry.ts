@@ -1,6 +1,6 @@
 import { colors } from "@std/colors";
 import { introText, logo, REMOTE_VERSION, VERSION } from "$/constants";
-import tunnel from "../tools/tunnel/mod.ts";
+import tunnel from "$/tools/tunnel";
 import { upgrade } from "./upgrade.ts";
 import { Command } from "@cliffy/command";
 

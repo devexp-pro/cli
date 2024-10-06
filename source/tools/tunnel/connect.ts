@@ -1,6 +1,6 @@
 import * as base64 from "@std/encoding/base64";
 import { SERVICE_DOMAIN } from "$/constants";
-import { kv } from "./kv.ts";
+import { kv } from "$/kv";
 
 export const connect = async (
   url: string,

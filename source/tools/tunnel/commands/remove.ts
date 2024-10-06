@@ -1,5 +1,5 @@
 import { Command } from "@cliffy/command";
-import { kv } from "../kv.ts";
+import { kv } from "$/kv";
 
 export const remove = new Command()
   .description("remove subcommand description")
