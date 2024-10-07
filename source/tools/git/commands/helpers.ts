@@ -1,5 +1,6 @@
 import { Input } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/input.ts";
 import { chooseUser } from "./userManager.ts";
+import { kv } from "$/kv";
 
 export function hasCyrillicCharacters(str: string): boolean {
   return /[\u0400-\u04FF]/.test(str);
@@ -52,7 +53,6 @@ export async function disconnectSshKeyAndUser(
   username: string,
   keyName: string,
 ) {
-  const kv = await Deno.openKv();
   const user = await kv.get<string>(["userName:", username]);
 
   const email = user.value ? user.value[3] : "Empty";
@@ -85,13 +85,11 @@ export async function manualDisconnectSshKeyAndUser() {
 }
 
 export async function deleteSelectedKvObject(key: string, value: string) {
-  const kv = await Deno.openKv();
   await kv.delete([key, value]);
   kv.close();
 }
 
 export async function checkIsThisActive(usernameOrSSHKey: string) {
-  const kv = await Deno.openKv();
   const activeProfile = await kv.get(["activeProfile"]);
   const activeSSHKey = await kv.get(["activeSSHKey"]);
   const activeProfileName = activeProfile?.value ?? "Empty";

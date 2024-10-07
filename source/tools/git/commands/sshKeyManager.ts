@@ -10,11 +10,10 @@ import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/confirm.t
 import { checkIsThisActive } from "./helpers.ts";
 import { startupSetup } from "./creatingEnvironment.ts";
 import { PATH_TO_DOT } from "../constants.ts";
+import { kv } from "$/kv";
 
 export async function createNewSshKey() {
   await startupSetup();
-
-  const kv = await Deno.openKv();
 
   const name = await getUserInput("Enter a name for the SSH key:");
   const email = await getUserInput("Enter your email:");
@@ -42,7 +41,6 @@ export async function createNewSshKey() {
 export async function getAllSshKeysList(): Promise<
   Array<Deno.KvEntry<string>>
 > {
-  const kv = await Deno.openKv();
   const iter = await kv.list<string>({ prefix: ["sshKeyName:"] });
   const keys = [];
 
