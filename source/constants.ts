@@ -42,6 +42,6 @@ export const logo = `
 export const introText = `
   Version ${colors.green(VERSION)}
   Crafted with ${colors.red("<3")} by DevExp Team
-  Use "pp -h" to get help on commands.
+  Use "dx -h" to get help on commands.
   ${IS_DEVELOP}
 `;
