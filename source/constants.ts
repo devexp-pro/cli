@@ -37,11 +37,13 @@ export const logo = `
    ░ ░  ░    ░       ░░     ░    ░    ░  ░░
      ░       ░  ░     ░     ░  ░ ░    ░
    ░                 ░
+
+  https://devexp.pro
 `;
 
 export const introText = `
   Version ${colors.green(VERSION)}
-  Crafted with ${colors.red("<3")} by DevExp Team
+  Crafted with ${colors.red("<3")} by DevExp
   Use "dx -h" to get help on commands.
   ${IS_DEVELOP}
 `;
