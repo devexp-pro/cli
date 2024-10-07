@@ -1,4 +1,4 @@
-import { Input } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/input.ts";
+import { Input } from "@cliffy/prompt";
 import { chooseUser } from "./userManager.ts";
 import { kv } from "$/kv";
 

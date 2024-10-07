@@ -1,4 +1,4 @@
-import { ensureFile } from "https://deno.land/std@0.224.0/fs/mod.ts";
+import { ensureFile } from "@std/fs";
 import { shelly } from "@vseplet/shelly";
 import { shellConfigFile } from "./helpers.ts";
 import { PATH_TO_DOT, PATH_TO_GIT_CONFIG } from "../constants.ts";

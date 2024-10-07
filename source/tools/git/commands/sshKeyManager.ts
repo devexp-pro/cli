@@ -6,7 +6,7 @@ import {
   getUserInput,
   readPublicKey,
 } from "./helpers.ts";
-import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.4/prompt/confirm.ts";
+import { Confirm } from "@cliffy/prompt";
 import { checkIsThisActive } from "./helpers.ts";
 import { startupSetup } from "./creatingEnvironment.ts";
 import { PATH_TO_DOT } from "../constants.ts";

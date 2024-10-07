@@ -1,8 +1,8 @@
 import { shelly } from "@vseplet/shelly";
 import { showActiveProfileStatus } from "./activateProfile.ts";
-import { ensureFile } from "https://deno.land/std@0.224.0/fs/mod.ts";
+import { ensureFile } from "@std/fs";
 import { getUserInput, shellConfigFile } from "./helpers.ts";
-import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
+import { Confirm } from "@cliffy/prompt";
 import {
   CURRENT_DIRECTORY,
   PATH_HOME,

@@ -1,5 +1,5 @@
 import { shelly } from "@vseplet/shelly";
-import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
+import { Confirm } from "@cliffy/prompt";
 import { deactivateProfile } from "./activateProfile.ts";
 import { shellConfigFile } from "./helpers.ts";
 import { PATH_TO_DOT, PATH_TO_GIT_CONFIG } from "../constants.ts";
