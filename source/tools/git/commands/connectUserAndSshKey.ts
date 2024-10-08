@@ -1,8 +1,8 @@
 import { chooseUser } from "./userManager.ts";
 import { choseSshKey } from "./sshKeyManager.ts";
+import { kv } from "$/kv";
 
 async function keyRecording(user: string, sshKey: string, email: string) {
-  const kv = await Deno.openKv();
 
   await kv.set(["userName:", user], ["connectedSSH", sshKey, "Email:", email]);
   await kv.set(["sshKeyName:", sshKey], ["connectedUser", user]);

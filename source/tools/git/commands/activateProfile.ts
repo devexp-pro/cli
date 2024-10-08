@@ -3,9 +3,9 @@ import { chooseUser } from "./userManager.ts";
 import { shelly } from "@vseplet/shelly";
 import { startupSetup } from "./creatingEnvironment.ts";
 import { PATH_TO_DOT, PATH_TO_GIT_CONFIG } from "../constants.ts";
+import { kv } from "$/kv";
 
 async function setActiveProfile(username: string, sshKey: string) {
-  const kv = await Deno.openKv();
   await kv.set(["activeProfile"], [username]);
   await kv.set(["activeSSHKey"], [sshKey]);
   kv.close();
@@ -90,7 +90,6 @@ export async function activateProfile() {
 }
 
 export async function showActiveProfileStatus(returnData: boolean) {
-  const kv = await Deno.openKv();
   const activeProfile = await kv.get(["activeProfile"]);
   const activeSSHKey = await kv.get(["activeSSHKey"]);
   kv.close();
@@ -113,7 +112,6 @@ export async function showActiveProfileStatus(returnData: boolean) {
 }
 
 export async function deactivateProfile() {
-  const kv = await Deno.openKv();
   const activeProfile = await kv.get(["activeProfile"]);
   const activeSSHKey = await kv.get(["activeSSHKey"]);
   if (activeProfile.value === null || activeSSHKey.value === null) {

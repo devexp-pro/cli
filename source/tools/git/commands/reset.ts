@@ -1,8 +1,9 @@
 import { shelly } from "@vseplet/shelly";
-import { Confirm } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
+import { Confirm } from "@cliffy/prompt";
 import { deactivateProfile } from "./activateProfile.ts";
 import { shellConfigFile } from "./helpers.ts";
 import { PATH_TO_DOT, PATH_TO_GIT_CONFIG } from "../constants.ts";
+import { kv } from "$/kv";
 
 export async function fullReset() {
   console.log("WARNING");
@@ -29,7 +30,6 @@ export async function fullReset() {
 }
 
 async function restoreOldUserData() {
-  const kv = await Deno.openKv();
   const user = await kv.get<string>(["OldUsername"]);
   const username = user.value ? user.value[0].trim() : "Empty";
   const email = user.value ? user.value[1].trim() : "Empty";
@@ -69,7 +69,6 @@ async function deleteDotFolder(folderPath: string): Promise<void> {
 }
 
 async function terminateDB() {
-  const kv = await Deno.openKv();
   await deletionDenoKvTemplate(kv, "activeProfile");
   await deletionDenoKvTemplate(kv, "activeSSHKey");
   await deletionDenoKvTemplate(kv, "userName:");

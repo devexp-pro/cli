@@ -8,9 +8,11 @@
     "$/helpers": "./source/helpers.ts",
     "@cliffy/command": "jsr:@cliffy/command@^1.0.0-rc.5",
     "@cliffy/table": "jsr:@cliffy/table@^1.0.0-rc.5",
+    "@cliffy/prompt": "jsr:@cliffy/prompt@^1.0.0-rc.5",
     "@std/colors": "https://deno.land/x/cliffy@v0.25.7/ansi/colors.ts",
     "@std/ulid": "jsr:@std/ulid",
     "@std/encoding/base64": "jsr:@std/encoding/base64",
-    "@vseplet/shelly": "jsr:@vseplet/shelly@^0.1.14"
+    "@vseplet/shelly": "jsr:@vseplet/shelly@^0.1.14",
+    "@std/fs": "https://deno.land/std@0.224.0/fs/mod.ts"
   }
 }

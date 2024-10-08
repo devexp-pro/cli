@@ -1,4 +1,4 @@
-import { Select } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
+import { Select } from "@cliffy/prompt";
 
 export async function selectUserCore(dataArray: Array<Deno.KvEntry<string>>) {
   const data = await dataArray;

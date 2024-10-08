@@ -5,12 +5,12 @@ import {
   getUserInput,
 } from "./helpers.ts";
 import { checkIsThisActive } from "./helpers.ts";
+import { kv } from "$/kv";
 
 export async function createNewUser() {
   const name = await getUserInput("Please enter a name:");
   const email = await getUserInput("Please enter a email:");
   const ssh = "Empty";
-  const kv = await Deno.openKv();
 
   await kv.set(["userName:", name], ["connectedSSH", ssh, "Email:", email]);
 
@@ -20,7 +20,6 @@ export async function createNewUser() {
 }
 
 export async function getUserList(): Promise<Array<Deno.KvEntry<string>>> {
-  const kv = await Deno.openKv();
 
   const iter = kv.list<string>({ prefix: ["userName:"] });
   const users = [];
