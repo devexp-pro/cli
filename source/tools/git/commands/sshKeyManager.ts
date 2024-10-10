@@ -35,7 +35,6 @@ export async function createNewSshKey() {
   } else {
     console.log("Error: SSH key generation failed");
   }
-  kv.close();
 }
 
 export async function getAllSshKeysList(): Promise<
@@ -46,7 +45,6 @@ export async function getAllSshKeysList(): Promise<
 
   for await (const res of iter) keys.push(res);
 
-  kv.close();
   return keys;
 }
 

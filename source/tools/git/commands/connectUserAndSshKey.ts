@@ -9,7 +9,6 @@ async function keyRecording(user: string, sshKey: string, email: string) {
 
   console.log(`User ${user} connected to SSH key ${sshKey}`);
 
-  kv.close();
 }
 
 export async function connectUserToSsh() {
