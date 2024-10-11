@@ -19,6 +19,7 @@ import { gitClone } from "./commands/gitManager.ts";
 import { about } from "./commands/about.ts";
 import { fullReset } from "./commands/reset.ts";
 import { Command } from "@cliffy/command";
+import { createNewSshKeyCommand } from "./commands/sshKeyManager.ts";
 
 const logo = `
 #####     #####   ########
@@ -153,3 +154,24 @@ const tool = new Command()
   .description("Git manager");
 
 export default tool;
+
+
+
+
+const test = new Command()
+  .name("test")
+  .description("test")
+  .action(() => {
+    chooseUser(true);
+  });
+  
+
+
+  await new Command()
+  .name("your-cli-app")
+  .version("1.0.0")
+  .description("Your CLI application description")
+  .command("test", test)
+  .command("createSSH", createNewSshKeyCommand)
+  .parse(Deno.args);
+

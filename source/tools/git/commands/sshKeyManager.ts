@@ -11,12 +11,24 @@ import { checkIsThisActive } from "./helpers.ts";
 import { startupSetup } from "./creatingEnvironment.ts";
 import { PATH_TO_DOT } from "../constants.ts";
 import { kv } from "$/kv";
+import { Command } from "@cliffy/command";
 
 export async function createNewSshKey() {
   await startupSetup();
 
   const name = await getUserInput("Enter a name for the SSH key:");
   const email = await getUserInput("Enter your email:");
+  
+  return generateSshKey(name, email)
+}
+
+async function createNewSshKeyWithArgs(name: string, email: string) {
+  await startupSetup();
+
+  return generateSshKey(name, email);
+}
+
+async function generateSshKey(name: string, email: string) {
   const ssh = await shelly([
     "ssh-keygen",
     "-t",
@@ -32,6 +44,7 @@ export async function createNewSshKey() {
     console.log("SSH key generated successfully");
     await kv.set(["sshKeyName:", name], ["connectedUser", connectedUser]);
     await shelly(["ssh-add", "-K", `${PATH_TO_DOT}${name}`]);
+    return true;
   } else {
     console.log("Error: SSH key generation failed");
   }
@@ -112,3 +125,11 @@ export async function deleteSshKey() {
     console.log(`Key ${keyName} deleted successfully`);
   }
 }
+
+export const createNewSshKeyCommand = new Command()
+  .name("createSSH")
+  .description("Create new SSH key")
+  .arguments("<ssh_key_name:string> <email:string>")
+  .action(async (_, name, email) => {
+    await createNewSshKeyWithArgs(name, email);
+  });
