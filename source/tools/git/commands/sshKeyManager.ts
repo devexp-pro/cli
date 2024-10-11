@@ -140,8 +140,11 @@ export const showAllSshKeysCommand = new Command()
   .description("Show all SSH keys")
   .action(async () => {
     const sshKeys = await getAllSshKeysList();
-    console.log(sshKeys.map(sshKey => sshKey.key[1]));
+    sshKeys.forEach(async (sshKey) => {
+      const publicKey = await readPublicKey(String(sshKey.key[1])); 
+      console.log(`Name: ${String(sshKey.key[1])} | Public Key: ${publicKey}`); 
+    });
   })
 
-  
+
 
