@@ -1,6 +1,10 @@
 import { Input } from "@cliffy/prompt";
 import { chooseUser } from "./userManager.ts";
 import { kv } from "$/kv";
+import { getUserList } from "./userManager.ts";
+import { getAllSshKeysList } from "./sshKeyManager.ts";
+
+
 
 export function hasCyrillicCharacters(str: string): boolean {
   return /[\u0400-\u04FF]/.test(str);
@@ -136,3 +140,17 @@ export async function fetchJSON(url: URL | string): Promise<string> {
   if (!response.ok) throw new Error(`Response not OK (${response.status})`);
   return await response.json();
 }
+
+export async function checkIfEntityExist(entity: string, searchZone: 'user' | 'sshkey'): Promise<boolean> {
+  if (searchZone === 'user') {
+    const users = await getUserList();
+    const userExists = users.some((user: Deno.KvEntry<string>) => user.key[1] === entity);
+    return userExists;
+  } else if (searchZone === 'sshkey') {
+    const sshKeys = await getAllSshKeysList();
+    const sshKeyExists = sshKeys.some((sshKey: Deno.KvEntry<string>) => sshKey.key[1] === entity);
+    return sshKeyExists;
+  }
+  return false;
+}
+

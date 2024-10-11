@@ -130,6 +130,18 @@ export const createNewSshKeyCommand = new Command()
   .name("createSSH")
   .description("Create new SSH key")
   .arguments("<ssh_key_name:string> <email:string>")
-  .action(async (_, name, email) => {
+  .action(async (_options, ...args) => {
+    const [name, email] = args
     await createNewSshKeyWithArgs(name, email);
-  });
+  })
+  
+export const showAllSshKeysCommand = new Command()
+  .name("showAllSSH")
+  .description("Show all SSH keys")
+  .action(async () => {
+    const sshKeys = await getAllSshKeysList();
+    console.log(sshKeys.map(sshKey => sshKey.key[1]));
+  })
+
+  
+
