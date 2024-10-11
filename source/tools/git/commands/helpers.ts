@@ -3,6 +3,7 @@ import { chooseUser } from "./userManager.ts";
 import { kv } from "$/kv";
 import { getUserList } from "./userManager.ts";
 import { getAllSshKeysList } from "./sshKeyManager.ts";
+import { deactivateProfile } from "./activateProfile.ts";
 
 
 
@@ -80,8 +81,7 @@ export async function manualDisconnectSshKeyAndUser() {
   const sshName = user?.connectedSSH ?? "Unknown";
 
   if (await checkIsThisActive(userName)) {
-    console.log("You can't disconnect active user. Deactivate profile first.");
-    return;
+    await deactivateProfile();
   }
 
   await disconnectSshKeyAndUser(userName, sshName);

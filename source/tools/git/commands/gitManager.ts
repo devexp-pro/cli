@@ -1,7 +1,7 @@
 import { shelly } from "@vseplet/shelly";
 import { showActiveProfileStatus } from "./activateProfile.ts";
 import { ensureFile } from "@std/fs";
-import { getUserInput, shellConfigFile } from "./helpers.ts";
+import { getUserInput, shellConfigFile, checkIfEntityExist } from "./helpers.ts";
 import { Confirm } from "@cliffy/prompt";
 import {
   CURRENT_DIRECTORY,
@@ -9,6 +9,7 @@ import {
   PATH_TO_DOT,
   PATH_TO_GIT_CONFIG,
 } from "../constants.ts";
+import { Command } from "@cliffy/command";
 
 async function searchWordInGitConfig(searchWord: string) {
   const fileContents = await Deno.readTextFile(PATH_TO_GIT_CONFIG);
@@ -64,6 +65,7 @@ export async function gitClone() {
   );
   console.log("Update config..... Done.");
 
+  
   await shelly(["git", "clone", `${gitCloneURL}`]);
   console.log("Repository clone..... Done");
 
@@ -133,4 +135,59 @@ UserKnownHostsFile ${PATH_TO_DOT}known_hosts`;
   const encoder = new TextEncoder();
   await file.write(encoder.encode("\n" + "\n" + updateBlock));
   file.close();
+}
+
+export const gitCloneCommand = new Command()
+  .name("gitClone")
+  .description("Clone a repository")
+  .arguments("<ssh_key_name:string> <git_clone_url:string> <repository_name:string>")
+  .action(async (_options: unknown, ...args: string[]) => {
+    const [ssh, gitCloneURL, repositoryName] = args
+    await gitCloneCommandCore(ssh, gitCloneURL, repositoryName);
+  })
+
+
+export async function gitCloneCommandCore(ssh: string, gitCloneURL: string, repositoryName: string) {
+  
+  if (await checkIfEntityExist(ssh, "sshkey") === false) {
+    console.log("SSH key not found. Please create a new one.");
+    return;
+  }
+
+  const shell = await shellConfigFile();
+
+  const checkRepositoryName = searchWordInGitConfig(repositoryName);
+
+  if (await checkRepositoryName === true) {
+    console.log("This name is already taken. Please choose another one.");
+    return;
+  }
+
+  const parseGitUrlData = await parseGitUrl(gitCloneURL);
+
+  // await updateConfigToNewLocalRepository(
+  //   repositoryName,
+  //   ssh,
+  //   parseGitUrlData.source,
+  // );
+  // console.log("Update config..... Done.");
+
+  await shelly(["git", "clone", `${gitCloneURL}`]);
+  console.log("Repository clone..... Done");
+
+  await shelly([
+    "git",
+    "-C",
+    `${CURRENT_DIRECTORY}/${parseGitUrlData.projectName}`,
+    "remote",
+    "set-url",
+    "origin",
+    `git@${repositoryName}:${parseGitUrlData.username}/${parseGitUrlData.repository}`,
+  ]);
+
+  await shelly(["source", `${PATH_HOME}${shell}`]);
+
+  console.log("Git set new URL..... Done");
+
+  console.log("The process has been completed successfully.");
 }

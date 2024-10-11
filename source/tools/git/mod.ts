@@ -15,7 +15,7 @@ import {
   activateProfile,
   showActiveProfileStatus,
 } from "./commands/activateProfile.ts";
-import { gitClone } from "./commands/gitManager.ts";
+import { gitClone, gitCloneCommand } from "./commands/gitManager.ts";
 import { about } from "./commands/about.ts";
 import { fullReset } from "./commands/reset.ts";
 import { Command } from "@cliffy/command";
@@ -171,5 +171,6 @@ const start = new Command()
   .command("start", start)
   .command("createssh", createNewSshKeyCommand)
   .command("showssh", showAllSshKeysCommand)
+  .command("gitclone", gitCloneCommand)
 
 export default tool;
