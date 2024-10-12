@@ -7,7 +7,7 @@ import {
   VERSION,
 } from "$/constants";
 import tunnel from "$/tools/tunnel";
-import git from "$/tools/git";
+import gitManager from "$/tools/git";
 import vault from "$/tools/vault";
 import { upgrade } from "./upgrade.ts";
 import { Command } from "@cliffy/command";
@@ -33,5 +33,4 @@ export const entry = new Command()
   .command("git", gitManager)
   .command("vault", vault)
   .command("config", tuner)
-  .command("git", git)
   .command("upgrade", upgrade);
