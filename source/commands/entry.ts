@@ -28,5 +28,5 @@ export const entry = new Command()
     Deno.exit();
   })
   .command("tunnel", tunnel)
-  .command("gitManager", gitManager)
+  .command("git", gitManager)
   .command("upgrade", upgrade);
