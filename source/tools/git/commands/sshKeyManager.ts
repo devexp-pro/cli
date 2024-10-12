@@ -87,43 +87,9 @@ export async function deleteSshKey() {
     console.log("No data found.");
   } else {
     const result = await selectSshKeyCore(sshKey);
+const keyName = result?.[0] ?? "Unknown";
 
-    const keyName = result?.[0] ?? "Unknown";
-    const connectedUser = result?.[1] ?? "Unknown";
-    const pathToDelete = `${Deno.env.get("HOME")}/.ssh/DOT/${keyName}`;
-    const pathToDeletePubKey = `${
-      Deno.env.get("HOME")
-    }/.ssh/DOT/${keyName}.pub`;
-
-    if (await checkIsThisActive(keyName)) {
-      console.log("You can't delete active key. Deactivate profile first.");
-      return;
-    }
-
-    if (connectedUser !== "Empty") {
-      console.log(
-        `This key is connected to a user ${connectedUser}, are you sure you want to delete it?`,
-      );
-      const confirmed: boolean = await Confirm.prompt("Can you confirm?");
-      if (!confirmed) {
-        console.log("Key deletion canceled");
-        return;
-      }
-      await disconnectSshKeyAndUser(connectedUser, keyName);
-    }
-
-    await deleteSelectedKvObject("sshKeyName:", keyName);
-    await shelly(["ssh-add", "-d", `${PATH_TO_DOT}${keyName}`]);
-    await shelly([
-      "security",
-      "delete-generic-password",
-      "-l",
-      "SSH:",
-      `${PATH_TO_DOT}${keyName}`,
-    ]);
-    await Deno.remove(pathToDelete);
-    await Deno.remove(pathToDeletePubKey);
-    console.log(`Key ${keyName} deleted successfully`);
+    await deleteSshKeyCore(keyName);
   }
 }
 
