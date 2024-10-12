@@ -4,6 +4,7 @@
     "$/kv": "./source/kv.ts",
     "$/tools/git": "./source/tools/git/mod.ts",
     "$/tools/tunnel": "./source/tools/tunnel/mod.ts",
+    "$/tools/vault": "./source/tools/vault/mod.ts",
     "$/constants": "./source/constants.ts",
     "$/helpers": "./source/helpers.ts",
     "@cliffy/command": "jsr:@cliffy/command@^1.0.0-rc.5",
@@ -13,6 +14,7 @@
     "@std/ulid": "jsr:@std/ulid",
     "@std/encoding/base64": "jsr:@std/encoding/base64",
     "@vseplet/shelly": "jsr:@vseplet/shelly@^0.1.14",
+    "@vseplet/apifly": "jsr:@vseplet/apifly@^0.0.39",
     "@std/fs": "https://deno.land/std@0.224.0/fs/mod.ts"
   }
 }
