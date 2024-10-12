@@ -7,9 +7,11 @@ import {
   VERSION,
 } from "$/constants";
 import tunnel from "$/tools/tunnel";
-import gitManager from "$/tools/git";
+import git from "$/tools/git";
+import vault from "$/tools/vault";
 import { upgrade } from "./upgrade.ts";
 import { Command } from "@cliffy/command";
+import tuner from "../tools/config/mod.ts";
 
 export const entry = new Command()
   .name("dx")
@@ -29,4 +31,7 @@ export const entry = new Command()
   })
   .command("tunnel", tunnel)
   .command("git", gitManager)
+  .command("vault", vault)
+  .command("config", tuner)
+  .command("git", git)
   .command("upgrade", upgrade);
