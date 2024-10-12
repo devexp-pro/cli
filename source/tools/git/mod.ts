@@ -15,10 +15,12 @@ import {
   activateProfile,
   showActiveProfileStatus,
 } from "./commands/activateProfile.ts";
-import { gitClone } from "./commands/gitManager.ts";
+import { gitClone, gitCloneCommand } from "./commands/gitManager.ts";
 import { about } from "./commands/about.ts";
 import { fullReset } from "./commands/reset.ts";
 import { Command } from "@cliffy/command";
+import { createNewSshKeyCommand, showAllSshKeysCommand, deleteSshKeyCommand } from "./commands/sshKeyManager.ts";
+
 
 const logo = `
 #####     #####   ########
@@ -145,11 +147,25 @@ async function main() {
   }
 }
 
-const tool = new Command()
-  .name("Git manager")
+const start = new Command()
+  .name("start git manager")
   .action(() => {
     main();
   })
-  .description("Git manager");
+  .description("start git manager");
+
+ const tool = new Command()
+  .name("gitManager")
+  .version("1.0.0")
+  .description("Git manager")
+  .action(() => {
+    tool.showHelp();
+    Deno.exit();
+  })
+  .command("start", start)
+  .command("createssh", createNewSshKeyCommand)
+  .command("showssh", showAllSshKeysCommand)
+  .command("gitclone", gitCloneCommand)
+  .command("deletessh", deleteSshKeyCommand)
 
 export default tool;

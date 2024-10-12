@@ -1,6 +1,11 @@
 import { Input } from "@cliffy/prompt";
 import { chooseUser } from "./userManager.ts";
 import { kv } from "$/kv";
+import { getUserList } from "./userManager.ts";
+import { getAllSshKeysList } from "./sshKeyManager.ts";
+import { deactivateProfile } from "./activateProfile.ts";
+
+
 
 export function hasCyrillicCharacters(str: string): boolean {
   return /[\u0400-\u04FF]/.test(str);
@@ -67,7 +72,6 @@ export async function disconnectSshKeyAndUser(
 
   console.log(`User ${username} disconnected to SSH key ${keyName}`);
 
-  kv.close();
 }
 
 export async function manualDisconnectSshKeyAndUser() {
@@ -77,8 +81,7 @@ export async function manualDisconnectSshKeyAndUser() {
   const sshName = user?.connectedSSH ?? "Unknown";
 
   if (await checkIsThisActive(userName)) {
-    console.log("You can't disconnect active user. Deactivate profile first.");
-    return;
+    await deactivateProfile();
   }
 
   await disconnectSshKeyAndUser(userName, sshName);
@@ -86,7 +89,6 @@ export async function manualDisconnectSshKeyAndUser() {
 
 export async function deleteSelectedKvObject(key: string, value: string) {
   await kv.delete([key, value]);
-  kv.close();
 }
 
 export async function checkIsThisActive(usernameOrSSHKey: string) {
@@ -94,7 +96,6 @@ export async function checkIsThisActive(usernameOrSSHKey: string) {
   const activeSSHKey = await kv.get(["activeSSHKey"]);
   const activeProfileName = activeProfile?.value ?? "Empty";
   const activeSSHKeyName = activeSSHKey?.value ?? "Empty";
-  kv.close();
 
   if (
     `${activeProfileName}` === usernameOrSSHKey ||
@@ -139,3 +140,17 @@ export async function fetchJSON(url: URL | string): Promise<string> {
   if (!response.ok) throw new Error(`Response not OK (${response.status})`);
   return await response.json();
 }
+
+export async function checkIfEntityExist(entity: string, searchZone: 'user' | 'sshkey'): Promise<boolean> {
+  if (searchZone === 'user') {
+    const users = await getUserList();
+    const userExists = users.some((user: Deno.KvEntry<string>) => user.key[1] === entity);
+    return userExists;
+  } else if (searchZone === 'sshkey') {
+    const sshKeys = await getAllSshKeysList();
+    const sshKeyExists = sshKeys.some((sshKey: Deno.KvEntry<string>) => sshKey.key[1] === entity);
+    return sshKeyExists;
+  }
+  return false;
+}
+

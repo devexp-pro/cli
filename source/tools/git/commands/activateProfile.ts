@@ -7,8 +7,7 @@ import { kv } from "$/kv";
 
 async function setActiveProfile(username: string, sshKey: string) {
   await kv.set(["activeProfile"], [username]);
-  await kv.set(["activeSSHKey"], [sshKey]);
-  kv.close();
+  await kv.set(["activeSSHKey"], [sshKey]); 
 }
 
 function stringifySSHConfig(
@@ -92,7 +91,6 @@ export async function activateProfile() {
 export async function showActiveProfileStatus(returnData: boolean) {
   const activeProfile = await kv.get(["activeProfile"]);
   const activeSSHKey = await kv.get(["activeSSHKey"]);
-  kv.close();
 
   if (activeProfile.value === null || activeSSHKey.value === null) {
     console.log("There is no current active profile");
@@ -121,7 +119,6 @@ export async function deactivateProfile() {
   await kv.delete(["activeProfile"]);
   await kv.delete(["activeSSHKey"]);
 
-  kv.close();
 
   console.log("Profile deactivated successfully");
 }

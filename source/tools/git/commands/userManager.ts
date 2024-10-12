@@ -16,7 +16,6 @@ export async function createNewUser() {
 
   console.log(`User ${name} saved successfully`);
 
-  kv.close();
 }
 
 export async function getUserList(): Promise<Array<Deno.KvEntry<string>>> {
@@ -25,8 +24,6 @@ export async function getUserList(): Promise<Array<Deno.KvEntry<string>>> {
   const users = [];
 
   for await (const res of iter) users.push(res);
-
-  kv.close();
 
   return users;
 }
