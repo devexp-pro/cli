@@ -1,6 +1,6 @@
 {
   "lock": false,
-  "version": "0.0.7-alpha",
+  "version": "0.0.8-alpha",
   "license": "",
   "tasks": {
     "dev": "DEV=true deno -A --unstable-kv ./source/main.ts",
