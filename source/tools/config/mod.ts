@@ -1,7 +1,8 @@
 import { prompt } from "@cliffy/prompt/prompt";
 import { Command } from "@cliffy/command";
 import { ensureDir } from "jsr:@std/fs@^1.0.0/ensure-dir";
-import { Confirm, Input } from "@cliffy/prompt";
+import { Input } from "@cliffy/prompt/input";
+import { Confirm } from "@cliffy/prompt";
 
 async function getPackageVersion(): Promise<string> {
   try {
