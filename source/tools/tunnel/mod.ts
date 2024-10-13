@@ -12,7 +12,7 @@ const tool = new Command()
     tool.showHelp();
     Deno.exit();
   })
-  .description("Simple API gateway based on Deno")
+  .description("simple API gateway")
   .command("set", set)
   .command("start", start)
   .command("remove", remove)

@@ -21,10 +21,8 @@ import { loginCommand } from "./commands/login.ts";
 import { fetchAndSetSecretsCommand } from "./commands/fetch_and_set.ts";
 
 const vault = new Command()
-  .name("guarden")
-  .version("1.0.0")
   .description(
-    "CLI утилита для безопасного управления секретами с использованием Deno, Apifly и DenoKV.",
+    "vault description",
   )
   .command("create-project", createProjectCommand())
   .command("delete-project", deleteProjectCommand())
