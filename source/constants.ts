@@ -34,8 +34,7 @@ export const logo = `
   ██████╔╝███████╗ ╚████╔╝ ███████╗██╔╝ ██╗██║
   ╚═════╝ ╚══════╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝╚═╝
 
-  https://devexp.pro
-`;
+  https://devexp.pro`;
 
 export const introText = `
   Version ${colors.green(VERSION)}
