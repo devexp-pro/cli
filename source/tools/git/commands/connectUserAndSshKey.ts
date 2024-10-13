@@ -3,12 +3,10 @@ import { choseSshKey } from "./sshKeyManager.ts";
 import { kv } from "$/kv";
 
 async function keyRecording(user: string, sshKey: string, email: string) {
-
   await kv.set(["userName:", user], ["connectedSSH", sshKey, "Email:", email]);
   await kv.set(["sshKeyName:", sshKey], ["connectedUser", user]);
 
   console.log(`User ${user} connected to SSH key ${sshKey}`);
-
 }
 
 export async function connectUserToSsh() {

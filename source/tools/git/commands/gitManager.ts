@@ -1,7 +1,11 @@
 import { shelly } from "@vseplet/shelly";
 import { showActiveProfileStatus } from "./activateProfile.ts";
 import { ensureFile } from "@std/fs";
-import { getUserInput, shellConfigFile, checkIfEntityExist } from "./helpers.ts";
+import {
+  checkIfEntityExist,
+  getUserInput,
+  shellConfigFile,
+} from "./helpers.ts";
 import { Confirm } from "@cliffy/prompt";
 import {
   CURRENT_DIRECTORY,
@@ -65,7 +69,6 @@ export async function gitClone() {
   );
   console.log("Update config..... Done.");
 
-  
   await shelly(["git", "clone", `${gitCloneURL}`]);
   console.log("Repository clone..... Done");
 
@@ -140,15 +143,19 @@ UserKnownHostsFile ${PATH_TO_DOT}known_hosts`;
 export const gitCloneCommand = new Command()
   .name("gitClone")
   .description("Clone a repository")
-  .arguments("<ssh_key_name:string> <git_clone_url:string> <repository_name:string>")
+  .arguments(
+    "<ssh_key_name:string> <git_clone_url:string> <repository_name:string>",
+  )
   .action(async (_options: unknown, ...args: string[]) => {
-    const [ssh, gitCloneURL, repositoryName] = args
+    const [ssh, gitCloneURL, repositoryName] = args;
     await gitCloneCommandCore(ssh, gitCloneURL, repositoryName);
-  })
+  });
 
-
-export async function gitCloneCommandCore(ssh: string, gitCloneURL: string, repositoryName: string) {
-  
+export async function gitCloneCommandCore(
+  ssh: string,
+  gitCloneURL: string,
+  repositoryName: string,
+) {
   if (await checkIfEntityExist(ssh, "sshkey") === false) {
     console.log("SSH key not found. Please create a new one.");
     return;

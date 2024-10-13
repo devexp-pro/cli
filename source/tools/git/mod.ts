@@ -19,8 +19,11 @@ import { gitClone, gitCloneCommand } from "./commands/gitManager.ts";
 import { about } from "./commands/about.ts";
 import { fullReset } from "./commands/reset.ts";
 import { Command } from "@cliffy/command";
-import { createNewSshKeyCommand, showAllSshKeysCommand, deleteSshKeyCommand } from "./commands/sshKeyManager.ts";
-
+import {
+  createNewSshKeyCommand,
+  deleteSshKeyCommand,
+  showAllSshKeysCommand,
+} from "./commands/sshKeyManager.ts";
 
 const logo = `
 #####     #####   ########
@@ -154,7 +157,7 @@ const start = new Command()
   })
   .description("start git manager");
 
- const tool = new Command()
+const tool = new Command()
   .name("gitManager")
   .version("1.0.0")
   .description("Git manager")
@@ -166,6 +169,6 @@ const start = new Command()
   .command("createssh", createNewSshKeyCommand)
   .command("showssh", showAllSshKeysCommand)
   .command("gitclone", gitCloneCommand)
-  .command("deletessh", deleteSshKeyCommand)
+  .command("deletessh", deleteSshKeyCommand);
 
 export default tool;

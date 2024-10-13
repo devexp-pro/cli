@@ -9,7 +9,7 @@ import { Command } from "@cliffy/command";
 
 export const upgrade = new Command()
   .description("upgrade subcommand description")
-  .action(async (_options, ..._args) => {
+  .action(async (_options: any, ..._args: any) => {
     if (REMOTE_VERSION != VERSION) {
       const res = await shelly([
         "deno",

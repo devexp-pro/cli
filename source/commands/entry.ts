@@ -12,12 +12,15 @@ import vault from "$/tools/vault";
 import { upgrade } from "./upgrade.ts";
 import { Command } from "@cliffy/command";
 import tuner from "../tools/config/mod.ts";
+import { dash } from "./dash.ts";
+import { login } from "./login.ts";
+import { logout } from "./logout.ts";
 
 export const entry = new Command()
   .name("dx")
   .usage("usage late init...")
   .description("description late init...")
-  .action((_options, ..._args) => {
+  .action((_options: any, ..._args: any) => {
     console.log(colors.rgb24(logo, 0xFFA500));
     console.log(introText);
 
@@ -33,4 +36,7 @@ export const entry = new Command()
   .command("git", gitManager)
   .command("vault", vault)
   .command("config", tuner)
+  .command("dash", dash)
+  .command("login", login)
+  .command("logout", logout)
   .command("upgrade", upgrade);

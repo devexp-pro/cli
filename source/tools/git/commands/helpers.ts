@@ -5,8 +5,6 @@ import { getUserList } from "./userManager.ts";
 import { getAllSshKeysList } from "./sshKeyManager.ts";
 import { deactivateProfile } from "./activateProfile.ts";
 
-
-
 export function hasCyrillicCharacters(str: string): boolean {
   return /[\u0400-\u04FF]/.test(str);
 }
@@ -71,7 +69,6 @@ export async function disconnectSshKeyAndUser(
   await kv.set(["sshKeyName:", keyName], ["connectedUser", "Empty"]);
 
   console.log(`User ${username} disconnected to SSH key ${keyName}`);
-
 }
 
 export async function manualDisconnectSshKeyAndUser() {
@@ -141,16 +138,22 @@ export async function fetchJSON(url: URL | string): Promise<string> {
   return await response.json();
 }
 
-export async function checkIfEntityExist(entity: string, searchZone: 'user' | 'sshkey'): Promise<boolean> {
-  if (searchZone === 'user') {
+export async function checkIfEntityExist(
+  entity: string,
+  searchZone: "user" | "sshkey",
+): Promise<boolean> {
+  if (searchZone === "user") {
     const users = await getUserList();
-    const userExists = users.some((user: Deno.KvEntry<string>) => user.key[1] === entity);
+    const userExists = users.some((user: Deno.KvEntry<string>) =>
+      user.key[1] === entity
+    );
     return userExists;
-  } else if (searchZone === 'sshkey') {
+  } else if (searchZone === "sshkey") {
     const sshKeys = await getAllSshKeysList();
-    const sshKeyExists = sshKeys.some((sshKey: Deno.KvEntry<string>) => sshKey.key[1] === entity);
+    const sshKeyExists = sshKeys.some((sshKey: Deno.KvEntry<string>) =>
+      sshKey.key[1] === entity
+    );
     return sshKeyExists;
   }
   return false;
 }
-

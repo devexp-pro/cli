@@ -7,7 +7,7 @@ import { kv } from "$/kv";
 
 async function setActiveProfile(username: string, sshKey: string) {
   await kv.set(["activeProfile"], [username]);
-  await kv.set(["activeSSHKey"], [sshKey]); 
+  await kv.set(["activeSSHKey"], [sshKey]);
 }
 
 function stringifySSHConfig(
@@ -118,7 +118,6 @@ export async function deactivateProfile() {
 
   await kv.delete(["activeProfile"]);
   await kv.delete(["activeSSHKey"]);
-
 
   console.log("Profile deactivated successfully");
 }

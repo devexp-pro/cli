@@ -34,7 +34,6 @@ async function restoreOldUserData() {
   const username = user.value ? user.value[0].trim() : "Empty";
   const email = user.value ? user.value[1].trim() : "Empty";
 
-
   await shelly(["git", "config", "--global", "user.name", `${username}`]);
   await shelly(["git", "config", "--global", "user.email", `${email}`]);
 

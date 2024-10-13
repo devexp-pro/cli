@@ -21,29 +21,29 @@ import { loginCommand } from "./commands/login.ts";
 import { fetchAndSetSecretsCommand } from "./commands/fetch_and_set.ts";
 
 const vault = new Command()
-    .name("guarden")
-    .version("1.0.0")
-    .description(
-        "CLI утилита для безопасного управления секретами с использованием Deno, Apifly и DenoKV.",
-    )
-    .command("create-project", createProjectCommand())
-    .command("delete-project", deleteProjectCommand())
-    .command("rename-project", renameProjectCommand())
-    .command("select-project", selectProjectCommand())
-    .command("select-env", selectEnvCommand())
-    .command("create-env", createEnvCommand())
-    .command("rename-env", renameEnvCommand())
-    .command("delete-env", deleteEnvCommand())
-    .command("generate-token", generateTokenCommand())
-    .command("add-secret", addSecretCommand())
-    .command("update-secret", updateSecretCommand())
-    .command("delete-secret", deleteSecretCommand())
-    .command("fetch-secrets", fetchSecretsCommand())
-    .command("fetch-set", fetchAndSetSecretsCommand())
-    .command("show-current", showCurrentConfigCommand())
-    .command("run", runCommand())
-    .command("logout", logoutCommand())
-    .command("login", loginCommand())
-    .command("invite", inviteUserCommand());
+  .name("guarden")
+  .version("1.0.0")
+  .description(
+    "CLI утилита для безопасного управления секретами с использованием Deno, Apifly и DenoKV.",
+  )
+  .command("create-project", createProjectCommand())
+  .command("delete-project", deleteProjectCommand())
+  .command("rename-project", renameProjectCommand())
+  .command("select-project", selectProjectCommand())
+  .command("select-env", selectEnvCommand())
+  .command("create-env", createEnvCommand())
+  .command("rename-env", renameEnvCommand())
+  .command("delete-env", deleteEnvCommand())
+  .command("generate-token", generateTokenCommand())
+  .command("add-secret", addSecretCommand())
+  .command("update-secret", updateSecretCommand())
+  .command("delete-secret", deleteSecretCommand())
+  .command("fetch-secrets", fetchSecretsCommand())
+  .command("fetch-set", fetchAndSetSecretsCommand())
+  .command("show-current", showCurrentConfigCommand())
+  .command("run", runCommand())
+  .command("logout", logoutCommand())
+  .command("login", loginCommand())
+  .command("invite", inviteUserCommand());
 
 export default vault;
