@@ -11,6 +11,7 @@
     "@cliffy/table": "jsr:@cliffy/table@^1.0.0-rc.5",
     "@cliffy/prompt": "jsr:@cliffy/prompt@^1.0.0-rc.5",
     "@cliffy/prompt/select": "https://jsr.io/@cliffy/prompt/1.0.0-rc.7/select.ts",
+    "@cliffy/prompt/input": "https://jsr.io/@cliffy/prompt/1.0.0-rc.7/input.ts",
 
     "@std/colors": "https://deno.land/x/cliffy@v0.25.7/ansi/colors.ts",
     "@std/ulid": "jsr:@std/ulid",
