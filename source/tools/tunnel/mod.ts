@@ -12,7 +12,7 @@ const tool = new Command()
     tool.showHelp();
     Deno.exit();
   })
-  .description("HTTP tunnels for development and sharing")
+  .description("HTTP tunnels for development and public access")
   .command("set", set)
   .command("start", start)
   .command("remove", remove)

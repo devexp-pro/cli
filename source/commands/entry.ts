@@ -19,6 +19,7 @@ import toolHyper from "$/tools/hyper";
 import toolTemplate from "$/tools/template";
 import toolAlias from "$/tools/alias";
 import toolTerm from "$/tools/term";
+import toolRadio from "$/tools/radio";
 
 import { upgrade } from "./upgrade.ts";
 import { dash } from "./dash.ts";
@@ -48,11 +49,12 @@ export const entry = new Command()
   .command("config", toolConfig)
   .command("vault", toolVault)
   .command("flow", toolFlow)
-  .command("term", toolTerm)
   .command("template", toolTemplate)
   .command("alias", toolAlias)
   .command("hyper", toolHyper)
   .command("git", toolGit)
+  .command("term", toolTerm)
+  .command("radio", toolRadio)
   .command("dash", dash)
   .command("login", login)
   .command("logout", logout)

@@ -17,6 +17,7 @@
     "$/tools/template": "./source/tools/template/mod.ts",
     "$/tools/hyper": "./source/tools/hyper/mod.ts",
     "$/tools/term": "./source/tools/term/mod.ts",
+    "$/tools/radio": "./source/tools/radio/mod.ts",
 
     "$/dashboard": "./source/dashboard/mod.ts",
 
