@@ -26,6 +26,7 @@ import { upgrade } from "./upgrade.ts";
 import { dash } from "./dash.ts";
 import { login } from "./login.ts";
 import { logout } from "./logout.ts";
+import { setup } from "./setup.ts";
 
 export const entry = new Command()
   .name("dx")
@@ -60,4 +61,5 @@ export const entry = new Command()
   .command("dash", dash)
   .command("login", login)
   .command("logout", logout)
+  .command("setup", setup)
   .command("upgrade", upgrade);
