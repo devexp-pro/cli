@@ -11,7 +11,7 @@
     "$/tools/tunnel": "./source/tools/tunnel/mod.ts",
     "$/tools/config": "./source/tools/config/mod.ts",
     "$/tools/vault": "./source/tools/vault/mod.ts",
-    "$/tools/workflow": "./source/tools/workflow/mod.ts",
+    "$/tools/flow": "./source/tools/flow/mod.ts",
     "$/tools/alias": "./source/tools/alias/mod.ts",
     "$/tools/pm": "./source/tools/pm/mod.ts",
 
