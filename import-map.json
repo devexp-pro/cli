@@ -18,6 +18,7 @@
     "$/tools/hyper": "./source/tools/hyper/mod.ts",
     "$/tools/term": "./source/tools/term/mod.ts",
     "$/tools/radio": "./source/tools/radio/mod.ts",
+    "$/tools/clip": "./source/tools/clip/mod.ts",
 
     "$/dashboard": "./source/dashboard/mod.ts",
 

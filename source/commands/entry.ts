@@ -20,6 +20,7 @@ import toolTemplate from "$/tools/template";
 import toolAlias from "$/tools/alias";
 import toolTerm from "$/tools/term";
 import toolRadio from "$/tools/radio";
+import toolClip from "$/tools/clip";
 
 import { upgrade } from "./upgrade.ts";
 import { dash } from "./dash.ts";
@@ -55,6 +56,7 @@ export const entry = new Command()
   .command("git", toolGit)
   .command("term", toolTerm)
   .command("radio", toolRadio)
+  .command("clip", toolClip)
   .command("dash", dash)
   .command("login", login)
   .command("logout", logout)

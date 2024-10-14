@@ -1,12 +1,12 @@
 import { Command } from "@cliffy/command";
 
 const tool = new Command()
-  .name("term")
+  .name("clip")
   .usage("")
   .action(() => {
     tool.showHelp();
     Deno.exit();
   })
-  .description("share a terminal session");
+  .description("share text between devices");
 
 export default tool;
