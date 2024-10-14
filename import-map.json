@@ -1,6 +1,10 @@
 {
   "imports": {
     "$deno-json": "./deno.json",
+    "$/shared": "./source/shared.ts",
+    "$/constants": "./source/constants.ts",
+    "$/helpers": "./source/helpers.ts",
+    "$/types": "./source/types.ts",
     "$/kv": "./source/kv.ts",
     "$/tools/git": "./source/tools/git/mod.ts",
     "$/tools/tunnel": "./source/tools/tunnel/mod.ts",
@@ -9,8 +13,6 @@
     "$/tools/workflow": "./source/tools/workflow/mod.ts",
     "$/tools/mind": "./source/tools/mind/mod.ts",
     "$/dashboard": "./source/dashboard/mod.ts",
-    "$/constants": "./source/constants.ts",
-    "$/helpers": "./source/helpers.ts",
     "@cliffy/command": "jsr:@cliffy/command@^1.0.0-rc.5",
     "@cliffy/table": "jsr:@cliffy/table@^1.0.0-rc.5",
     "@cliffy/prompt": "jsr:@cliffy/prompt@^1.0.0-rc.5",
