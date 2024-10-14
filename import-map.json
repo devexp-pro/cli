@@ -7,13 +7,16 @@
     "$/types": "./source/types.ts",
     "$/kv": "./source/kv.ts",
 
+    "$/tools/llm": "./source/tools/llm/mod.ts",
     "$/tools/git": "./source/tools/git/mod.ts",
     "$/tools/tunnel": "./source/tools/tunnel/mod.ts",
     "$/tools/config": "./source/tools/config/mod.ts",
     "$/tools/vault": "./source/tools/vault/mod.ts",
     "$/tools/flow": "./source/tools/flow/mod.ts",
     "$/tools/alias": "./source/tools/alias/mod.ts",
-    "$/tools/pm": "./source/tools/pm/mod.ts",
+    "$/tools/template": "./source/tools/template/mod.ts",
+    "$/tools/hyper": "./source/tools/hyper/mod.ts",
+    "$/tools/term": "./source/tools/term/mod.ts",
 
     "$/dashboard": "./source/dashboard/mod.ts",
 
@@ -30,6 +33,7 @@
     "@cliffy/prompt/prompt": "https://jsr.io/@cliffy/prompt/1.0.0-rc.7/prompt.ts",
     "@hono/hono": "jsr:@hono/hono@4.5.6",
 
+    "@vseplet/shibui": "jsr:@vseplet/shibui@0.4.33",
     "@vseplet/shelly": "jsr:@vseplet/shelly@^0.1.14",
     "@vseplet/apifly": "jsr:@vseplet/apifly@^0.0.39",
     "@vseplet/luminous": "jsr:@vseplet/luminous@^1.0.6",

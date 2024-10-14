@@ -12,7 +12,7 @@ const tool = new Command()
     tool.showHelp();
     Deno.exit();
   })
-  .description("simple API gateway")
+  .description("HTTP tunnels for development and sharing")
   .command("set", set)
   .command("start", start)
   .command("remove", remove)
