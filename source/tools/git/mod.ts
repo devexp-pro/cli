@@ -160,7 +160,7 @@ const start = new Command()
 const tool = new Command()
   .name("gitManager")
   .version("1.0.0")
-  .description("Git manager")
+  .description("git profile manager")
   .action(() => {
     tool.showHelp();
     Deno.exit();

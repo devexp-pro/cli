@@ -126,7 +126,11 @@ const SubmitValue = island<
           return RESPONSE(Alert("danger", "Value not submitted"));
         }
       } catch (e) {
-        return RESPONSE(Alert("danger", e.toString()));
+        if (e instanceof Error) {
+          return RESPONSE(Alert("danger", e.message));
+        } else {
+          return RESPONSE(Alert("danger", "Unknown error occurred"));
+        }
       }
     },
   },

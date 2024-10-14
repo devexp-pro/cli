@@ -1,12 +1,12 @@
 import { Command } from "@cliffy/command";
 
 const tool = new Command()
-  .name("alias")
+  .name("term")
   .usage("")
   .action(() => {
     tool.showHelp();
     Deno.exit();
   })
-  .description("storage for commands with descriptions");
+  .description("share a terminal session via internet");
 
 export default tool;

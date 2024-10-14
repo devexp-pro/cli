@@ -1,12 +1,12 @@
 import { Command } from "@cliffy/command";
 
 const tool = new Command()
-  .name("pm")
+  .name("template")
   .usage("")
   .action(() => {
     tool.showHelp();
     Deno.exit();
   })
-  .description("process manager description");
+  .description("creating projects using flexible templates");
 
 export default tool;

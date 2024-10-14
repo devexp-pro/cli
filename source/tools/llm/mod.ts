@@ -1,12 +1,12 @@
 import { Command } from "@cliffy/command";
 
 const tool = new Command()
-  .name("alias")
+  .name("llm")
   .usage("")
   .action(() => {
     tool.showHelp();
     Deno.exit();
   })
-  .description("storage for commands with descriptions");
+  .description("access to various large language models");
 
 export default tool;

@@ -22,7 +22,7 @@ import { fetchAndSetSecretsCommand } from "./commands/fetch_and_set.ts";
 
 const vault = new Command()
   .description(
-    "vault description",
+    "storage for secrets and env variables",
   )
   .command("create-project", createProjectCommand())
   .command("delete-project", deleteProjectCommand())
