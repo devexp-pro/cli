@@ -1,12 +1,12 @@
 import { Command } from "@cliffy/command";
 
 const tool = new Command()
-  .name("mind")
+  .name("alias")
   .usage("")
   .action(() => {
     tool.showHelp();
     Deno.exit();
   })
-  .description("mind description");
+  .description("alias description");
 
 export default tool;
