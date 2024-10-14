@@ -13,7 +13,7 @@ import toolTunnel from "$/tools/tunnel";
 import toolConfig from "$/tools/config";
 import toolVault from "$/tools/vault";
 import toolGit from "$/tools/git";
-import toolWorkflow from "$/tools/workflow";
+import toolFlow from "$/tools/flow";
 import toolPm from "$/tools/pm";
 import toolAlias from "$/tools/alias";
 
@@ -42,7 +42,7 @@ export const entry = new Command()
   .command("config", toolConfig)
   .command("vault", toolVault)
   .command("git", toolGit)
-  .command("workflow", toolWorkflow)
+  .command("flow", toolFlow)
   .command("alias", toolAlias)
   .command("pm", toolPm)
   .command("dash", dash)

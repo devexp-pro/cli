@@ -1,12 +1,12 @@
 import { Command } from "@cliffy/command";
 
 const tool = new Command()
-  .name("workflow")
+  .name("flow")
   .usage("")
   .action(() => {
     tool.showHelp();
     Deno.exit();
   })
-  .description("workflow description");
+  .description("flow description");
 
 export default tool;
