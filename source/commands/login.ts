@@ -1,6 +1,6 @@
 import { Command } from "@cliffy/command";
-import { open } from "https://deno.land/x/open/index.ts";
-import { kv } from "$/shared";
+import { open } from "x/open";
+import { kv } from "$/kv";
 
 export const login = new Command()
   .description("Login via GitHub OAuth")

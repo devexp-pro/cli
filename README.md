@@ -12,7 +12,7 @@ curl -fsSL https://devexp.pro/install.sh | sh
    **Значение:**
    ```json
    {
-       "github_username": "string",
-       "uuid": "string"
+     "github_username": "string",
+     "uuid": "string"
    }
    ```
