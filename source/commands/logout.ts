@@ -1,5 +1,6 @@
 import { Command } from "@cliffy/command";
 import { kv } from "$/kv";
+import { SERVICE_URL } from "$/constants";
 interface SessionData {
   github_username: string;
 }
@@ -23,7 +24,7 @@ export const logout = new Command()
     const sessionId = sessionDataArray[0].key[1];
 
     const result = await fetch(
-      `http://localhost:8000/logout?session_id=${sessionId}`,
+      `${SERVICE_URL}/auth/logout?session_id=${sessionId}`,
     );
 
     if (result.ok) {

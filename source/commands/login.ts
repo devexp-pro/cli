@@ -1,6 +1,7 @@
 import { Command } from "@cliffy/command";
 import { open } from "x/open";
 import { kv } from "$/kv";
+import { SERVICE_URL } from "$/constants";
 
 export const login = new Command()
   .description("Login via GitHub OAuth")
@@ -25,13 +26,13 @@ export const login = new Command()
       const authToken = crypto.randomUUID();
       console.log(`Generated UUID for auth_token: ${authToken}`);
 
-      const url = `http://localhost:8000/login?auth_token=${authToken}`;
+      const url = `${SERVICE_URL}/auth/login?auth_token=${authToken}`;
       console.log(`Opening browser with URL: ${url}`);
       await open(url, { wait: false });
       console.log("Открыт браузер для авторизации через GitHub...");
 
       const result = await fetch(
-        `http://localhost:8000/wait-for-login?auth_token=${authToken}`,
+        `${SERVICE_URL}/auth/wait-for-login?auth_token=${authToken}`,
       );
 
       if (result.ok) {
