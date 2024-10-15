@@ -1,12 +1,12 @@
 import { Command } from "@cliffy/command";
 
 const tool = new Command()
-  .name("mind")
+  .name("term")
   .usage("")
   .action(() => {
     tool.showHelp();
     Deno.exit();
   })
-  .description("mind description");
+  .description("share a terminal session");
 
 export default tool;

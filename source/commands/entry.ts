@@ -1,4 +1,6 @@
 import { colors } from "@std/colors";
+import { Command } from "@cliffy/command";
+
 import {
   introText,
   IS_DEVELOP,
@@ -6,22 +8,32 @@ import {
   REMOTE_VERSION,
   VERSION,
 } from "$/constants";
+
+import toolLlm from "$/tools/llm";
 import toolTunnel from "$/tools/tunnel";
 import toolConfig from "$/tools/config";
 import toolVault from "$/tools/vault";
 import toolGit from "$/tools/git";
-import toolWorkflow from "$/tools/workflow";
-import toolMind from "$/tools/mind";
+import toolFlow from "$/tools/flow";
+import toolHyper from "$/tools/hyper";
+import toolTemplate from "$/tools/template";
+import toolAlias from "$/tools/alias";
+import toolTerm from "$/tools/term";
+import toolRadio from "$/tools/radio";
+import toolClip from "$/tools/clip";
+
 import { upgrade } from "./upgrade.ts";
-import { Command } from "@cliffy/command";
 import { dash } from "./dash.ts";
 import { login } from "./login.ts";
 import { logout } from "./logout.ts";
+import { setup } from "./setup.ts";
 
 export const entry = new Command()
   .name("dx")
   .usage("usage late init...")
-  .description("description late init...")
+  .description(
+    "This is a powerful entry point for all developers, significantly improving the developer experience",
+  )
   .action((_options: any, ..._args: any) => {
     console.log(colors.rgb24(logo, 0xFFA500));
     console.log(introText);
@@ -34,13 +46,20 @@ export const entry = new Command()
     entry.showHelp();
     Deno.exit();
   })
+  .command("llm", toolLlm)
   .command("tunnel", toolTunnel)
   .command("config", toolConfig)
   .command("vault", toolVault)
+  .command("flow", toolFlow)
+  .command("template", toolTemplate)
+  .command("alias", toolAlias)
+  .command("hyper", toolHyper)
   .command("git", toolGit)
-  .command("workflow", toolWorkflow)
-  .command("mind", toolMind)
+  .command("term", toolTerm)
+  .command("radio", toolRadio)
+  .command("clip", toolClip)
   .command("dash", dash)
   .command("login", login)
   .command("logout", logout)
+  .command("setup", setup)
   .command("upgrade", upgrade);

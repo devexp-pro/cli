@@ -18,13 +18,13 @@ async function getPackageVersion(): Promise<string> {
 const displayIntro = async () => {
   const version = await getPackageVersion();
   console.log(`
-⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️                       
+⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️
 ⚙️ ████████╗██╗   ██╗███╗   ██╗███████╗██████╗ ⚙️
 ⚙️ ╚══██╔══╝██║   ██║████╗  ██║██╔════╝██╔══██╗⚙️  Version: ${version}
 ⚙️    ██║   ██║   ██║██╔██╗ ██║█████╗  ██████╔╝⚙️  CLI Configuration Generator
 ⚙️    ██║   ██║   ██║██║╚██╗██║██╔══╝  ██╔══██╗⚙️  Author: @artpani4 & @vseplet
 ⚙️    ██║   ╚██████╔╝██║ ╚████║███████╗██║  ██║⚙️  Use "help" for more commands
-⚙️    ╚═╝    ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝⚙️                              
+⚙️    ╚═╝    ╚═════╝ ╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝⚙️
 ⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️⚙️
     `);
 };
@@ -84,7 +84,7 @@ export type ${configName}CfgType = typeof ${configName}Cfg;
 };
 
 const createConfig = async () => {
-  await displayIntro();
+  // await displayIntro();
   const { directory } = await prompt([
     {
       name: "directory",
@@ -155,8 +155,8 @@ export type ${configName}Type = typeof cfg;
 
 const tuner = new Command()
   .name("config")
-  .version("0.1.0")
-  .description("CLI tool to generate configuration files")
+  // .version("0.1.0")
+  .description("generate configuration files")
   .action(createConfig);
 
 export default tuner;
