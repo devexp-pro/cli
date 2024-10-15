@@ -1,6 +1,6 @@
 import { prompt } from "@cliffy/prompt/prompt";
 import { Command } from "@cliffy/command";
-import { ensureDir } from "jsr:@std/fs@^1.0.0/ensure-dir";
+import { ensureDir } from "@std/fs";
 import { Input } from "@cliffy/prompt/input";
 import { Confirm } from "@cliffy/prompt";
 
