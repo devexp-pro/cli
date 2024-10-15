@@ -12,13 +12,13 @@ export async function createNewUser() {
   const email = await getUserInput("Please enter a email:");
   const ssh = "Empty";
 
-  await kv.set(["userName:", name], ["connectedSSH", ssh, "Email:", email]);
+  await kv.set(["tool", "git", "userName:", name], {connectedSSH: ssh, Email: email});
 
   console.log(`User ${name} saved successfully`);
 }
 
 export async function getUserList(): Promise<Array<Deno.KvEntry<string>>> {
-  const iter = kv.list<string>({ prefix: ["userName:"] });
+  const iter = kv.list<string>({ prefix: ["tool", "git", "userName:"] });
   const users = [];
 
   for await (const res of iter) users.push(res);
