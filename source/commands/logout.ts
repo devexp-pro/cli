@@ -1,5 +1,5 @@
 import { Command } from "@cliffy/command";
-import { kv } from "$/shared";
+import { kv } from "$/kv";
 interface SessionData {
   github_username: string;
 }
