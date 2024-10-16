@@ -10,7 +10,7 @@ const action = async () => {
   );
 
   const aliasToStart: string = await Select.prompt({
-    message: "Pick a color",
+    message: "Please select tunnel:\n",
     options: tunnels.map((entry) => ({
       // @ts-ignore
       name: `${entry.value.alias} ${entry.value.name} ${entry.value.port}`,
@@ -23,7 +23,7 @@ const action = async () => {
 };
 
 const command = new Command()
-  .description("start subcommand description")
+  .description("start a tunnel")
   .arguments("<alias:string>")
   .action(
     async (_options: any, ...args: any) => {

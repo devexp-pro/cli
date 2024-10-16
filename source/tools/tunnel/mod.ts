@@ -3,15 +3,7 @@ import list from "./commands/list.ts";
 import remove from "./commands/remove.ts";
 import set from "./commands/set.ts";
 import start from "./commands/start.ts";
-import {
-  Checkbox,
-  Confirm,
-  Input,
-  List,
-  Number,
-  prompt,
-  Select,
-} from "@cliffy/prompt";
+import { Select } from "@cliffy/prompt";
 
 // https://www.asciiart.eu/text-to-ascii-art font Pagga
 const tool = new Command()
@@ -19,10 +11,10 @@ const tool = new Command()
   .usage("start <tunnel_name>")
   .action(async (options: any, ..._args: any) => {
     const command: string = await Select.prompt({
-      message: "select command",
+      message: "Please, select action:\n",
       options: [
         { name: "set tunnel alias", value: "set" },
-        { name: "start tunnel", value: "start" },
+        { name: "start a tunnel", value: "start" },
         { name: "remove tunnel alias", value: "remove" },
         { name: "show list of tunnels", value: "list" },
         { name: "help", value: "help" },

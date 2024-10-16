@@ -8,7 +8,7 @@ const action = async () => {
   );
 
   const aliasesToRemove: string[] = await Checkbox.prompt({
-    message: "Pick a color",
+    message: "Please select tunnels:\n",
     options: tunnels.map((entry) => ({
       // @ts-ignore
       name: `${entry.value.alias} ${entry.value.name} ${entry.value.port}`,
@@ -26,7 +26,7 @@ const action = async () => {
 };
 
 const command = new Command()
-  .description("remove subcommand description")
+  .description("remove tunnel alias")
   .arguments("<tunnel_name:string>")
   .action(async (_options: any, ...args: [any]) => {
     const [name] = args;

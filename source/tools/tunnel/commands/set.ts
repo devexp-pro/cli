@@ -19,15 +19,15 @@ const setAlias = async (alias: string, name: string, port: number) => {
 const action = async () => {
   const { alias, name, port } = await prompt([{
     name: "alias",
-    message: "Tunnel alias:",
+    message: "Enter tunnel alias:",
     type: Input,
   }, {
     name: "name",
-    message: "Tunnel name",
+    message: "Enter tunnel name:",
     type: Input,
   }, {
     name: "port",
-    message: "Port number:",
+    message: "Enter tunnel port",
     type: Number,
   }]);
 
@@ -35,7 +35,7 @@ const action = async () => {
 };
 
 const command = new Command()
-  .description("set subcommand description")
+  .description("set alias for tunnel")
   .arguments("<alias:string> <tunnel_name:string> <port:number>")
   // .example("set tunnel", "pp set sevapp 8000")
   .action(async (_options: any, ...args: [string, string, number]) => {

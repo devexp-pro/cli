@@ -34,7 +34,7 @@ const action = async () => {
 
 const command = new Command()
   .name("list")
-  .description("list subcommand description")
+  .description("show list of tunnels")
   .action(action);
 
 export default {
