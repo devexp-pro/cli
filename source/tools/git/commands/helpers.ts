@@ -56,17 +56,17 @@ export async function disconnectSshKeyAndUser(
   username: string,
   keyName: string,
 ) {
-  const user = await kv.get<string>(["userName:", username]);
+  const user = await kv.get<string>(["tool", "git", "userName:", username]);
 
   const email = user.value ? user.value[3] : "Empty";
 
-  await kv.set(["userName:", username], [
+  await kv.set(["tool", "git", "userName:", username], [
     "connectedSSH",
     "Empty",
     "Email:",
     email,
   ]);
-  await kv.set(["sshKeyName:", keyName], ["connectedUser", "Empty"]);
+  await kv.set(["tool", "git", "sshKeyName:", keyName], ["connectedUser", "Empty"]);
 
   console.log(`User ${username} disconnected to SSH key ${keyName}`);
 }
@@ -84,8 +84,17 @@ export async function manualDisconnectSshKeyAndUser() {
   await disconnectSshKeyAndUser(userName, sshName);
 }
 
-export async function deleteSelectedKvObject(key: string, value: string) {
-  await kv.delete([key, value]);
+export async function deleteSelectedKvObject(key: Deno.KvKeyPart[], value: string) {
+  const iterator = kv.list({ prefix: key });
+  const batch = kv.atomic();
+
+  for await (const entry of iterator) {
+    if (entry.key[3] === value) {
+      const targetEntry = entry.key;
+      batch.delete(targetEntry);
+    }
+  }
+  await batch.commit();
 }
 
 export async function checkIsThisActive(usernameOrSSHKey: string) {

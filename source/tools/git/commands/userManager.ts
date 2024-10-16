@@ -61,17 +61,21 @@ export async function deleteUser() {
   const connectedSSH = result?.[1] ?? "Unknown";
 
   if (await checkIsThisActive(name)) {
-    console.log("You can't delete active user. Deactivate profile first.");
+    console.log("You can't delete active user. Change active user first.");
     return;
   }
 
   if (result !== undefined) {
     if (connectedSSH !== "Empty") {
       await disconnectSshKeyAndUser(name, connectedSSH);
-      await deleteSelectedKvObject("userName:", name);
+      const key = ["tool", "git", "userName:"];
+      await deleteSelectedKvObject(key, name);
       console.log(`User ${name} deleted successfully`);
     } else {
-      await deleteSelectedKvObject("userName:", name);
+      
+      const key = `"tool", "git", "userName:"`;
+      await deleteSelectedKvObject(key, name);
+
       console.log(`User ${name} deleted successfully`);
     }
   } else {
