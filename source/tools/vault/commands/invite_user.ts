@@ -1,5 +1,5 @@
 import { Command, Input } from "../deps.ts";
-import { createClient } from "../client/utils/api.ts";
+import { createClient } from "../api.ts";
 
 import { green, red, yellow } from "../deps.ts";
 import { Select } from "@cliffy/prompt/select";

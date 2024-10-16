@@ -1,13 +1,13 @@
 import { Command } from "../deps.ts";
-import { createClient } from "../client/utils/api.ts";
-import { getCurrentEnv, getCurrentProject } from "../client/utils/config.ts";
+import { createClient, getCurrentEnv, getCurrentProject } from "../api.ts";
+
 import { green, red } from "../deps.ts";
 
 export function addSecretCommand() {
   return new Command()
     .description("Добавить секрет в текущее окружение.")
     .arguments("<key:string> <value:string>")
-    .action(async (options, key: string, value: string) => {
+    .action(async (_options: any, key: string, value: string) => {
       try {
         const project = await getCurrentProject();
         const env = await getCurrentEnv();

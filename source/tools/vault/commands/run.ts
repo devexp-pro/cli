@@ -1,13 +1,12 @@
 import { Command } from "../deps.ts";
-import { createClient } from "../client/utils/api.ts"; // Добавляем клиента Apifly
-import { getCurrentEnv, getCurrentProject } from "../client/utils/config.ts";
+import { createClient, getCurrentEnv, getCurrentProject } from "../api.ts";
 import { green, red } from "../deps.ts";
 
 export function runCommand() {
   return new Command()
     .description("Выполнить команду с секретами как переменными окружения.")
     .arguments("<command...:string>")
-    .action(async (options, ...command: string[]) => {
+    .action(async (_options: any, ...command: string[]) => {
       try {
         const project = await getCurrentProject();
         const env = await getCurrentEnv();
@@ -17,7 +16,6 @@ export function runCommand() {
           return;
         }
 
-        // Используем Apifly-клиент для получения секретов
         const client = await createClient();
         const response = await client.call("fetchSecrets", [project, env]);
 
@@ -37,7 +35,6 @@ export function runCommand() {
           return;
         }
 
-        // Объединяем секреты с текущими переменными окружения
         const cmd = command.join(" ");
         const denoCommand = new Deno.Command("sh", {
           args: ["-c", cmd],

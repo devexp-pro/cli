@@ -1,6 +1,6 @@
 import { Command } from "../deps.ts";
-import { createClient } from "../client/utils/api.ts";
-import { getCurrentProject } from "../client/utils/config.ts";
+import { createClient, getCurrentProject } from "../api.ts";
+
 import { green, red } from "../deps.ts";
 import { Input } from "@cliffy/prompt/input";
 

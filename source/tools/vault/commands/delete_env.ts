@@ -1,17 +1,18 @@
 import { Command } from "../deps.ts";
-import { createClient } from "../client/utils/api.ts";
 import {
+  createClient,
   getCurrentEnv,
   getCurrentProject,
   setCurrentEnv,
-} from "../client/utils/config.ts";
+} from "../api.ts";
+
 import { green, red, yellow } from "../deps.ts";
 
 export function deleteEnvCommand() {
   return new Command()
     .description("Удалить окружение.")
     .arguments("<envName:string>")
-    .action(async (options, envName: string) => {
+    .action(async (_options: any, envName: string) => {
       try {
         const project = await getCurrentProject();
         const currentEnv = await getCurrentEnv();

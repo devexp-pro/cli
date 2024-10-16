@@ -1,7 +1,7 @@
 import { Command } from "../deps.ts";
 
-import { createClient } from "../client/utils/api.ts";
-import { getCurrentEnv, getCurrentProject } from "../client/utils/config.ts";
+import { createClient, getCurrentEnv, getCurrentProject } from "../api.ts";
+
 import { green, red } from "../deps.ts";
 import { Table } from "@cliffy/table";
 

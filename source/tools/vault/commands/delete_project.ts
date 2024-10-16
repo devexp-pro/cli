@@ -1,16 +1,13 @@
 import { Command } from "../deps.ts";
-import { createClient } from "../client/utils/api.ts";
-import {
-  getCurrentProject,
-  setCurrentProject,
-} from "../client/utils/config.ts";
+import { createClient, getCurrentProject, setCurrentProject } from "../api.ts";
+
 import { green, red, yellow } from "../deps.ts";
 
 export function deleteProjectCommand() {
   return new Command()
     .description("Удалить проект.")
     .arguments("<projectName:string>")
-    .action(async (options, projectName: string) => {
+    .action(async (_options: any, projectName: string) => {
       try {
         const client = await createClient();
         const currentProject = await getCurrentProject();
@@ -21,7 +18,7 @@ export function deleteProjectCommand() {
               `Текущий проект '${currentProject}' совпадает с удаляемым проектом.`,
             ),
           );
-          await setCurrentProject(""); // Сбрасываем текущий проект, если он совпадает
+          await setCurrentProject("");
           console.log(green(`Текущий проект сброшен.`));
         }
 
