@@ -22,6 +22,10 @@ const vault = new Command()
   .description(
     "storage for secrets and env variables",
   )
+  .action(() => {
+    vault.showHelp();
+    Deno.exit(0);
+  })
   .command("create-project", createProjectCommand())
   .command("delete-project", deleteProjectCommand())
   .command("rename-project", renameProjectCommand())
