@@ -95,8 +95,8 @@ export async function deleteSelectedKvObject(key: Deno.KvKeyPart[], value: strin
 }
 
 export async function checkIsThisActive(usernameOrSSHKey: string) {
-  const activeProfile = await kv.get(["activeProfile"]);
-  const activeSSHKey = await kv.get(["activeSSHKey"]);
+  const activeProfile = await kv.get(["tool", "git", "activeProfile"]);
+  const activeSSHKey = await kv.get(["tool", "git", "activeSSHKey"]);
   const activeProfileName = activeProfile?.value ?? "Empty";
   const activeSSHKeyName = activeSSHKey?.value ?? "Empty";
 

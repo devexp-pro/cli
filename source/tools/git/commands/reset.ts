@@ -30,9 +30,9 @@ export async function fullReset() {
 }
 
 async function restoreOldUserData() {
-  const user = await kv.get<string>(["OldUsername"]);
-  const username = user.value ? user.value[0].trim() : "Empty";
-  const email = user.value ? user.value[1].trim() : "Empty";
+  const user = await kv.get<{ backupName: string; backupEmail: string }>(["tool", "git", "OldUsername"]);
+  const username = user.value ? user.value.backupName.trim() : "Empty";
+  const email = user.value ? user.value.backupEmail.trim() : "Empty";
 
   await shelly(["git", "config", "--global", "user.name", `${username}`]);
   await shelly(["git", "config", "--global", "user.email", `${email}`]);
@@ -67,6 +67,7 @@ async function deleteDotFolder(folderPath: string): Promise<void> {
 }
 
 async function terminateDB() {
+  await deletionDenoKvTemplate(kv, ["tool", "git"]);
   await deletionDenoKvTemplate(kv, ["tool", "git", "activeProfile"]);
   await deletionDenoKvTemplate(kv, ["activeProfile"]);
   await deletionDenoKvTemplate(kv, ["activeSSHKey"]);

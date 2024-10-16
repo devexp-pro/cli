@@ -57,7 +57,6 @@ export async function deleteUser() {
   const data = await getUserList();
   const result = await selectUserCore(data);
   const name = result?.[0] ?? "Unknown";
-  console.log(name);
   const connectedSSH = result?.[1] ?? "Unknown";
   const key = ["tool", "git", "userName:"];
 
