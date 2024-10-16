@@ -7,7 +7,7 @@ export const connect = async (
   alias = "test",
   attempts = 100,
 ) => {
-  const data = (await kv.get(["tunnels", alias])).value as any;
+  const data = (await kv.get(["tool", "tunnel", "list", alias])).value as any;
   const tunnelName = data.name;
   const port = data.port;
   console.log(`${url}/${tunnelName}`);
