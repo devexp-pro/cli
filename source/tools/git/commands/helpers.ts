@@ -47,7 +47,7 @@ export async function readGitConfigFile(filePath: string) {
       }
     }
     return rezult;
-  } catch (error) {
+  } catch (error: any) {
     console.error(`An error occurred: ${error.message}`);
   }
 }
@@ -58,15 +58,12 @@ export async function disconnectSshKeyAndUser(
 ) {
   const user = await kv.get<string>(["tool", "git", "userName:", username]);
 
-  const email = user.value ? user.value[3] : "Empty";
+  // const email = user.value ? user.value[3] : "Empty";
 
-  await kv.set(["tool", "git", "userName:", username], [
-    "connectedSSH",
-    "Empty",
-    "Email:",
-    email,
-  ]);
-  await kv.set(["tool", "git", "sshKeyName:", keyName], ["connectedUser", "Empty"]);
+  const email = (user.value as unknown as { Email: string }).Email
+
+  await kv.set(["tool", "git", "userName:", username], {connectedSSH: "Empty", Email: email});
+  await kv.set(["tool", "git", "sshKeyName:", keyName], {connectedUser: "Empty"});
 
   console.log(`User ${username} disconnected to SSH key ${keyName}`);
 }

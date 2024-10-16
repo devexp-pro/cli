@@ -6,10 +6,10 @@ import {
   getUserInput,
   readPublicKey,
 } from "./helpers.ts";
-import { Confirm } from "@cliffy/prompt";
+// import { Confirm } from "@cliffy/prompt";
 import { checkIsThisActive } from "./helpers.ts";
 import { startupSetup } from "./creatingEnvironment.ts";
-import { PATH_HOME, PATH_TO_DOT } from "../constants.ts";
+import { PATH_TO_DOT } from "../constants.ts";
 import { kv } from "$/kv";
 import { Command } from "@cliffy/command";
 import { deactivateProfile } from "./activateProfile.ts";
@@ -43,7 +43,7 @@ async function generateSshKey(name: string, email: string) {
 
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
-    await kv.set(["sshKeyName:", name], ["connectedUser", connectedUser]);
+    await kv.set(["tool", "git", "sshKeyName:", name], {connectedUser: connectedUser});
     await shelly(["ssh-add", "-K", `${PATH_TO_DOT}${name}`]);
     return true;
   } else {
@@ -54,7 +54,7 @@ async function generateSshKey(name: string, email: string) {
 export async function getAllSshKeysList(): Promise<
   Array<Deno.KvEntry<string>>
 > {
-  const iter = await kv.list<string>({ prefix: ["sshKeyName:"] });
+  const iter = await kv.list<string>({ prefix: ["tool", "git", "sshKeyName:"] });
   const keys = [];
 
   for await (const res of iter) keys.push(res);
@@ -98,20 +98,23 @@ export async function deleteSshKeyCore(nameSshKey: string) {
   if (sshKey.length === 0) {
     console.log("No data found.");
   } else {
-    const result = sshKey.find((key) => key.key[1] === nameSshKey);
+    const result = sshKey.find((key) => key.key[3] === nameSshKey);
 
-    const keyName = String(result?.key[1]) ?? "Unknown";
-    const connectedUser = String(result?.value[1]) ?? "Unknown";
+    const keyName = String(result?.key[3]) ?? "Unknown";
+    // const connectedUser = String(result?.value[1]) ?? "Unknown";
+
+    const connectedUser = (result?.value as unknown as { connectedUser: string }).connectedUser;
 
     const pathToDelete = `${PATH_TO_DOT}${keyName}`;
     const pathToDeletePubKey = `${PATH_TO_DOT}${keyName}.pub`;
+    const key = ["tool", "git", "sshKeyName:", keyName];
 
     if (await checkIsThisActive(keyName)) {
       await deactivateProfile();
       await disconnectSshKeyAndUser(connectedUser, keyName);
     }
 
-    await deleteSelectedKvObject("sshKeyName:", keyName);
+    await deleteSelectedKvObject(key, keyName);
     await shelly(["ssh-add", "-d", `${PATH_TO_DOT}${keyName}`]);
     await shelly([
       "security",
@@ -130,7 +133,7 @@ export const deleteSshKeyCommand = new Command()
   .name("deleteSSH")
   .description("Delete SSH key")
   .arguments("<ssh_key_name:string>")
-  .action(async (_options, ...args) => {
+  .action(async (_options: any, ...args: any[]) => {
     const [name] = args;
     await deleteSshKeyCore(name);
   });
@@ -139,7 +142,7 @@ export const createNewSshKeyCommand = new Command()
   .name("createSSH")
   .description("Create new SSH key")
   .arguments("<ssh_key_name:string> <email:string>")
-  .action(async (_options, ...args) => {
+  .action(async (_options: any, ...args: any[]) => {
     const [name, email] = args;
     await createNewSshKeyWithArgs(name, email);
   });
@@ -151,6 +154,6 @@ export const showAllSshKeysCommand = new Command()
     const sshKeys = await getAllSshKeysList();
     sshKeys.forEach(async (sshKey) => {
       const publicKey = await readPublicKey(String(sshKey.key[1]));
-      console.log(`Name: ${String(sshKey.key[1])} | Public Key: ${publicKey}`);
+      console.log(`Name: ${String(sshKey.key[3])} | Public Key: ${publicKey}`);
     });
   });
