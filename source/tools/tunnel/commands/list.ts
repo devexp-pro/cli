@@ -6,8 +6,10 @@ import { kv } from "$/kv";
 export const list = new Command()
   .name("list")
   .description("list subcommand description")
-  .action(async (_options, ..._args) => {
-    const tunnels = await Array.fromAsync(kv.list({ prefix: ["tunnels"] }));
+  .action(async (_options: any, ..._args: any) => {
+    const tunnels = await Array.fromAsync(
+      kv.list({ prefix: ["tool", "tunnel", "list"] }),
+    );
 
     if (tunnels.length > 0) {
       const table = new Table()
