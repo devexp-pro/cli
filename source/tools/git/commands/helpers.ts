@@ -58,8 +58,6 @@ export async function disconnectSshKeyAndUser(
 ) {
   const user = await kv.get<string>(["tool", "git", "userName:", username]);
 
-  // const email = user.value ? user.value[3] : "Empty";
-
   const email = (user.value as unknown as { Email: string }).Email
 
   await kv.set(["tool", "git", "userName:", username], {connectedSSH: "Empty", Email: email});

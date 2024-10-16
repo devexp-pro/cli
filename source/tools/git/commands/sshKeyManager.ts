@@ -101,7 +101,6 @@ export async function deleteSshKeyCore(nameSshKey: string) {
     const result = sshKey.find((key) => key.key[3] === nameSshKey);
 
     const keyName = String(result?.key[3]) ?? "Unknown";
-    // const connectedUser = String(result?.value[1]) ?? "Unknown";
 
     const connectedUser = (result?.value as unknown as { connectedUser: string }).connectedUser;
 
