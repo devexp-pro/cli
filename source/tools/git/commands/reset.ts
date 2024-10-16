@@ -76,7 +76,7 @@ async function terminateDB() {
 }
 
 async function deletionDenoKvTemplate(kv: Deno.Kv, key: Deno.KvKeyPart[]): Promise<void> {
-  const iterator = kv.list({ prefix: [key] });
+  const iterator = kv.list({ prefix: key });
   const batch = kv.atomic();
 
   for await (const entry of iterator) {
@@ -85,3 +85,38 @@ async function deletionDenoKvTemplate(kv: Deno.Kv, key: Deno.KvKeyPart[]): Promi
 
   await batch.commit();
 }
+
+
+
+
+// Пригождается в разработке.
+async function clearEntireDatabase(kv: Deno.Kv): Promise<void> {
+  const iterator = kv.list({ prefix: [] });
+  const batchSize = 100;
+  let batch: Deno.KvKey[] = [];
+
+  for await (const entry of iterator) {
+    batch.push(entry.key);
+
+    if (batch.length >= batchSize) {
+      const atomicOp = kv.atomic();
+      for (const key of batch) {
+        atomicOp.delete(key);
+      }
+      await atomicOp.commit();
+      batch = [];
+    }
+  }
+
+  if (batch.length > 0) {
+    const atomicOp = kv.atomic();
+    for (const key of batch) {
+      atomicOp.delete(key);
+    }
+    await atomicOp.commit();
+  }
+
+  console.log("Database terminated successfully.");
+}
+
+// clearEntireDatabase(kv);

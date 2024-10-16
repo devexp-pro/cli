@@ -107,7 +107,7 @@ export async function deleteSshKeyCore(nameSshKey: string) {
 
     const pathToDelete = `${PATH_TO_DOT}${keyName}`;
     const pathToDeletePubKey = `${PATH_TO_DOT}${keyName}.pub`;
-    const key = ["tool", "git", "sshKeyName:", keyName];
+    const key = ["tool", "git", "sshKeyName:"];
 
     if (await checkIsThisActive(keyName)) {
       await deactivateProfile();
