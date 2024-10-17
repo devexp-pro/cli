@@ -1,6 +1,6 @@
 import { Command } from "../deps.ts";
-import { createClient } from "../client/utils/api.ts";
-import { getCurrentEnv, getCurrentProject } from "../client/utils/config.ts";
+import { createClient, getCurrentEnv, getCurrentProject } from "../api.ts";
+
 import { green, red, yellow } from "../deps.ts";
 
 export function fetchAndSetSecretsCommand() {
@@ -9,7 +9,8 @@ export function fetchAndSetSecretsCommand() {
       "Получить секреты для текущего окружения и установить их в переменные окружения.",
     )
     .option("--export <path:string>", "Сохранить переменные окружения в файл")
-    .action(async ({ export: exportPath }) => {
+    //@ts-ignore
+    .action(async (_options: any, { export: exportPath }) => {
       try {
         const project = await getCurrentProject();
         const env = await getCurrentEnv();

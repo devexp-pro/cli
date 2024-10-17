@@ -1,33 +1,29 @@
 import { Command } from "@cliffy/command";
 import { kv } from "$/kv";
-interface SessionData {
-  github_username: string;
-}
+import { SERVICE_URL } from "$/constants";
 
 export const logout = new Command()
   .description("Logout from the current session")
   .action(async () => {
-    const sessionData = kv.list<SessionData>({ prefix: ["auth"] });
-    let sessionDataArray: Array<{ key: string[]; value: SessionData }> = [];
+    // Проверяем текущую сессию по новому ключу
+    const sessionData = await kv.get<
+      { sessionId: string; github_username: string }
+    >(["auth", "session"]);
 
-    for await (const entry of sessionData) {
-      //@ts-ignore
-      sessionDataArray.push(entry);
-    }
-
-    if (sessionDataArray.length === 0) {
+    if (!sessionData.value) {
       console.log("No active session found. You are not logged in.");
       return;
     }
 
-    const sessionId = sessionDataArray[0].key[1];
+    const { sessionId } = sessionData.value;
 
     const result = await fetch(
-      `http://localhost:8000/logout?session_id=${sessionId}`,
+      `${SERVICE_URL}/auth/logout?session_id=${sessionId}`,
     );
 
     if (result.ok) {
-      await kv.delete(["auth", sessionId]);
+      // Удаляем сессию из KV
+      await kv.delete(["auth", "session"]);
       console.log("Logged out successfully!");
     } else {
       console.error("Error during logout");

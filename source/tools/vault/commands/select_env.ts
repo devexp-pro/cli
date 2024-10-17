@@ -1,6 +1,6 @@
 import { Command, green, red } from "../deps.ts";
-import { createClient } from "../client/utils/api.ts";
-import { getCurrentProject, setCurrentEnv } from "../client/utils/config.ts";
+import { createClient, getCurrentProject, setCurrentEnv } from "../api.ts";
+
 import { Select } from "@cliffy/prompt/select";
 
 export function selectEnvCommand() {

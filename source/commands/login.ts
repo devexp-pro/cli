@@ -1,23 +1,21 @@
 import { Command } from "@cliffy/command";
 import { open } from "x/open";
 import { kv } from "$/kv";
+import { SERVICE_URL } from "$/constants";
 
 export const login = new Command()
   .description("Login via GitHub OAuth")
   .action(async () => {
     try {
-      const sessionData = kv.list<{}>({ prefix: ["auth"] });
-      let sessionDataArray = <any> [];
-      for await (const entry of sessionData) {
-        sessionDataArray.push(entry);
-      }
+      // Ищем сессии, хранящиеся по ключу ["auth", "session"]
+      const sessionData = await kv.get<
+        { sessionId: string; github_username: string }
+      >(["auth", "session"]);
 
-      if (sessionDataArray.length > 0) {
-        const sessionId = sessionDataArray[0].key[1];
-        const githubUsername = sessionDataArray[0].value.github_username;
-
+      if (sessionData.value) {
+        const { sessionId, github_username } = sessionData.value;
         console.log(
-          `You are already logged in as ${githubUsername} with sessionId: ${sessionId}.`,
+          `You are already logged in as ${github_username} with sessionId: ${sessionId}.`,
         );
         return;
       }
@@ -25,13 +23,18 @@ export const login = new Command()
       const authToken = crypto.randomUUID();
       console.log(`Generated UUID for auth_token: ${authToken}`);
 
-      const url = `http://localhost:8000/login?auth_token=${authToken}`;
+      const url = `${SERVICE_URL}/auth/login?auth_token=${authToken}`;
       console.log(`Opening browser with URL: ${url}`);
-      await open(url, { wait: false });
+      try {
+        await open(url, { wait: false });
+      } catch {
+        console.log(`URL: ${url}`);
+      }
+
       console.log("Открыт браузер для авторизации через GitHub...");
 
       const result = await fetch(
-        `http://localhost:8000/wait-for-login?auth_token=${authToken}`,
+        `${SERVICE_URL}/auth/wait-for-login?auth_token=${authToken}`,
       );
 
       if (result.ok) {
@@ -41,10 +44,13 @@ export const login = new Command()
         console.log(
           `Received from server: sessionId: ${sessionId}, githubUsername: ${githubUsername}`,
         );
-        await kv.set(["auth", sessionId], {
+
+        // Сохраняем данные сессии в новый ключ
+        await kv.set(["auth", "session"], {
+          sessionId,
           github_username: githubUsername,
-          uuid,
         });
+
         console.log(
           `Успешная авторизация! Username: ${githubUsername}, sessionId: ${sessionId}`,
         );

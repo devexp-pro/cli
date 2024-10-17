@@ -9,14 +9,10 @@ export interface ProjectData {
 
 export type GuardenDefinition = ApiflyDefinition<
   {
-    token: string | null;
+    session_id: string | null;
     projects: ProjectData[];
   },
   {
-    generateToken: {
-      args: [userId: string];
-      returns: { success: boolean; message: string; token: string };
-    };
     createProject: {
       args: [projectName: string];
       returns: { success: boolean };
@@ -70,7 +66,5 @@ export type GuardenDefinition = ApiflyDefinition<
       returns: { success: boolean; message: string };
     };
   },
-  {
-    token: string;
-  }
+  { session_id: string }
 >;

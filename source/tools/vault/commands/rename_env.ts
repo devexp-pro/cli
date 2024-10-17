@@ -1,20 +1,20 @@
 import { Command } from "../deps.ts";
-import { createClient } from "../client/utils/api.ts";
 import {
+  createClient,
   getCurrentEnv,
   getCurrentProject,
   setCurrentEnv,
-} from "../client/utils/config.ts";
+} from "../api.ts";
+
 import { green, red, yellow } from "../deps.ts";
 
 export function renameEnvCommand() {
   return new Command()
     .description("Изменить название окружения.")
     .arguments("<oldEnvName:string> <newEnvName:string>")
-    .action(async (options, oldEnvName: string, newEnvName: string) => {
+    .action(async (_options: any, oldEnvName: string, newEnvName: string) => {
       try {
         const project = await getCurrentProject();
-        const currentEnv = await getCurrentEnv();
 
         if (!project) {
           console.error(

@@ -22,6 +22,9 @@ export const IMPORT_MAP_URL =
 
 export const SERVICE_DOMAIN = IS_DEVELOP ? "localhost:4000" : "devexp.cloud";
 
+export const SERVICE_URL = (IS_DEVELOP ? "http://" : "https://") +
+  SERVICE_DOMAIN;
+
 export const WEBSOCKET_URL = `${
   IS_DEVELOP ? "ws" : "wss"
 }://wss.${SERVICE_DOMAIN}/wss`;

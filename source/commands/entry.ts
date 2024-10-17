@@ -30,7 +30,7 @@ import { setup } from "./setup.ts";
 
 export const entry = new Command()
   .name("dx")
-  .usage("usage late init...")
+  .usage("[command]")
   .description(
     "This is a powerful entry point for all developers, significantly improving the developer experience",
   )
@@ -46,20 +46,20 @@ export const entry = new Command()
     entry.showHelp();
     Deno.exit();
   })
-  .command("llm", toolLlm)
+  // .command("llm", toolLlm)
   .command("tunnel", toolTunnel)
   .command("config", toolConfig)
   .command("vault", toolVault)
-  .command("flow", toolFlow)
-  .command("template", toolTemplate)
-  .command("alias", toolAlias)
-  .command("hyper", toolHyper)
+  // .command("flow", toolFlow)
+  // .command("template", toolTemplate)
+  // .command("alias", toolAlias)
+  // .command("hyper", toolHyper)
   .command("git", toolGit)
-  .command("term", toolTerm)
-  .command("radio", toolRadio)
+  // .command("term", toolTerm)
+  // .command("radio", toolRadio)
   .command("clip", toolClip)
   .command("dash", dash)
   .command("login", login)
   .command("logout", logout)
-  .command("setup", setup)
+  // .command("setup", setup)
   .command("upgrade", upgrade);

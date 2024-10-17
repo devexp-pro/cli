@@ -1,7 +1,7 @@
 import { Command } from "../deps.ts";
 
-import { createClient } from "../client/utils/api.ts";
-import { setCurrentProject } from "../client/utils/config.ts";
+import { createClient, setCurrentProject } from "../api.ts";
+
 import { green, red } from "../deps.ts";
 import { Select } from "@cliffy/prompt/select";
 
@@ -25,7 +25,6 @@ export function selectProjectCommand() {
           options: response!.state.projects!.map((p) => p!.name!),
         });
 
-        // Сохраняем текущий проект
         await setCurrentProject(selectedProject);
 
         console.log(green(`Проект '${selectedProject}' успешно выбран.`));
