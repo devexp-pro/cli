@@ -30,9 +30,9 @@ export async function fullReset() {
 }
 
 async function restoreOldUserData() {
-  const user = await kv.get<string>(["OldUsername"]);
-  const username = user.value ? user.value[0].trim() : "Empty";
-  const email = user.value ? user.value[1].trim() : "Empty";
+  const user = await kv.get<{ backupName: string; backupEmail: string }>(["tool", "git", "OldUsername"]);
+  const username = user.value ? user.value.backupName.trim() : "Empty";
+  const email = user.value ? user.value.backupEmail.trim() : "Empty";
 
   await shelly(["git", "config", "--global", "user.name", `${username}`]);
   await shelly(["git", "config", "--global", "user.email", `${email}`]);
@@ -67,15 +67,11 @@ async function deleteDotFolder(folderPath: string): Promise<void> {
 }
 
 async function terminateDB() {
-  await deletionDenoKvTemplate(kv, "activeProfile");
-  await deletionDenoKvTemplate(kv, "activeSSHKey");
-  await deletionDenoKvTemplate(kv, "userName:");
-  await deletionDenoKvTemplate(kv, "sshKeyName:");
-  await deletionDenoKvTemplate(kv, "OldUsername");
+  await deletionDenoKvTemplate(kv, ["tool", "git"]);
 }
 
-async function deletionDenoKvTemplate(kv: Deno.Kv, key: string): Promise<void> {
-  const iterator = kv.list({ prefix: [key] });
+async function deletionDenoKvTemplate(kv: Deno.Kv, key: Deno.KvKeyPart[]): Promise<void> {
+  const iterator = kv.list({ prefix: key });
   const batch = kv.atomic();
 
   for await (const entry of iterator) {
@@ -84,3 +80,38 @@ async function deletionDenoKvTemplate(kv: Deno.Kv, key: string): Promise<void> {
 
   await batch.commit();
 }
+
+
+
+
+// Пригождается в разработке.
+async function clearEntireDatabase(kv: Deno.Kv): Promise<void> {
+  const iterator = kv.list({ prefix: [] });
+  const batchSize = 100;
+  let batch: Deno.KvKey[] = [];
+
+  for await (const entry of iterator) {
+    batch.push(entry.key);
+
+    if (batch.length >= batchSize) {
+      const atomicOp = kv.atomic();
+      for (const key of batch) {
+        atomicOp.delete(key);
+      }
+      await atomicOp.commit();
+      batch = [];
+    }
+  }
+
+  if (batch.length > 0) {
+    const atomicOp = kv.atomic();
+    for (const key of batch) {
+      atomicOp.delete(key);
+    }
+    await atomicOp.commit();
+  }
+
+  console.log("Database terminated successfully.");
+}
+
+// clearEntireDatabase(kv);

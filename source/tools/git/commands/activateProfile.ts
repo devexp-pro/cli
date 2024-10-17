@@ -6,8 +6,8 @@ import { PATH_TO_DOT, PATH_TO_GIT_CONFIG } from "../constants.ts";
 import { kv } from "$/kv";
 
 async function setActiveProfile(username: string, sshKey: string) {
-  await kv.set(["activeProfile"], [username]);
-  await kv.set(["activeSSHKey"], [sshKey]);
+  await kv.set(["tool", "git", "activeProfile"], { username: username });
+  await kv.set(["tool", "git", "activeSSHKey"], { sshKey: sshKey });
 }
 
 function stringifySSHConfig(
@@ -89,8 +89,8 @@ export async function activateProfile() {
 }
 
 export async function showActiveProfileStatus(returnData: boolean) {
-  const activeProfile = await kv.get(["activeProfile"]);
-  const activeSSHKey = await kv.get(["activeSSHKey"]);
+  const activeProfile = await kv.get<{ username: string }>(["tool", "git", "activeProfile"]);
+  const activeSSHKey = await kv.get<{ sshKey: string }>(["tool", "git", "activeSSHKey"]);
 
   if (activeProfile.value === null || activeSSHKey.value === null) {
     console.log("There is no current active profile");
@@ -99,7 +99,7 @@ export async function showActiveProfileStatus(returnData: boolean) {
 
   if (returnData === false) {
     console.log(
-      `Current active profile: ${activeProfile?.value} | Current active SSH key: ${activeSSHKey?.value}`,
+      `Current active profile: ${activeProfile?.value?.username} | Current active SSH key: ${activeSSHKey?.value?.sshKey}`,
     );
   } else {
     const username = activeProfile.value;
@@ -110,14 +110,14 @@ export async function showActiveProfileStatus(returnData: boolean) {
 }
 
 export async function deactivateProfile() {
-  const activeProfile = await kv.get(["activeProfile"]);
-  const activeSSHKey = await kv.get(["activeSSHKey"]);
+  const activeProfile = await kv.get(["tool", "git", "activeProfile"]);
+  const activeSSHKey = await kv.get(["tool", "git", "activeSSHKey"]);
   if (activeProfile.value === null || activeSSHKey.value === null) {
     console.log("No active profile");
   }
 
-  await kv.delete(["activeProfile"]);
-  await kv.delete(["activeSSHKey"]);
+  await kv.delete(["tool", "git", "activeProfile"]);
+  await kv.delete(["tool", "git", "activeSSHKey"]);
 
   console.log("Profile deactivated successfully");
 }

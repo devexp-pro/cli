@@ -1,28 +1,29 @@
 // import { bash, sh, shelly, zsh } from "@vseplet/shelly";
 // import { ensureFile } from "https://deno.land/std/fs/mod.ts";
 // import { checShell, shellConfigFile } from "./commands/service.ts";
+// import { kv } from "$/kv";
 
-// // test()
-// const selectedUserName = "Mikhail_Svetlov"
-// const PATHTOGITCONFIG = `${Deno.env.get("HOME")}/.ssh/DOT/config`;
+// async function deleteSelectedKvObject(key: Deno.KvKeyPart[], value: string) {
+//   const iterator = kv.list({ prefix: key });
 
-// async function testDel(kv: Deno.Kv, key: string): Promise<void> {
-//   const iterator = kv.list({ prefix: [key] });
-//   console.log(iterator)
+//   // console.log(iterator);
+
 //   const batch = kv.atomic();
 
 //   for await (const entry of iterator) {
-//     batch.delete(entry.key);
+//     console.log(entry);
+//     if (entry.key[3] === value) {
+//       const testKey = entry.key;
+//       console.log(`!!!Found!!! ${entry.key[3]}`);
+//       console.log("-----------------");
+//       console.log(testKey);
+//       console.log("-----------------");
+//       batch.delete(testKey);
+//     }
 //   }
 
 //   await batch.commit();
-//   console.log(`All entries for key "${key}" have been deleted.`);
+
 // }
 
-// async function test() {
-//   const kv = await Deno.openKv();
-//   await testDel(kv, "userName:");
-//   kv.close();
-// }
-
-// test();
+// deleteSelectedKvObject(["tool", "git", "userName:"], "test");

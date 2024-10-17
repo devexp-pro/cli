@@ -7,11 +7,11 @@ export async function selectUserCore(dataArray: Array<Deno.KvEntry<string>>) {
     const selectedObject = await Select.prompt({
       message: "Select User",
       options: data.map((key) => ({
-        name: key.key[1] as string,
+        name: key.key[3] as string,
         value: {
-          userName: key.key[1],
-          sshKey: key.value[1],
-          email: key.value[3],
+          userName: key.key[3],
+          sshKey: (key.value as unknown as { connectedSSH: string }).connectedSSH,
+          email: (key.value as unknown as { Email: string }).Email,
         },
       })),
     });
@@ -35,17 +35,20 @@ export async function selectSshKeyCore(dataArray: Array<Deno.KvEntry<string>>) {
     const selectedObject = await Select.prompt({
       message: "Select SSH Key",
       options: data.map((key) => ({
-        name: key.key[1] as string,
-        value: { keyName: key.key[1], conectionUser: key.value[1] },
+        name: key.key[3] as string,
+        value: {
+          name: key.key[3],
+          conectionUser: (key?.value as unknown as { connectedUser: string }).connectedUser,
+        },
       })),
     });
 
-    const { keyName, conectionUser } = selectedObject as unknown as {
-      keyName: string;
+    const { name, conectionUser } = selectedObject as unknown as {
+      name: string;
       conectionUser: string;
     };
 
-    return [keyName, conectionUser];
+    return [name, conectionUser];
   } else {
     return undefined;
   }

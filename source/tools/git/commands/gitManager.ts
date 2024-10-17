@@ -39,14 +39,14 @@ export async function gitClone() {
   console.log(
     `When cloning a repository, the SSH key of the currently active profile will be linked to its local version.`,
   );
-  console.log(`Current key: ${activeUserStatus?.ssh}`);
+  console.log(`Current key: ${activeUserStatus?.ssh.sshKey}`);
   const confirmed: boolean = await Confirm.prompt("Do you understand?");
   if (!confirmed) {
     console.log("Cancel cloning");
     return;
   }
 
-  const ssh = activeUserStatus?.ssh as string ?? "Empty";
+  const ssh = activeUserStatus?.ssh.sshKey ?? "Empty";
   const gitCloneURL = await getUserInput(
     "Paste the link to clone the repository via SSH",
   );

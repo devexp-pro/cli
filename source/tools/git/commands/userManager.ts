@@ -12,13 +12,13 @@ export async function createNewUser() {
   const email = await getUserInput("Please enter a email:");
   const ssh = "Empty";
 
-  await kv.set(["userName:", name], ["connectedSSH", ssh, "Email:", email]);
+  await kv.set(["tool", "git", "userName:", name], {connectedSSH: ssh, Email: email});
 
   console.log(`User ${name} saved successfully`);
 }
 
 export async function getUserList(): Promise<Array<Deno.KvEntry<string>>> {
-  const iter = kv.list<string>({ prefix: ["userName:"] });
+  const iter = kv.list<string>({ prefix: ["tool", "git", "userName:"] });
   const users = [];
 
   for await (const res of iter) users.push(res);
@@ -57,21 +57,21 @@ export async function deleteUser() {
   const data = await getUserList();
   const result = await selectUserCore(data);
   const name = result?.[0] ?? "Unknown";
-  console.log(name);
   const connectedSSH = result?.[1] ?? "Unknown";
+  const key = ["tool", "git", "userName:"];
 
   if (await checkIsThisActive(name)) {
-    console.log("You can't delete active user. Deactivate profile first.");
+    console.log("You can't delete active user. Change active user first.");
     return;
   }
 
   if (result !== undefined) {
     if (connectedSSH !== "Empty") {
       await disconnectSshKeyAndUser(name, connectedSSH);
-      await deleteSelectedKvObject("userName:", name);
+      await deleteSelectedKvObject(key, name);
       console.log(`User ${name} deleted successfully`);
     } else {
-      await deleteSelectedKvObject("userName:", name);
+      await deleteSelectedKvObject(key, name);
       console.log(`User ${name} deleted successfully`);
     }
   } else {

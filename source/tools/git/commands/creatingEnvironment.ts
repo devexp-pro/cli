@@ -67,7 +67,7 @@ async function createBackupUserData() {
     "user.email",
   ]);
 
-  await kv.set(["OldUsername"], [currentUsername.stdout, currentEmail.stdout]);
+  await kv.set(["tool", "git", "OldUsername"], { backupName: currentUsername.stdout, backupEmail: currentEmail.stdout});
 }
 
 async function shellSetup() {
