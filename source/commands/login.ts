@@ -25,7 +25,12 @@ export const login = new Command()
 
       const url = `${SERVICE_URL}/auth/login?auth_token=${authToken}`;
       console.log(`Opening browser with URL: ${url}`);
-      await open(url, { wait: false });
+      try {
+        await open(url, { wait: false });
+      } catch {
+        console.log(`URL: ${url}`);
+      }
+
       console.log("Открыт браузер для авторизации через GitHub...");
 
       const result = await fetch(
