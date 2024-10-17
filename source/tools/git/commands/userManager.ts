@@ -12,7 +12,10 @@ export async function createNewUser() {
   const email = await getUserInput("Please enter a email:");
   const ssh = "Empty";
 
-  await kv.set(["tool", "git", "userName:", name], {connectedSSH: ssh, Email: email});
+  await kv.set(["tool", "git", "userName:", name], {
+    connectedSSH: ssh,
+    Email: email,
+  });
 
   console.log(`User ${name} saved successfully`);
 }

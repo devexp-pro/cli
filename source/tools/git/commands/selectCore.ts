@@ -10,7 +10,8 @@ export async function selectUserCore(dataArray: Array<Deno.KvEntry<string>>) {
         name: key.key[3] as string,
         value: {
           userName: key.key[3],
-          sshKey: (key.value as unknown as { connectedSSH: string }).connectedSSH,
+          sshKey:
+            (key.value as unknown as { connectedSSH: string }).connectedSSH,
           email: (key.value as unknown as { Email: string }).Email,
         },
       })),
@@ -38,7 +39,8 @@ export async function selectSshKeyCore(dataArray: Array<Deno.KvEntry<string>>) {
         name: key.key[3] as string,
         value: {
           name: key.key[3],
-          conectionUser: (key?.value as unknown as { connectedUser: string }).connectedUser,
+          conectionUser:
+            (key?.value as unknown as { connectedUser: string }).connectedUser,
         },
       })),
     });

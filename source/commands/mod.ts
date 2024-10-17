@@ -24,9 +24,9 @@ import toolClip from "$/tools/clip";
 
 import { upgrade } from "./upgrade.ts";
 import { dash } from "./dash.ts";
-import { login } from "./login.ts";
-import { logout } from "./logout.ts";
-import { setup } from "./setup.ts";
+import { login } from "./setup/login.ts";
+import { logout } from "./setup/logout.ts";
+import { setup } from "./setup/setup.ts";
 
 export const entry = new Command()
   .name("dx")

@@ -1,3 +1,3 @@
-import { entry } from "./commands/entry.ts";
+import { entry } from "./commands/mod.ts";
 
 await entry.parse(Deno.args);

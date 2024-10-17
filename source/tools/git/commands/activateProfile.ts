@@ -89,8 +89,16 @@ export async function activateProfile() {
 }
 
 export async function showActiveProfileStatus(returnData: boolean) {
-  const activeProfile = await kv.get<{ username: string }>(["tool", "git", "activeProfile"]);
-  const activeSSHKey = await kv.get<{ sshKey: string }>(["tool", "git", "activeSSHKey"]);
+  const activeProfile = await kv.get<{ username: string }>([
+    "tool",
+    "git",
+    "activeProfile",
+  ]);
+  const activeSSHKey = await kv.get<{ sshKey: string }>([
+    "tool",
+    "git",
+    "activeSSHKey",
+  ]);
 
   if (activeProfile.value === null || activeSSHKey.value === null) {
     console.log("There is no current active profile");

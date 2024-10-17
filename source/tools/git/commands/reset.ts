@@ -30,7 +30,11 @@ export async function fullReset() {
 }
 
 async function restoreOldUserData() {
-  const user = await kv.get<{ backupName: string; backupEmail: string }>(["tool", "git", "OldUsername"]);
+  const user = await kv.get<{ backupName: string; backupEmail: string }>([
+    "tool",
+    "git",
+    "OldUsername",
+  ]);
   const username = user.value ? user.value.backupName.trim() : "Empty";
   const email = user.value ? user.value.backupEmail.trim() : "Empty";
 
@@ -70,7 +74,10 @@ async function terminateDB() {
   await deletionDenoKvTemplate(kv, ["tool", "git"]);
 }
 
-async function deletionDenoKvTemplate(kv: Deno.Kv, key: Deno.KvKeyPart[]): Promise<void> {
+async function deletionDenoKvTemplate(
+  kv: Deno.Kv,
+  key: Deno.KvKeyPart[],
+): Promise<void> {
   const iterator = kv.list({ prefix: key });
   const batch = kv.atomic();
 
@@ -80,9 +87,6 @@ async function deletionDenoKvTemplate(kv: Deno.Kv, key: Deno.KvKeyPart[]): Promi
 
   await batch.commit();
 }
-
-
-
 
 // Пригождается в разработке.
 async function clearEntireDatabase(kv: Deno.Kv): Promise<void> {

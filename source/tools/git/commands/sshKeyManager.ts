@@ -43,7 +43,9 @@ async function generateSshKey(name: string, email: string) {
 
   if (ssh.success === true) {
     console.log("SSH key generated successfully");
-    await kv.set(["tool", "git", "sshKeyName:", name], {connectedUser: connectedUser});
+    await kv.set(["tool", "git", "sshKeyName:", name], {
+      connectedUser: connectedUser,
+    });
     await shelly(["ssh-add", "-K", `${PATH_TO_DOT}${name}`]);
     return true;
   } else {
@@ -54,7 +56,9 @@ async function generateSshKey(name: string, email: string) {
 export async function getAllSshKeysList(): Promise<
   Array<Deno.KvEntry<string>>
 > {
-  const iter = await kv.list<string>({ prefix: ["tool", "git", "sshKeyName:"] });
+  const iter = await kv.list<string>({
+    prefix: ["tool", "git", "sshKeyName:"],
+  });
   const keys = [];
 
   for await (const res of iter) keys.push(res);
@@ -102,7 +106,8 @@ export async function deleteSshKeyCore(nameSshKey: string) {
 
     const keyName = String(result?.key[3]) ?? "Unknown";
 
-    const connectedUser = (result?.value as unknown as { connectedUser: string }).connectedUser;
+    const connectedUser =
+      (result?.value as unknown as { connectedUser: string }).connectedUser;
 
     const pathToDelete = `${PATH_TO_DOT}${keyName}`;
     const pathToDeletePubKey = `${PATH_TO_DOT}${keyName}.pub`;
