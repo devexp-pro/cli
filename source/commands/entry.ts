@@ -30,7 +30,7 @@ import { setup } from "./setup.ts";
 
 export const entry = new Command()
   .name("dx")
-  .usage("usage late init...")
+  .usage("[command]")
   .description(
     "This is a powerful entry point for all developers, significantly improving the developer experience",
   )
