@@ -68,12 +68,6 @@ async function deleteDotFolder(folderPath: string): Promise<void> {
 
 async function terminateDB() {
   await deletionDenoKvTemplate(kv, ["tool", "git"]);
-  await deletionDenoKvTemplate(kv, ["tool", "git", "activeProfile"]);
-  await deletionDenoKvTemplate(kv, ["activeProfile"]);
-  await deletionDenoKvTemplate(kv, ["activeSSHKey"]);
-  await deletionDenoKvTemplate(kv, ["userName:"]);
-  await deletionDenoKvTemplate(kv, ["sshKeyName:"]);
-  await deletionDenoKvTemplate(kv, ["OldUsername"]);
 }
 
 async function deletionDenoKvTemplate(kv: Deno.Kv, key: Deno.KvKeyPart[]): Promise<void> {
