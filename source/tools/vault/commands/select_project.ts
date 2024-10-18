@@ -22,6 +22,7 @@ export function selectProjectCommand() {
 
         const selectedProject = await Select.prompt<string>({
           message: "Выберите проект:",
+
           options: response!.state.projects!.map((p) => p!.name!),
         });
 

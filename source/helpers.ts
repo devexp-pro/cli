@@ -16,7 +16,7 @@ export async function getSessionID(): Promise<string | null> {
 
     if (sessionData.value) {
       const sessionId = sessionData.value.sessionId;
-      console.log(`Найден sessionId: ${sessionId}`);
+
       return sessionId;
     }
 

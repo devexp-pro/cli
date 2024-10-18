@@ -8,7 +8,7 @@ export function createProjectCommand() {
     .action(async (_options: any, projectName: string) => {
       try {
         const client = await createClient();
-
+        console.log(`Ща будем создавать проект: ${projectName}`);
         const response = await client.call("createProject", [projectName]);
 
         if (!response.success) {
