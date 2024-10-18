@@ -1,18 +1,18 @@
 import { Command } from "../deps.ts";
 import { createClient, getCurrentProject, setCurrentProject } from "../api.ts";
 
-import { green, red, yellow } from "../deps.ts";
+import { green, red } from "../deps.ts";
 
 export function renameProjectCommand() {
   return new Command()
-    .description("Переименовать проект.")
+    .description("Переименовать текущий проект.")
     .arguments("<newProjectName:string>")
     .action(async (_options: any, newProjectName: string) => {
       try {
         const currentProject = await getCurrentProject();
 
         if (!currentProject) {
-          console.error(red("Проект не выбран."));
+          console.error(red("Текущий проект не выбран."));
           return;
         }
 

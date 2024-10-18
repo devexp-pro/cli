@@ -6,15 +6,16 @@ import {
   setCurrentEnv,
 } from "../api.ts";
 
-import { green, red, yellow } from "../deps.ts";
+import { green, red } from "../deps.ts";
 
 export function renameEnvCommand() {
   return new Command()
-    .description("Изменить название окружения.")
-    .arguments("<oldEnvName:string> <newEnvName:string>")
-    .action(async (_options: any, oldEnvName: string, newEnvName: string) => {
+    .description("Переименовать текущее окружение.")
+    .arguments("<newEnvName:string>")
+    .action(async (_options: any, newEnvName: string) => {
       try {
         const project = await getCurrentProject();
+        const currentEnv = await getCurrentEnv();
 
         if (!project) {
           console.error(
@@ -25,10 +26,15 @@ export function renameEnvCommand() {
           return;
         }
 
+        if (!currentEnv) {
+          console.error(red("Текущее окружение не выбрано."));
+          return;
+        }
+
         const client = await createClient();
         const response = await client.call("renameEnvironment", [
           project,
-          oldEnvName,
+          currentEnv,
           newEnvName,
         ]);
 
@@ -42,7 +48,7 @@ export function renameEnvCommand() {
 
         console.log(
           green(
-            `Окружение '${oldEnvName}' успешно переименовано в '${newEnvName}'.`,
+            `Окружение '${currentEnv}' успешно переименовано в '${newEnvName}'.`,
           ),
         );
       } catch (error) {
