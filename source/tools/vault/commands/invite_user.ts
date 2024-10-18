@@ -1,18 +1,16 @@
-import { Command, Input } from "../deps.ts";
+import { Command } from "../deps.ts";
 import { createClient } from "../api.ts";
 
-import { green, red, yellow } from "../deps.ts";
+import { green, red } from "../deps.ts";
 import { Select } from "@cliffy/prompt/select";
 
-export function inviteUserCommand() {
+export function inviteUserCommand(username: string) {
   return new Command()
     .description("Пригласить пользователя в проект.")
     .action(async () => {
       try {
-        // Получаем клиента Apifly
         const client = await createClient();
 
-        // Получаем список проектов текущего пользователя
         const [response, error] = await client.get();
         if (error) {
           console.error(red(`Ошибка получения проектов: ${error.message}`));
@@ -26,34 +24,24 @@ export function inviteUserCommand() {
           return;
         }
 
-        // Показываем пользователю список проектов для выбора
         const selectedProject = await Select.prompt({
           message: "Выберите проект:",
           options: projects,
         });
 
-        // Вводим имя пользователя для инвайта
-        const inviteeUsername = await Input.prompt({
-          message: "Введите имя пользователя, которого хотите пригласить:",
-          validate: (value) =>
-            value.length > 0 ? true : "Имя пользователя не может быть пустым.",
-        });
-
-        // Проверяем существование пользователя
         const checkUserResponse = await client.call("checkUserExists", [
-          inviteeUsername,
+          username,
         ]);
 
         if (!checkUserResponse.success) {
           console.error(
-            red(`Пользователь с именем '${inviteeUsername}' не найден.`),
+            red(`Пользователь с именем '${username}' не найден.`),
           );
           return;
         }
 
-        // Приглашаем пользователя в выбранный проект
         const inviteResponse = await client.call("inviteUserToProject", [
-          inviteeUsername,
+          username,
           selectedProject,
         ]);
 
@@ -68,7 +56,7 @@ export function inviteUserCommand() {
 
         console.log(
           green(
-            `Пользователь '${inviteeUsername}' успешно приглашен в проект '${selectedProject}'.`,
+            `Пользователь '${username}' успешно приглашен в проект '${selectedProject}'.`,
           ),
         );
       } catch (error) {
