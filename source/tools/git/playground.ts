@@ -1,6 +1,6 @@
 // import { bash, sh, shelly, zsh } from "@vseplet/shelly";
 // import { ensureFile } from "https://deno.land/std/fs/mod.ts";
-// import { checShell, shellConfigFile } from "./commands/service.ts";
+// import { checShell, shellConfigFile } from "./commands/tool.ts";
 // import { kv } from "$/kv";
 
 // async function deleteSelectedKvObject(key: Deno.KvKeyPart[], value: string) {
