@@ -9,7 +9,7 @@ export async function createClient(): Promise<ApiflyClient<GuardenDefinition>> {
   if (session_id === null) throw new Error("No SESSION ID! Authorize first");
 
   return new apifly.client<GuardenDefinition>({
-    baseURL: `${SERVICE_URL}/services/vault`,
+    baseURL: `${SERVICE_URL}/service/vault`,
     headers: {
       Authorization: session_id,
     },

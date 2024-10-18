@@ -12,7 +12,7 @@ const createClient = async () => {
       rps: 1,
       rt: (response) => 1000,
     },
-    baseURL: `${SERVICE_URL}/services/clip`,
+    baseURL: `${SERVICE_URL}/service/clip`,
     headers: {
       "hello": "world",
       Authorization: session_id,
