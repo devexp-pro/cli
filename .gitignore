@@ -1,6 +1,7 @@
 .vscode
 .DS_Store
 .zed
+dbs
 ololo
 ololo-shm
 ololo-wal
