@@ -1,7 +1,7 @@
 import { Command } from "@cliffy/command";
 import { SERVICE_URL } from "$/constants";
 import fetchify from "@vseplet/fetchify";
-import { getSessionID } from "$/helpers";
+import { getSessionID } from "$/kv";
 
 const createClient = async () => {
   const session_id = await getSessionID();
