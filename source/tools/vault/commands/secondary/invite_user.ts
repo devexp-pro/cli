@@ -1,7 +1,7 @@
-import { Command } from "../deps.ts";
-import { createClient } from "../api.ts";
+import { Command } from "../../deps.ts";
+import { createClient } from "../../api.ts";
 
-import { green, red } from "../deps.ts";
+import { green, red } from "../../deps.ts";
 import { Select } from "@cliffy/prompt/select";
 
 export function inviteUserCommand(username: string) {

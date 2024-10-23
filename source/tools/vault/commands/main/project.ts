@@ -4,9 +4,9 @@ import {
   deleteProjectCommand,
   renameProjectCommand,
   selectProjectCommand,
-} from "./project_commands.ts";
+} from "../project_commands.ts";
 import { Select } from "@cliffy/prompt/select";
-import { Input } from "../deps.ts";
+import { Input } from "../../deps.ts";
 
 // Главное меню для работы с проектами
 const projectMenu = async () => {

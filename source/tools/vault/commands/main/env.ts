@@ -5,9 +5,9 @@ import {
   deleteEnvCommand,
   renameEnvCommand,
   selectEnvCommand,
-} from "./env_commands.ts";
+} from "../env_commands.ts";
 import { Select } from "@cliffy/prompt/select";
-import { Input } from "../deps.ts";
+import { Input } from "../../deps.ts";
 
 // Главное меню для работы с окружениями
 const envMenu = async () => {

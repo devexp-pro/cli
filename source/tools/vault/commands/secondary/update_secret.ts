@@ -1,7 +1,7 @@
-import { Command } from "../deps.ts";
-import { createClient, getCurrentEnv, getCurrentProject } from "../api.ts";
+import { Command } from "../../deps.ts";
+import { createClient, getCurrentEnv, getCurrentProject } from "../../api.ts";
 
-import { green, red } from "../deps.ts";
+import { green, red } from "../../deps.ts";
 
 export function updateSecretCommand() {
   return new Command()

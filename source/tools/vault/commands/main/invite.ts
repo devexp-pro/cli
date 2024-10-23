@@ -1,6 +1,6 @@
 import { Command } from "@cliffy/command";
-import { inviteUserCommand } from "./invite_user.ts";
-import { Input } from "../deps.ts";
+import { inviteUserCommand } from "../secondary/invite_user.ts";
+import { Input } from "../../deps.ts";
 
 const inviteCommand = new Command()
   .description("Пригласить пользователя в проект.")

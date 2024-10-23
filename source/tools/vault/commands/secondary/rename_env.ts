@@ -1,12 +1,12 @@
-import { Command } from "../deps.ts";
+import { Command } from "../../deps.ts";
 import {
   createClient,
   getCurrentEnv,
   getCurrentProject,
   setCurrentEnv,
-} from "../api.ts";
+} from "../../api.ts";
 
-import { green, red } from "../deps.ts";
+import { green, red } from "../../deps.ts";
 
 export function renameEnvCommand() {
   return new Command()

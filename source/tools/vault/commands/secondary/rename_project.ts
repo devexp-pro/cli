@@ -1,7 +1,11 @@
-import { Command } from "../deps.ts";
-import { createClient, getCurrentProject, setCurrentProject } from "../api.ts";
+import { Command } from "../../deps.ts";
+import {
+  createClient,
+  getCurrentProject,
+  setCurrentProject,
+} from "../../api.ts";
 
-import { green, red } from "../deps.ts";
+import { green, red } from "../../deps.ts";
 
 export function renameProjectCommand() {
   return new Command()

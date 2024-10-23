@@ -1,7 +1,7 @@
-import { getCurrentEnv, getCurrentProject } from "../api.ts";
-import { Command } from "../deps.ts";
+import { getCurrentEnv, getCurrentProject } from "../../api.ts";
+import { Command } from "../../deps.ts";
 
-import { green, red, yellow } from "../deps.ts";
+import { green, red, yellow } from "../../deps.ts";
 
 export function showCurrentConfigCommand() {
   return new Command()

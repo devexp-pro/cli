@@ -1,5 +1,5 @@
-import { Command, green, red } from "../deps.ts";
-import { createClient, getCurrentProject, setCurrentEnv } from "../api.ts";
+import { Command, green, red } from "../../deps.ts";
+import { createClient, getCurrentProject, setCurrentEnv } from "../../api.ts";
 
 import { Select } from "@cliffy/prompt/select";
 

@@ -5,9 +5,9 @@ import {
   deleteSecretCommand,
   fetchSecretsCommand,
   updateSecretCommand,
-} from "./secret_commands.ts";
+} from "../secret_commands.ts";
 import { Select } from "@cliffy/prompt/select";
-import { Input } from "../deps.ts";
+import { Input } from "../../deps.ts";
 
 // Главное меню для работы с секретами
 const secretMenu = async () => {

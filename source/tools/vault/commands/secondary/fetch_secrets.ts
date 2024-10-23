@@ -1,12 +1,14 @@
-import { Command } from "../deps.ts";
-import { createClient, getCurrentEnv, getCurrentProject } from "../api.ts";
-import { green, red } from "../deps.ts";
+import { Command } from "../../deps.ts";
 
-export function runCommand() {
+import { createClient, getCurrentEnv, getCurrentProject } from "../../api.ts";
+
+import { green, red } from "../../deps.ts";
+import { Table } from "@cliffy/table";
+
+export function fetchSecretsCommand() {
   return new Command()
-    .description("Выполнить команду с секретами как переменными окружения.")
-    .arguments("<command...:string>")
-    .action(async (_options: any, ...command: string[]) => {
+    .description("Получить и вывести секреты для текущего окружения.")
+    .action(async () => {
       try {
         const project = await getCurrentProject();
         const env = await getCurrentEnv();
@@ -35,22 +37,16 @@ export function runCommand() {
           return;
         }
 
-        const cmd = command.join(" ");
-        const denoCommand = new Deno.Command("sh", {
-          args: ["-c", cmd],
-          env: { ...Deno.env.toObject(), ...secrets },
-          stdout: "inherit",
-          stderr: "inherit",
-        });
+        // Создаем таблицу и выводим секреты
+        const table = new Table()
+          .header(["Key", "Value"])
+          .body(Object.entries(secrets)) // Преобразуем объект секретов в массив для таблицы
+          .border();
 
-        const { success } = await denoCommand.output();
-
-        if (success) {
-          console.log(green("Команда успешно выполнена."));
-        } else {
-          console.error(red("Команда завершилась с ошибкой."));
-          Deno.exit(1);
-        }
+        console.log(
+          `Секреты для проекта '${project}' и окружения '${env}':`,
+        );
+        table.render();
       } catch (error) {
         console.error(red(`Ошибка: ${(error as Error).message}`));
       }

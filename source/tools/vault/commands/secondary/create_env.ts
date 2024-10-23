@@ -1,5 +1,5 @@
-import { Command } from "../deps.ts";
-import { createClient, getCurrentProject } from "../api.ts";
+import { Command } from "../../deps.ts";
+import { createClient, getCurrentProject } from "../../api.ts";
 
 export function createEnvCommand() {
   return new Command()

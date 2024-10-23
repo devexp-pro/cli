@@ -1,8 +1,8 @@
-import { Command } from "../deps.ts";
+import { Command } from "../../deps.ts";
 
-import { createClient, setCurrentProject } from "../api.ts";
+import { createClient, setCurrentProject } from "../../api.ts";
 
-import { green, red } from "../deps.ts";
+import { green, red } from "../../deps.ts";
 import { Select } from "@cliffy/prompt/select";
 
 export function selectProjectCommand() {
