@@ -20,7 +20,7 @@ export const ENTRYPOINT_SOURCE_URL =
 export const IMPORT_MAP_URL =
   `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/develop/import-map.json`;
 
-export const SERVICE_DOMAIN = IS_DEVELOP ? "localhost:4000" : "devexp.cloud";
+export const SERVICE_DOMAIN = IS_DEVELOP ? "127.0.0.1:4000" : "devexp.cloud";
 
 export const SERVICE_URL = (IS_DEVELOP ? "http://" : "https://") +
   SERVICE_DOMAIN;
