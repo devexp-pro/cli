@@ -36,7 +36,7 @@ export const login = new Command()
       );
 
       const result = await fetch(
-        `${SERVICE_URL}/auth/wait-for-login?loginToken=${loginToken}`,
+        `${SERVICE_URL}/auth/wait-for-complete?loginToken=${loginToken}`,
       );
 
       if (result.ok) {
