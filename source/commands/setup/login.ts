@@ -1,20 +1,17 @@
 import { Command } from "@cliffy/command";
 import { open } from "x/open";
-import { kv } from "$/kv";
+import { getSession, kv } from "$/kv";
 import { SERVICE_URL } from "$/constants";
 
 export const login = new Command()
   .description("Authenticate to DevExp")
   .action(async () => {
     try {
-      const sessionData = await kv.get<
-        { sessionId: string; username: string; userId: string }
-      >(["auth", "session"]);
+      const session = await getSession();
 
-      if (sessionData.value) {
-        const { sessionId, username } = sessionData.value;
+      if (session) {
         console.log(
-          `You are already logged in as ${username} with sessionId: ${sessionId}.`,
+          `You are already logged in as ${session.email}`,
         );
         return;
       }
@@ -41,21 +38,18 @@ export const login = new Command()
 
       if (result.ok) {
         const responseJson = await result.json();
-        const { sessionId, username, userId } = responseJson;
+        const { key, email, id, username } = responseJson;
 
         console.log(
-          `Received from server: sessionId: ${sessionId}, username: ${username}`,
+          `Received from server: sessionKey: ${key}, email: ${email}, id: ${id}`,
         );
 
         await kv.set(["auth", "session"], {
-          sessionId,
+          key,
+          email,
+          id,
           username,
-          userId,
         });
-
-        console.log(
-          `Successful auth! Username: ${username}, sessionId: ${sessionId}`,
-        );
       } else {
         console.error("Authorization error");
       }

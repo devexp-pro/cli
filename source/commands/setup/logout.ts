@@ -1,23 +1,25 @@
 import { Command } from "@cliffy/command";
-import { kv } from "$/kv";
+import { getSession, kv } from "$/kv";
 import { SERVICE_URL } from "$/constants";
 
 export const logout = new Command()
   .description("Log out of the CLI")
   .action(async () => {
-    const sessionData = await kv.get<
-      { sessionId: string; username: string; userId: string }
-    >(["auth", "session"]);
+    const session = await getSession();
 
-    if (!sessionData.value) {
+    if (!session) {
       console.log("No active session found. You are not logged in.");
       return;
     }
 
-    const { sessionId } = sessionData.value;
-
     const result = await fetch(
-      `${SERVICE_URL}/auth/logout?sessionId=${sessionId}`,
+      `${SERVICE_URL}/auth/logout`,
+      {
+        headers: {
+          Identifier: session.id,
+          Authorization: session.key,
+        },
+      },
     );
 
     if (result.ok) {
