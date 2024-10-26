@@ -1,11 +1,11 @@
 import { Command } from "@cliffy/command";
 import { SERVICE_URL } from "$/constants";
 import fetchify from "@vseplet/fetchify";
-import { getSessionID } from "$/kv";
+import { getSession } from "$/kv";
 
 const createClient = async () => {
-  const session_id = await getSessionID();
-  if (session_id === null) throw new Error("No SESSION ID! Authorize first");
+  const session = await getSession();
+  if (session === null) throw new Error("Has no session, please login");
 
   return fetchify.create({
     limiter: {
@@ -14,8 +14,8 @@ const createClient = async () => {
     },
     baseURL: `${SERVICE_URL}/tool/clip`,
     headers: {
-      "hello": "world",
-      Authorization: session_id,
+      Identifier: session.id,
+      Authorization: session.key,
     },
   });
 };
