@@ -2,7 +2,6 @@ import { Command } from "@cliffy/command";
 import { SERVICE_URL } from "$/constants";
 import fetchify from "@vseplet/fetchify";
 import { getSession } from "$/kv";
-import { length } from "jsr:@valibot/valibot@0.36.0";
 import clipboard from "./clipboard.ts";
 
 const createClient = async () => {
