@@ -8,6 +8,8 @@ const remoteDenoJson = await fetchJSON(
 
 const permissionEnv = Deno.permissions.querySync({ name: "env" }).state;
 
+export const OS_NAME = Deno.build.os;
+
 export const IS_DEVELOP = permissionEnv == "granted"
   ? Deno.env.get("DEV") || false
   : false;
