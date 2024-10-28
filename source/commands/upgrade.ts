@@ -23,6 +23,7 @@ export const upgrade = new Command()
         "--allow-read",
         "--allow-write",
         "--unstable-kv",
+        "--allow-sys",
         "--import-map=" + IMPORT_MAP_URL,
         "-n",
         "dx",
