@@ -1,4 +1,5 @@
 import { Command } from "@cliffy/command";
+import { getSession } from "$/kv";
 
 const img = `
   \u001b[38;5;203;48;5;203m▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄\u001b[m
@@ -27,11 +28,45 @@ const img = `
   \u001b[38;5;236;48;5;236m▄▄\u001b[38;5;236;48;5;237m▄\u001b[38;5;236;48;5;238m▄\u001b[38;5;239;48;5;236m▄\u001b[38;5;236;48;5;236m▄\u001b[38;5;236;48;5;237m▄\u001b[38;5;236;48;5;238m▄\u001b[38;5;236;48;5;236m▄\u001b[38;5;236;48;5;237m▄\u001b[38;5;23;48;5;17m▄\u001b[38;5;237;48;5;239m▄\u001b[38;5;236;48;5;59m▄\u001b[38;5;236;48;5;237m▄\u001b[38;5;238;48;5;236m▄\u001b[38;5;239;48;5;236m▄\u001b[38;5;236;48;5;238m▄\u001b[38;5;236;48;5;237m▄\u001b[38;5;238;48;5;236m▄\u001b[38;5;237;48;5;237m▄\u001b[38;5;236;48;5;240m▄\u001b[38;5;239;48;5;23m▄\u001b[38;5;239;48;5;60m▄\u001b[38;5;236;48;5;66m▄▄\u001b[38;5;238;48;5;60m▄\u001b[38;5;246;48;5;60m▄\u001b[38;5;253;48;5;239m▄\u001b[38;5;255;48;5;242m▄\u001b[38;5;230;48;5;145m▄\u001b[38;5;230;48;5;250m▄\u001b[38;5;230;48;5;251m▄\u001b[38;5;230;48;5;254m▄\u001b[38;5;230;48;5;230m▄▄▄▄▄▄▄▄\u001b[38;5;255;48;5;230m▄\u001b[38;5;230;48;5;255m▄▄▄\u001b[38;5;230;48;5;230m▄▄▄\u001b[m
   `;
 
+const systemLines = [
+  `uptime: ${Deno.osUptime() / 60 / 60 / 24 | 0} days`,
+  `release: ${Deno.osRelease()}`,
+  `arch: ${Deno.build.arch}`,
+  `os: ${Deno.build.os}`,
+  `vendor: ${Deno.build.vendor}`,
+  `target: ${Deno.build.target}`,
+];
+
 export const intro = new Command()
   .name("intro")
   .description("show system info")
   .hidden()
-  .action(() => {
-    console.log(img);
+  .action(async () => {
+    const session = await getSession();
+    const lines = img.split("\n");
+    const startLineIndex = lines.length / systemLines.length * 2.3 | 0;
+
+    if (session) {
+      systemLines.push(``);
+    }
+
+    if (session?.username) {
+      systemLines.push(`username: ${session.username}`);
+    }
+
+    if (session?.email) {
+      systemLines.push(`email: ${session.email}`);
+    }
+
+    lines.forEach((l, index) => {
+      if (
+        index >= startLineIndex && index < (startLineIndex + systemLines.length)
+      ) {
+        console.log(l + "    " + systemLines[index - startLineIndex]);
+      } else {
+        console.log(l);
+      }
+    });
+
     Deno.exit();
   });
