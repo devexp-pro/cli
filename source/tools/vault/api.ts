@@ -1,6 +1,5 @@
-import apifly, { ApiflyClient } from "jsr:@vseplet/apifly";
+import apifly, { ApiflyClient } from "@vseplet/apifly";
 import type { GuardenDefinition } from "./GuardenDefinition.ts";
-
 import { kv } from "$/kv";
 import { SERVICE_URL } from "$/constants";
 
@@ -19,7 +18,6 @@ export async function createClient(): Promise<ApiflyClient<GuardenDefinition>> {
 
 export async function getSessionID(): Promise<string | null> {
   try {
-    // Получаем текущие данные сессии по ключу ["auth", "session"]
     const sessionData = await kv.get<{ sessionId: string }>([
       "auth",
       "session",
@@ -27,7 +25,6 @@ export async function getSessionID(): Promise<string | null> {
 
     if (sessionData.value) {
       const sessionId = sessionData.value.sessionId;
-
       return sessionId;
     }
 
@@ -42,14 +39,22 @@ export async function getSessionID(): Promise<string | null> {
 interface VaultConfig {
   currentProject?: string;
   currentEnv?: string;
+  currentProjectUUID?: string;
+  currentEnvUUID?: string;
 }
 
-export async function getCurrentProject(): Promise<string | null> {
+export async function getCurrentProject(): Promise<
+  Partial<VaultConfig> | null
+> {
   try {
-    const configData = await kv.get<VaultConfig>(["service", "vault"]);
+    const configData = await kv.get<VaultConfig>([
+      "service",
+      "vault",
+      "curConfig",
+    ]);
 
     if (configData.value && configData.value.currentProject) {
-      return configData.value.currentProject;
+      return configData.value;
     }
 
     console.log("Текущий проект не найден.");
@@ -60,46 +65,24 @@ export async function getCurrentProject(): Promise<string | null> {
   }
 }
 
-export async function getCurrentEnv(): Promise<string | null> {
+export async function setCurrentProject(
+  name: string,
+  uuid: string,
+): Promise<void> {
   try {
-    const configData = await kv.get<VaultConfig>(["service", "vault"]);
-
-    if (configData.value && configData.value.currentEnv) {
-      return configData.value.currentEnv;
-    }
-
-    console.log("Текущее окружение не найдено.");
-    return null;
-  } catch (error) {
-    console.error("Ошибка при получении текущего окружения:", error);
-    return null;
-  }
-}
-
-export async function setCurrentProject(project: string): Promise<void> {
-  try {
-    const configData = await kv.get<VaultConfig>(["service", "vault"]);
+    const configData = await kv.get<VaultConfig>([
+      "service",
+      "vault",
+      "curConfig",
+    ]);
     const config = configData.value || {};
 
-    config.currentProject = project;
+    config.currentProject = name;
+    config.currentProjectUUID = uuid;
 
-    await kv.set(["service", "vault"], config);
-    console.log(`Текущий проект установлен: ${project}`);
+    await kv.set(["service", "vault", "curConfig"], config);
+    console.log(`Текущий проект установлен: ${name}`);
   } catch (error) {
     console.error("Ошибка при установке текущего проекта:", error);
-  }
-}
-
-export async function setCurrentEnv(env: string): Promise<void> {
-  try {
-    const configData = await kv.get<VaultConfig>(["service", "vault"]);
-    const config = configData.value || {};
-
-    config.currentEnv = env;
-
-    await kv.set(["service", "vault"], config);
-    console.log(`Текущее окружение установлено: ${env}`);
-  } catch (error) {
-    console.error("Ошибка при установке текущего окружения:", error);
   }
 }
