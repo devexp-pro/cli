@@ -1,5 +1,7 @@
 import { Command } from "@cliffy/command";
 import { getSession } from "$/kv";
+import { VERSION } from "$/constants";
+import { colors } from "@std/colors";
 
 const img = `
   \u001b[38;5;203;48;5;203m▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄\u001b[m
@@ -29,12 +31,16 @@ const img = `
   `;
 
 const systemLines = [
-  `uptime: ${Deno.osUptime() / 60 / 60 / 24 | 0} days`,
-  `release: ${Deno.osRelease()}`,
-  `arch: ${Deno.build.arch}`,
-  `os: ${Deno.build.os}`,
-  `vendor: ${Deno.build.vendor}`,
-  `target: ${Deno.build.target}`,
+  colors.brightMagenta(`DevExp CLI v${VERSION}`),
+  ``,
+  `${colors.brightYellow("uptime:")} ${
+    Deno.osUptime() / 60 / 60 / 24 | 0
+  } days`,
+  `${colors.brightYellow("release:")} ${Deno.osRelease()}`,
+  `${colors.brightYellow("arch:")} ${Deno.build.arch}`,
+  `${colors.brightYellow("os:")} ${Deno.build.os}`,
+  `${colors.brightYellow("vendor:")} ${Deno.build.vendor}`,
+  `${colors.brightYellow("target:")} ${Deno.build.target}`,
 ];
 
 export const intro = new Command()
@@ -51,11 +57,13 @@ export const intro = new Command()
     }
 
     if (session?.username) {
-      systemLines.push(`username: ${session.username}`);
+      systemLines.push(
+        `${colors.brightYellow("username:")} ${session.username}`,
+      );
     }
 
     if (session?.email) {
-      systemLines.push(`email: ${session.email}`);
+      systemLines.push(`${colors.brightYellow("email:")} ${session.email}`);
     }
 
     lines.forEach((l, index) => {
