@@ -2,6 +2,6 @@
 .DS_Store
 .zed
 dbs
-ololo
-ololo-shm
-ololo-wal
+local-kv
+local-kv-shm
+local-kv-wal
