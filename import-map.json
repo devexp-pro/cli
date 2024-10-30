@@ -6,6 +6,7 @@
     "$/helpers": "./source/helpers.ts",
     "$/types": "./source/types.ts",
     "$/kv": "./source/kv.ts",
+    "$config/": "./config/",
 
     "$/tools/llm": "./source/tools/llm/mod.ts",
     "$/tools/git": "./source/tools/git/mod.ts",
