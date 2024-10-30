@@ -11,10 +11,10 @@ const vault = new Command()
     Deno.exit();
   })
   .description("Инструмент для работы с проектами, окружениями и секретами")
-  .command("project", projectCommand)
-  .command("env", envCommand)
-  .command("secret", secretCommand)
-  .command("invite", inviteCommand)
-  .command("run", runCommand);
+  .command("project", projectCommand);
+// .command("env", envCommand)
+// .command("secret", secretCommand)
+// .command("invite", inviteCommand)
+// .command("run", runCommand);
 
 export default vault;

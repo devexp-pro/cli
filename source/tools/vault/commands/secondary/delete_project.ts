@@ -22,7 +22,7 @@ export function deleteProjectCommand() {
               `Текущий проект '${currentProject}' совпадает с удаляемым проектом.`,
             ),
           );
-          await setCurrentProject("");
+          await setCurrentProject("", "");
           console.log(green(`Текущий проект сброшен.`));
         }
 

@@ -1,6 +1,6 @@
 import { Command } from "@cliffy/command";
 import { open } from "x/open";
-import { getSession, kv } from "$/kv";
+import { getSession ,kv, setSessionWithExpiration} from "$/kv";
 import { SERVICE_URL } from "$/constants";
 
 export const login = new Command()
@@ -44,12 +44,7 @@ export const login = new Command()
           `Received from server: sessionKey: ${key}, email: ${email}, id: ${id}`,
         );
 
-        await kv.set(["auth", "session"], {
-          key,
-          email,
-          id,
-          username,
-        });
+        await setSessionWithExpiration({ key, email, id, username });
       } else {
         console.error("Authorization error");
       }
