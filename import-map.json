@@ -39,6 +39,7 @@
     "@vseplet/shibui": "jsr:@vseplet/shibui@0.4.33",
     "@vseplet/shelly": "jsr:@vseplet/shelly@^0.1.15",
     "@vseplet/apifly": "jsr:@vseplet/apifly@^0.0.40",
+    "@vseplet/apifly/types": "jsr:@vseplet/apifly@^0.0.40/types",
     "@vseplet/luminous": "jsr:@vseplet/luminous@^1.0.6",
     "@vseplet/reface": "jsr:@vseplet/reface@0.0.24",
     "@vseplet/fetchify": "jsr:@vseplet/fetchify@0.3.20",
