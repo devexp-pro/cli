@@ -5,18 +5,17 @@ import { SERVICE_URL } from "$/constants";
 
 export async function createClient(): Promise<ApiflyClient<GuardenDefinition>> {
   const session = await getSession();
-  if (session === null)throw new Error("No SESSION! Authorize first");
+  if (session === null) throw new Error("No SESSION! Authorize first");
   // key: string;
   // email: string;
   // id: string;
   // username: string;
-  console.log(`${SERVICE_URL}/vault`)
   if (session.id === null) throw new Error("No SESSION ID! Authorize first");
   return new apifly.client<GuardenDefinition>({
     baseURL: `${SERVICE_URL}/tool/vault`,
     headers: {
       Authorization: session.key,
-      Identifier: session.id
+      Identifier: session.id,
     },
     limiter: { unlimited: true },
   });

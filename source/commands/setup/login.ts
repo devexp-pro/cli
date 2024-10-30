@@ -1,6 +1,6 @@
 import { Command } from "@cliffy/command";
 import { open } from "x/open";
-import { getSession ,kv, setSessionWithExpiration} from "$/kv";
+import { getSession, kv, setSessionWithExpiration } from "$/kv";
 import { SERVICE_URL } from "$/constants";
 
 export const login = new Command()

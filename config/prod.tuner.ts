@@ -7,8 +7,8 @@ const prodCfg = Tuner.tune({
     features: {
       auth: {
         times: {
-           // ms
-           sessionTTL:  24*60*60*1000, // 1 day
+          // ms
+          sessionTTL: 24 * 60 * 60 * 1000, // 1 day
         },
       },
     },

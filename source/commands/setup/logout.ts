@@ -1,7 +1,6 @@
 import { Command } from "@cliffy/command";
 import { getSession, kv } from "$/kv";
 
-
 export const logout = new Command()
   .description("Log out of the CLI")
   .action(async () => {
@@ -12,7 +11,6 @@ export const logout = new Command()
       return;
     }
 
-      await kv.delete(["auth", "session"]);
-      console.log("Logged out successfully!");
-    } 
-);
+    await kv.delete(["auth", "session"]);
+    console.log("Logged out successfully!");
+  });
