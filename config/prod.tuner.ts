@@ -12,6 +12,28 @@ const prodCfg = Tuner.tune({
         },
       },
     },
+    commands: {
+      dash: {
+        hidden: true,
+      },
+    },
+    tools: {
+      tunnel: {
+        hidden: false,
+      },
+      config: {
+        hidden: true,
+      },
+      vault: {
+        hidden: false,
+      },
+      git: {
+        hidden: true,
+      },
+      clip: {
+        hidden: false,
+      },
+    },
   },
 });
 

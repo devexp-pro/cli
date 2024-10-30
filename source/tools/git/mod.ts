@@ -24,6 +24,7 @@ import {
   deleteSshKeyCommand,
   showAllSshKeysCommand,
 } from "./commands/sshKeyManager.ts";
+import { config } from "$/constants";
 
 const logo = `
 #####     #####   ########
@@ -157,7 +158,9 @@ const start = new Command()
   })
   .description("start git manager");
 
-const tool = new Command()
+const tool = new Command();
+if (config.data.tools.git.hidden) tool.hidden();
+tool
   .name("gitManager")
   .version("1.0.0")
   .description("git profile manager")
