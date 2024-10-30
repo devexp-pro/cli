@@ -3,16 +3,16 @@
 import { SessionData } from "$/types";
 import { config } from "$/shared";
 
-
-
-
 export const kv = Deno.env.get("DEV")
   ? await Deno.openKv("local-kv")
   : await Deno.openKv();
 
 export async function getSessionID(): Promise<string | null> {
   try {
-    const sessionData = await kv.get<{ sessionId: string }>(["auth", "session"]);
+    const sessionData = await kv.get<{ sessionId: string }>([
+      "auth",
+      "session",
+    ]);
 
     if (sessionData.value) {
       return sessionData.value.sessionId;
@@ -42,8 +42,9 @@ export async function getSession(): Promise<SessionData | null> {
   }
 }
 
-
-export async function setSessionWithExpiration(data: SessionData): Promise<void> {
+export async function setSessionWithExpiration(
+  data: SessionData,
+): Promise<void> {
   try {
     const sessionTTL = config.data.features.auth.times.sessionTTL;
 

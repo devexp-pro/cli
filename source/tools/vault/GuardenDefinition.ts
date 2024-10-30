@@ -56,15 +56,27 @@ export type GuardenDefinition = ApiflyDefinition<
     // Environment Methods
     createEnvironment: {
       args: [projectUUID: TUUID, envName: string];
-      returns: { success: boolean; environment?: EnvironmentData; message?: string };
+      returns: {
+        success: boolean;
+        environment?: EnvironmentData;
+        message?: string;
+      };
     };
     getEnvironment: {
       args: [envUUID: TUUID];
-      returns: { success: boolean; environment?: EnvironmentData; message?: string };
+      returns: {
+        success: boolean;
+        environment?: EnvironmentData;
+        message?: string;
+      };
     };
     updateEnvironment: {
       args: [envUUID: TUUID, envName: string];
-      returns: { success: boolean; environment?: EnvironmentData; message?: string };
+      returns: {
+        success: boolean;
+        environment?: EnvironmentData;
+        message?: string;
+      };
     };
     deleteEnvironment: {
       args: [envUUID: TUUID];
@@ -78,7 +90,11 @@ export type GuardenDefinition = ApiflyDefinition<
     };
     getSecrets: {
       args: [envUUID: TUUID];
-      returns: { success: boolean; secrets: Record<string, string>; message?: string };
+      returns: {
+        success: boolean;
+        secrets: Record<string, string>;
+        message?: string;
+      };
     };
     updateSecret: {
       args: [envUUID: TUUID, key: string, value: string];
@@ -98,5 +114,6 @@ export type GuardenDefinition = ApiflyDefinition<
       args: [userUUID: TUUID, projectUUID: TUUID];
       returns: { success: boolean; isLinked: boolean };
     };
-  }, {userId: TUUID}
+  },
+  { userId: TUUID }
 >;
