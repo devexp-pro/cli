@@ -1,5 +1,5 @@
 import { Command } from "@cliffy/command";
-import { SERVICE_URL } from "$/constants";
+import { config, SERVICE_URL } from "$/constants";
 import fetchify from "@vseplet/fetchify";
 import { getSession } from "$/kv";
 import clipboard from "./clipboard.ts";
@@ -78,7 +78,9 @@ const load = new Command()
     Deno.exit();
   });
 
-const tool = new Command()
+const tool = new Command();
+if (config.data.tools.clip.hidden) tool.hidden();
+tool
   .name("clip")
   .usage("")
   .description("share text between devices using the cloud clipboard")

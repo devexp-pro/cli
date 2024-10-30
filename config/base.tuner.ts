@@ -10,6 +10,29 @@ const baseCfg = Tuner.tune({
         },
       },
     },
+    commands: {
+      dash: {
+        hidden: false,
+      },
+    },
+
+    tools: {
+      tunnel: {
+        hidden: false,
+      },
+      config: {
+        hidden: false,
+      },
+      vault: {
+        hidden: false,
+      },
+      git: {
+        hidden: false,
+      },
+      clip: {
+        hidden: false,
+      },
+    },
   },
 });
 

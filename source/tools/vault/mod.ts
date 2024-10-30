@@ -4,17 +4,20 @@ import envCommand from "./commands/main/env.ts";
 import secretCommand from "./commands/main/secret.ts";
 import inviteCommand from "./commands/main/invite.ts"; // Импортируем команду инвайта
 import runCommand from "./commands/main/run.ts";
+import { config } from "$/constants";
 
-const vault = new Command()
+const tool = new Command();
+if (config.data.tools.vault.hidden) tool.hidden();
+tool
   .action((_options: any, ..._args: any) => {
-    vault.showHelp();
+    tool.showHelp();
     Deno.exit();
   })
-  .description("Инструмент для работы с проектами, окружениями и секретами")
+  .description("Centralized secrets management")
   .command("project", projectCommand);
 // .command("env", envCommand)
 // .command("secret", secretCommand)
 // .command("invite", inviteCommand)
 // .command("run", runCommand);
 
-export default vault;
+export default tool;

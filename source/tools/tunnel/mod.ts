@@ -4,9 +4,12 @@ import remove from "./commands/remove.ts";
 import set from "./commands/set.ts";
 import start from "./commands/start.ts";
 import { Select } from "@cliffy/prompt";
+import { config } from "$/constants";
 
 // https://www.asciiart.eu/text-to-ascii-art font Pagga
-const tool = new Command()
+const tool = new Command();
+if (config.data.tools.tunnel.hidden) tool.hidden();
+tool
   .name("tunnel")
   .usage("start <tunnel_name>")
   .action(async (options: any, ..._args: any) => {

@@ -3,6 +3,7 @@ import { Command } from "@cliffy/command";
 import { ensureDir } from "@std/fs";
 import { Input } from "@cliffy/prompt/input";
 import { Confirm } from "@cliffy/prompt";
+import { config } from "$/constants";
 
 async function getPackageVersion(): Promise<string> {
   try {
@@ -153,10 +154,12 @@ export type ${configName}Type = typeof cfg;
   }
 };
 
-const tuner = new Command()
+const tool = new Command()
   .name("config")
   // .version("0.1.0")
   .description("generate configuration files")
   .action(createConfig);
 
-export default tuner;
+if (config.data.tools.config.hidden) tool.hidden();
+
+export default tool;
