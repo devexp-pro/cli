@@ -32,7 +32,7 @@ export function renameProjectCommand() {
           );
         }
 
-        await setCurrentProject(newProjectName);
+        await setCurrentProject(newProjectName, currentProject.uuid);
 
         console.log(
           green(
