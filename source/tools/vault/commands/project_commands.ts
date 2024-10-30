@@ -56,10 +56,12 @@ export function createProjectCommand() {
         .action(async (_options: any, projectName: string) => {
             try {
                 const client = await createClient();
+
                 const response = await client.call("createProject", [
                     projectName,
                 ]);
 
+               
                 if (!response.success) {
                     throw new Error(`Не удалось создать проект.`);
                 }
@@ -120,7 +122,7 @@ export function renameProjectCommand() {
             }
 
             const client = await createClient();
-            const response = await client.call("renameProject", [
+            const response = await client.call("updateProject", [
                 currentProject.currentProjectUUID,
                 newProjectName,
             ]);

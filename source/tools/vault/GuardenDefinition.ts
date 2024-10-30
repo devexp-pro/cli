@@ -1,113 +1,102 @@
+// source/tools/vault/GuardenDefinition.ts
+
 import { type ApiflyDefinition } from "@vseplet/apifly/types";
 
-export type TProjects = Record<string, ProjectData>;
-export type ProjectData = {
-  uuid: TUUID;
-  environments: EnvironmentData[];
-  name: string;
-};
 export type TUUID = `${string}-${string}-${string}-${string}-${string}`;
-export type UserData = {
-  token: string;
-  uuid: TUUID;
-  email: string;
-};
 
-export type EnvironmentData = {
+export interface ProjectData {
   uuid: TUUID;
   name: string;
-  secrets: SecretData[];
-};
+  owner_id: TUUID;
+  environments: EnvironmentData[];
+}
 
-export type SecretData = {
+export interface EnvironmentData {
+  uuid: TUUID;
+  name: string;
+  project_id: TUUID;
+  secrets: SecretData[];
+}
+
+export interface SecretData {
   uuid: TUUID;
   key: string;
-  value: any;
-};
-
-type TCallResponse = {
-  success: boolean;
-  projects: ProjectData[];
-};
+  value: string;
+  environment_id: TUUID;
+}
 
 export type GuardenDefinition = ApiflyDefinition<
   {
-    user: UserData;
+    user: { uuid: TUUID; email: string };
     projects: ProjectData[];
   },
   {
+    // Project Methods
     createProject: {
       args: [projectName: string];
-      returns: TCallResponse;
+      returns: { success: boolean; project?: ProjectData; message?: string };
     };
-    renameProject: {
-      args: [oldProjectUUID: string, newProjectName: string];
-      returns: TCallResponse;
+    getProject: {
+      args: [projectUUID: TUUID];
+      returns: { success: boolean; project?: ProjectData; message?: string };
+    };
+    updateProject: {
+      args: [projectUUID: TUUID, projectName: string];
+      returns: { success: boolean; project?: ProjectData; message?: string };
     };
     deleteProject: {
       args: [projectUUID: TUUID];
-      returns: TCallResponse;
+      returns: { success: boolean; message?: string };
     };
+    getProjectsByUser: {
+      args: [userUUID: TUUID];
+      returns: { success: boolean; projects: ProjectData[] };
+    };
+
+    // Environment Methods
     createEnvironment: {
       args: [projectUUID: TUUID, envName: string];
-      returns: TCallResponse;
+      returns: { success: boolean; environment?: EnvironmentData; message?: string };
     };
-    renameEnvironment: {
-      args: [projectUUID: TUUID, oldEnvUUID: TUUID, newEnvName: string];
-      returns: TCallResponse;
+    getEnvironment: {
+      args: [envUUID: TUUID];
+      returns: { success: boolean; environment?: EnvironmentData; message?: string };
+    };
+    updateEnvironment: {
+      args: [envUUID: TUUID, envName: string];
+      returns: { success: boolean; environment?: EnvironmentData; message?: string };
     };
     deleteEnvironment: {
-      args: [projectUUID: TUUID, envUUID: TUUID];
-      returns: TCallResponse;
+      args: [envUUID: TUUID];
+      returns: { success: boolean; message?: string };
     };
 
-    createSecret: {
-      args: [
-        projectUUID: TUUID,
-        envUUID: TUUID,
-        keyName: string,
-        value: string,
-      ];
-      returns: TCallResponse;
+    // Secret Methods
+    addSecret: {
+      args: [envUUID: TUUID, key: string, value: string];
+      returns: { success: boolean; secret?: SecretData; message?: string };
+    };
+    getSecrets: {
+      args: [envUUID: TUUID];
+      returns: { success: boolean; secrets: Record<string, string>; message?: string };
     };
     updateSecret: {
-      args: [
-        projectUUID: TUUID,
-        envUUID: TUUID,
-        keyUUID: TUUID,
-        value: string,
-      ];
-      returns: TCallResponse;
-    };
-    renameSecret: {
-      args: [
-        projectUUID: TUUID,
-        envUUID: TUUID,
-        keyUUID: TUUID,
-        newKeyName: string,
-      ];
-      returns: TCallResponse;
+      args: [envUUID: TUUID, key: string, value: string];
+      returns: { success: boolean; secret?: SecretData; message?: string };
     };
     deleteSecret: {
-      args: [projectUUID: TUUID, envUUID: TUUID, keyUUID: TUUID];
-      returns: TCallResponse;
-    };
-    fetchSecrets: {
-      args: [projectUUID: TUUID, envUUID: TUUID];
-      returns: TCallResponse;
+      args: [envUUID: TUUID, key: string];
+      returns: { success: boolean; message?: string };
     };
 
-    runCommand: {
-      args: [command: string];
-      returns: TCallResponse;
+    // User-Project Linking Methods
+    linkProjectToUser: {
+      args: [userUUID: TUUID, projectUUID: TUUID];
+      returns: { success: boolean; message?: string };
     };
-    inviteUserToProject: {
-      args: [inviteeEMAIL: string, projectUUID: TUUID];
-      returns: TCallResponse;
+    isProjectLinkedToUser: {
+      args: [userUUID: TUUID, projectUUID: TUUID];
+      returns: { success: boolean; isLinked: boolean };
     };
-    checkUserExists: {
-      args: [email: string];
-      returns: { success: boolean };
-    };
-  }
+  }, {userId: TUUID}
 >;

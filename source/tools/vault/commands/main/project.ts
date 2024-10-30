@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-case-declarations
 import { Command } from "@cliffy/command";
 import { Select } from "@cliffy/prompt/select";
 import { Input } from "@cliffy/prompt/input";
