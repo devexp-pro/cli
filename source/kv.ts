@@ -46,7 +46,7 @@ export async function getSession(): Promise<SessionData | null> {
 export async function setSessionWithExpiration(data: SessionData): Promise<void> {
   try {
     const sessionTTL = config.data.features.auth.times.sessionTTL;
-    console.log(sessionTTL)
+
     await kv.set(["auth", "session"], data, { expireIn: sessionTTL });
   } catch (error) {
     console.error("Ошибка при сохранении сессии:", error);
