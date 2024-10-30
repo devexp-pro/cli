@@ -1,7 +1,7 @@
 // source/kv.ts
 
 import { SessionData } from "$/types";
-import { config } from "$/shared";
+import { config } from "$/constants";
 
 export const kv = Deno.env.get("DEV")
   ? await Deno.openKv("local-kv")

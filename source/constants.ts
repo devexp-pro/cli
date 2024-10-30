@@ -1,6 +1,8 @@
 import localDenoJson from "$deno-json" with { type: "json" };
 import { fetchJSON } from "$/helpers";
 import { colors } from "@std/colors";
+import Tuner from "@artpani/tuner";
+import { BaseCfgType } from "$config/base.tuner.ts";
 
 const remoteDenoJson = await fetchJSON(
   `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/develop/deno.json`,
@@ -16,6 +18,11 @@ export const IS_DEVELOP = permissionEnv == "granted"
 
 export const VERSION = localDenoJson["version"];
 export const REMOTE_VERSION = remoteDenoJson["version"] || VERSION;
+
+if (!IS_DEVELOP) Deno.env.set("CONFIG", "prod"); // TODO: далее надо пофиксить тюнер и убрать это костыль
+export const config = await Tuner.use.loadConfig<BaseCfgType>({
+  configDirPath: "config",
+});
 
 export const ENTRYPOINT_SOURCE_URL =
   `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/develop/source/main.ts`;
