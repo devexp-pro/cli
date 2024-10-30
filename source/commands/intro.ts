@@ -98,6 +98,8 @@ const systemLines = [
   `${colors.brightYellow("target:")} ${Deno.build.target}`,
 ];
 
+const padding = `     `;
+
 export const intro = new Command()
   .name("intro")
   .description("show system info")
@@ -125,9 +127,9 @@ export const intro = new Command()
       if (
         index >= startLineIndex && index < (startLineIndex + systemLines.length)
       ) {
-        console.log(l + "    " + systemLines[index - startLineIndex]);
+        console.log(padding + l + "    " + systemLines[index - startLineIndex]);
       } else {
-        console.log(l);
+        console.log(padding + l);
       }
     });
 
