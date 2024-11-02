@@ -37,7 +37,7 @@
     "@cliffy/prompt/prompt": "jsr:@cliffy/prompt@^1.0.0-rc.7/prompt",
     "@hono/hono": "jsr:@hono/hono@4.5.6",
 
-    "@vseplet/shibui": "jsr:@vseplet/shibui@0.4.33",
+    "@vseplet/shibui": "jsr:@vseplet/shibui@^0.4.36",
     "@vseplet/shelly": "jsr:@vseplet/shelly@^0.1.15",
     "@vseplet/apifly": "jsr:@vseplet/apifly@^0.0.40",
     "@vseplet/apifly/types": "jsr:@vseplet/apifly@^0.0.40/types",
