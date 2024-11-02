@@ -3,10 +3,9 @@ import { Select } from "@cliffy/prompt/select";
 import { Input } from "@cliffy/prompt/input";
 
 const taskFileText = (name: string) => `
-import { task } from "jsr:@vseplet/shibui@0.4.33/core";
-import { CoreStartPot } from "jsr:@vseplet/shibui@0.4.33/core/pots";
+import { task } from "jsr:@vseplet/shibui@0.4.36/core";
 
-export default task(CoreStartPot)
+export default task()
   .name\`${name}\`
   .do(async ({ finish, pots, log }) => {
     log.dbg('run do function...');
@@ -15,8 +14,8 @@ export default task(CoreStartPot)
 `;
 
 const workflowFileText = (name: string) => `
-import { workflow } from "jsr:@vseplet/shibui@0.4.33/core";
-import { ContextPot, CoreStartPot } from "jsr:@vseplet/shibui@0.4.33/core/pots";
+import { workflow } from "jsr:@vseplet/shibui@0.4.36/core";
+import { ContextPot } from "jsr:@vseplet/shibui@0.4.36/core/pots";
 
 class CTX_${name} extends ContextPot<{ x: number }> {
   override data = {
@@ -26,7 +25,6 @@ class CTX_${name} extends ContextPot<{ x: number }> {
 
 export default workflow(CTX_${name})
   .name("${name}")
-  .on(CoreStartPot, (_pot) => new CTX_${name})
   .sq(({ task }) =>
     task()
       .name("single workflow task")
@@ -64,6 +62,8 @@ const action = async () => {
       new TextEncoder().encode(workflowFileText(name)),
     );
   }
+
+  Deno.exit(0);
 };
 
 const command = new Command()
@@ -71,8 +71,6 @@ const command = new Command()
   .description("create subcommand description")
   .action(async (_options: any, ..._args: any) => {
     await action();
-
-    Deno.exit(0);
   });
 
 export default {
