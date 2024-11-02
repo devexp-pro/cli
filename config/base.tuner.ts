@@ -32,6 +32,9 @@ const baseCfg = Tuner.tune({
       clip: {
         hidden: false,
       },
+      flow: {
+        hidden: false,
+      },
     },
   },
 });
