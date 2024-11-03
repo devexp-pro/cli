@@ -3,31 +3,35 @@ import { fetchJSON } from "$/helpers";
 import { colors } from "@std/colors";
 import Tuner from "@artpani/tuner";
 import { BaseCfgType } from "$config/base.tuner.ts";
-
-const remoteDenoJson = await fetchJSON(
-  `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/develop/deno.json`,
-) as unknown as typeof localDenoJson;
+import { color } from "@vseplet/luminous/helpers";
 
 const permissionEnv = Deno.permissions.querySync({ name: "env" }).state;
 
 export const OS_NAME = Deno.build.os;
 
 export const IS_DEVELOP = permissionEnv == "granted"
-  ? Deno.env.get("DEV") || false
+  ? Deno.env.get("DEV") !== undefined || false
   : false;
+
+export const baseRepoPath =
+  `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/develop`;
+
+const remoteDenoJson = await fetchJSON(
+  `${baseRepoPath}/deno.json`,
+) as unknown as typeof localDenoJson;
 
 export const VERSION = localDenoJson["version"];
 export const REMOTE_VERSION = remoteDenoJson["version"] || VERSION;
 
 if (!IS_DEVELOP) Deno.env.set("CONFIG", "prod"); // TODO: далее надо пофиксить тюнер и убрать это костыль
 export const config = await Tuner.use.loadConfig<BaseCfgType>({
+  absolutePathPrefix: IS_DEVELOP ? undefined : baseRepoPath,
   configDirPath: "config",
+  configName: IS_DEVELOP ? "dev" : "prod",
 });
 
-export const ENTRYPOINT_SOURCE_URL =
-  `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/develop/source/main.ts`;
-export const IMPORT_MAP_URL =
-  `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/develop/import-map.json`;
+export const ENTRYPOINT_SOURCE_URL = `${baseRepoPath}/source/main.ts`;
+export const IMPORT_MAP_URL = `${baseRepoPath}/import-map.json`;
 
 export const SERVICE_DOMAIN = IS_DEVELOP ? "127.0.0.1:4000" : "devexp.cloud";
 
@@ -52,5 +56,4 @@ export const introText = `
   Version ${colors.green(VERSION)}
   Crafted with ${colors.red("<3")} by DevExp
   Use "dx -h" to get help on commands.
-  ${IS_DEVELOP}
-`;
+  ${IS_DEVELOP ? colors.bgRed("\n  This is develop version!!!") : ""}`;

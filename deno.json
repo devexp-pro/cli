@@ -4,7 +4,7 @@
   "license": "",
   "tasks": {
     "dev": "DEV=true CONFIG=dev deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts",
-    "prod": "deno -A --unstable-kv ./source/main.ts"
+    "prod": "deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts"
   },
   "importMap": "./import-map.json"
 }
