@@ -3,7 +3,6 @@ import { fetchJSON } from "$/helpers";
 import { colors } from "@std/colors";
 import Tuner from "@artpani/tuner";
 import { BaseCfgType } from "$config/base.tuner.ts";
-import { color } from "@vseplet/luminous/helpers";
 
 const permissionEnv = Deno.permissions.querySync({ name: "env" }).state;
 
@@ -22,7 +21,6 @@ const remoteDenoJson = await fetchJSON(
 
 export const VERSION = localDenoJson["version"];
 export const REMOTE_VERSION = remoteDenoJson["version"] || VERSION;
-
 
 export const config = await Tuner.use.loadConfig<BaseCfgType>({
   absolutePathPrefix: IS_DEVELOP ? undefined : baseRepoPath,
