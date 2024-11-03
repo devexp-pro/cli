@@ -56,7 +56,10 @@ export function createProjectCommand() {
         .action(async (_options: any, projectName: string) => {
             try {
                 const client = await createClient();
-
+                // console.log(JSON.stringify({
+                //     type: "call",
+                //     calls: [{ name: "createProject", args: [projectName] }],
+                //   }))
                 const response = await client.call("createProject", [
                     projectName,
                 ]);
