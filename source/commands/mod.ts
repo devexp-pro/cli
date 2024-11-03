@@ -36,7 +36,7 @@ export const entry = new Command()
     "This is a powerful entry point for all developers, significantly improving the developer experience",
   )
   .action((_options: any, ..._args: any) => {
-    console.log(colors.rgb24(logo, 0xFFA500));
+    console.log(logo);
     console.log(introText);
 
     if (REMOTE_VERSION !== VERSION && !IS_DEVELOP) {
