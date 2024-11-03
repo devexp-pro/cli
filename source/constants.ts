@@ -23,10 +23,10 @@ const remoteDenoJson = await fetchJSON(
 export const VERSION = localDenoJson["version"];
 export const REMOTE_VERSION = remoteDenoJson["version"] || VERSION;
 
-if (!IS_DEVELOP) Deno.env.set("CONFIG", "prod"); // TODO: далее надо пофиксить тюнер и убрать это костыль
+
 export const config = await Tuner.use.loadConfig<BaseCfgType>({
   absolutePathPrefix: IS_DEVELOP ? undefined : baseRepoPath,
-  configDirPath: "config",
+  configDirPath: "./config",
   configName: IS_DEVELOP ? "dev" : "prod",
 });
 
