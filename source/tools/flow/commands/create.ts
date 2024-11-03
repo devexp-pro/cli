@@ -42,7 +42,6 @@ const action = async () => {
     options: [
       { name: "workflow", value: "workflow" },
       { name: "task", value: "task" },
-      { name: "help", value: "help" },
     ],
   });
 

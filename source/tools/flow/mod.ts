@@ -18,7 +18,7 @@ tool
       options: [
         { name: "create", value: "create" },
         { name: "run", value: "run" },
-        { name: "init", value: "init" },
+        // { name: "init", value: "init" },
         { name: "help", value: "help" },
       ],
     });
@@ -28,13 +28,16 @@ tool
         create.action();
         break;
       case "run":
-        run.action();
+        run.action({
+          path: "",
+        }, true);
         break;
       case "init":
         init.action();
         break;
       case "help":
         tool.showHelp();
+        Deno.exit();
         break;
     }
   })
