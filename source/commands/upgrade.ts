@@ -23,12 +23,14 @@ export const upgrade = new Command()
         "--allow-read",
         "--allow-write",
         "--unstable-kv",
+        "--unstable-broadcast-channel",
         "--allow-sys",
         "--import-map=" + IMPORT_MAP_URL,
         "-n",
         "dx",
         ENTRYPOINT_SOURCE_URL,
       ]);
+
       console.log(res.stderr || res.stderr);
       Deno.exit(res.code);
     } else {

@@ -3,10 +3,12 @@ import { execute } from "@vseplet/shibui";
 import { Select } from "@cliffy/prompt/select";
 import { Confirm } from "@cliffy/prompt";
 import { colors } from "@std/colors";
+import flow from "../mod.ts";
 
 const availableLoggingLevels = ["none", "dbg", "trc"];
 
-const interactiveAction = async () => {};
+const interactiveAction = async () => {
+};
 
 const inlineAction = async (options: {
   all?: boolean;
@@ -82,7 +84,7 @@ const action = async (
     await execute(modules[scriptName]);
   }
 
-  Deno.exit(0);
+  flow.action();
 };
 
 const command = new Command()
@@ -111,8 +113,8 @@ const command = new Command()
   .arguments("[path] [output:string]")
   .action(async (options: any, ...args: any) => {
     const [path] = args;
-    console.log(args.length);
-    console.log(options);
+    // console.log(args.length);
+    // console.log(options);
     const isInteractive = args.length == 0 && Object.keys(options).length == 0;
 
     await action({

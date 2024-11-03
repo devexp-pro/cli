@@ -1,6 +1,7 @@
 import { Command } from "@cliffy/command";
 import { Select } from "@cliffy/prompt/select";
 import { Input } from "@cliffy/prompt/input";
+import flow from "../mod.ts";
 
 const taskFileText = (name: string) => `
 import { task } from "jsr:@vseplet/shibui@0.4.36/core";
@@ -61,8 +62,8 @@ const action = async () => {
       new TextEncoder().encode(workflowFileText(name)),
     );
   }
-
-  Deno.exit(0);
+  flow.action();
+  // Deno.exit(0);
 };
 
 const command = new Command()
