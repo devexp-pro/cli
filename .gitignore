@@ -8,3 +8,4 @@ local-kv-wal
 ololo-kv
 ololo-kv-shm
 ololo-kv-wal
+*.flow.ts
