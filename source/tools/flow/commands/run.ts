@@ -92,12 +92,12 @@ const action = async (
 ) => {
   let resolvedPath = options.path || Deno.cwd();
 
-  console.log(Deno.cwd());
-  console.log(resolvedPath);
-  console.log(resolve("file://", Deno.cwd(), resolvedPath));
+  // console.log(Deno.cwd());
+  // console.log(resolvedPath);
+  // console.log(resolve("file://", Deno.cwd(), resolvedPath));
 
   resolvedPath = resolvedPath.startsWith("./")
-    ? resolve("file://", Deno.cwd(), resolvedPath)
+    ? resolve(Deno.cwd(), resolvedPath)
     : resolvedPath;
 
   const isFile = Deno.lstatSync(resolvedPath).isFile;
@@ -114,7 +114,7 @@ const action = async (
       }
     }
   } else {
-    builders[resolvedPath] = (await import(resolvedPath)).default;
+    builders[resolvedPath] = (await import("file://" + resolvedPath)).default;
     selectOptions.push({ name: resolvedPath, value: resolvedPath });
   }
 
