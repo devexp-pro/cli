@@ -4,7 +4,7 @@ import { Select } from "@cliffy/prompt/select";
 import { Confirm } from "@cliffy/prompt";
 import { colors } from "@std/colors";
 import flow from "../mod.ts";
-import { resolve } from "jsr:@std/path@0.224.0/resolve";
+import { resolve } from "@std/path";
 import { TTaskBuilder, TWorkflowBuilder } from "@vseplet/shibui/core/types";
 
 const availableLoggingLevels = ["none", "dbg", "trc"];
