@@ -62,13 +62,14 @@ const action = async () => {
       new TextEncoder().encode(workflowFileText(name)),
     );
   }
+
   flow.action();
   // Deno.exit(0);
 };
 
 const command = new Command()
   .name("create")
-  .description("create subcommand description")
+  .description("Create scripts")
   .action(async (_options: any, ..._args: any) => {
     await action();
   });
