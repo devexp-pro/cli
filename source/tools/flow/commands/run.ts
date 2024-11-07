@@ -3,7 +3,6 @@ import { execute } from "@vseplet/shibui";
 import { Select } from "@cliffy/prompt/select";
 import { Confirm } from "@cliffy/prompt";
 import { colors } from "@std/colors";
-import flow from "../mod.ts";
 import { resolve } from "@std/path";
 import { TTaskBuilder, TWorkflowBuilder } from "@vseplet/shibui/core/types";
 
@@ -54,7 +53,7 @@ const interactiveAction = async (
     await execute(builders[scriptName]);
   }
 
-  flow.action();
+  Deno.exit(0);
 };
 
 const inlineAction = async (
