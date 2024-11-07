@@ -22,13 +22,10 @@ import toolTerm from "$/tools/term";
 import toolRadio from "$/tools/radio";
 import toolClip from "$/tools/clip";
 
-import { upgrade } from "./upgrade.ts";
 import { dash } from "./dash.ts";
-import { login } from "./setup/login.ts";
-import { logout } from "./setup/logout.ts";
-import { setup } from "./setup/setup.ts";
 import { intro } from "./intro.ts";
-
+import { setup } from "./setup/mod.ts";
+import { upgrade } from "./setup/upgrade.ts";
 export const entry = new Command()
   .name("dx")
   .usage("[command]")
@@ -60,8 +57,5 @@ export const entry = new Command()
   // .command("radio", toolRadio)
   .command("clip", toolClip)
   .command("dash", dash)
-  .command("login", login)
-  .command("logout", logout)
-  // .command("setup", setup)
   .command("intro", intro)
-  .command("upgrade", upgrade);
+  .command("setup", setup);

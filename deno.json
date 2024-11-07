@@ -1,6 +1,6 @@
 {
   "lock": false,
-  "version": "0.1.13-alpha",
+  "version": "0.1.14-alpha",
   "license": "",
   "tasks": {
     "dev": "DEV=true CONFIG=dev deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts",
