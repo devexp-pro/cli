@@ -91,6 +91,11 @@ const action = async (
   interactive: boolean = false,
 ) => {
   let resolvedPath = options.path || Deno.cwd();
+
+  console.log(Deno.cwd());
+  console.log(resolvedPath);
+  console.log(resolve("file://", Deno.cwd(), resolvedPath));
+
   resolvedPath = resolvedPath.startsWith("./")
     ? resolve("file://", Deno.cwd(), resolvedPath)
     : resolvedPath;
