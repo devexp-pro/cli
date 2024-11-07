@@ -92,7 +92,7 @@ const action = async (
 ) => {
   let resolvedPath = options.path || Deno.cwd();
   resolvedPath = resolvedPath.startsWith("./")
-    ? resolve(Deno.cwd(), resolvedPath)
+    ? resolve("file://", Deno.cwd(), resolvedPath)
     : resolvedPath;
 
   const isFile = Deno.lstatSync(resolvedPath).isFile;
