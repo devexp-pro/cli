@@ -35,5 +35,6 @@ export const upgrade = new Command()
       Deno.exit(res.code);
     } else {
       console.log(`  The latest version is already installed!`);
+      Deno.exit(0);
     }
   });
