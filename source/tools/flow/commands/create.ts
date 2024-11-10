@@ -3,7 +3,7 @@ import { Select } from "@cliffy/prompt/select";
 import { Input } from "@cliffy/prompt/input";
 
 const taskFileText = (name: string) => `
-import { task } from "jsr:@vseplet/shibui@0.4.36/core";
+import { task } from "jsr:@vseplet/shibui@0.4.39/core";
 
 export default task()
   .name\`${name}\`
@@ -14,8 +14,8 @@ export default task()
 `;
 
 const workflowFileText = (name: string) => `
-import { workflow } from "jsr:@vseplet/shibui@0.4.36/core";
-import { ContextPot } from "jsr:@vseplet/shibui@0.4.36/core/pots";
+import { workflow } from "jsr:@vseplet/shibui@0.4.39/core";
+import { ContextPot } from "jsr:@vseplet/shibui@0.4.39/core/pots";
 
 class CTX_${name} extends ContextPot<{ x: number }> {
   override data = {

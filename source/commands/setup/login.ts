@@ -51,4 +51,6 @@ export const login = new Command()
     } catch (error) {
       console.error("Error during auth process:", error);
     }
+
+    Deno.exit(0);
   });

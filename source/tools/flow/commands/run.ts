@@ -1,10 +1,10 @@
 import { Command } from "@cliffy/command";
-import { execute } from "@vseplet/shibui";
+import { execute, runCI } from "@vseplet/shibui";
+import { TTaskBuilder, TWorkflowBuilder } from "@vseplet/shibui/core/types";
 import { Select } from "@cliffy/prompt/select";
 import { Confirm } from "@cliffy/prompt";
 import { colors } from "@std/colors";
 import { resolve } from "@std/path";
-import { TTaskBuilder, TWorkflowBuilder } from "@vseplet/shibui/core/types";
 
 const availableLoggingLevels = ["none", "dbg", "trc"];
 
@@ -13,6 +13,7 @@ type Options = {
   simple?: boolean;
   debug?: boolean;
   logs?: boolean;
+  ci?: boolean;
   path: string;
 };
 
@@ -85,6 +86,12 @@ const simpleAction = async (
   Deno.exit(0);
 };
 
+const ciAction = (
+  builder: ShibuiBuilder,
+) => {
+  runCI(builder);
+};
+
 const action = async (
   options: Options,
   interactive: boolean = false,
@@ -101,6 +108,7 @@ const action = async (
 
   const isFile = Deno.lstatSync(resolvedPath).isFile;
   const builders: BuildersMap = {};
+  let builder: ShibuiBuilder | null = null;
   const selectOptions: SelectOption[] = [];
 
   if (!isFile) {
@@ -114,6 +122,7 @@ const action = async (
     }
   } else {
     builders[resolvedPath] = (await import("file://" + resolvedPath)).default;
+    builder = builders[resolvedPath];
     selectOptions.push({ name: resolvedPath, value: resolvedPath });
   }
 
@@ -126,6 +135,17 @@ const action = async (
 
   if (options.simple) {
     await simpleAction(builders);
+  } else if (options.ci) {
+    if (!isFile) {
+      console.log(colors.red(`  In CI you can run only one script!`));
+      Deno.exit(-1);
+    }
+
+    if (!builder) {
+      Deno.exit(-1);
+    }
+
+    ciAction(builder);
   } else if (interactive) {
     await interactiveAction(
       countOfScripts,
@@ -143,6 +163,9 @@ const command = new Command()
   .usage("[path]")
   .option("-s, --simple", "run in simple mode", {
     conflicts: ["all", "debug", "logs"],
+  })
+  .option("-c, --ci", "run in simple mode", {
+    conflicts: ["all", "debug", "logs", "simple"],
   })
   .option("-a, --all", "run all scripts", {
     conflicts: ["simple"],
@@ -177,6 +200,7 @@ const command = new Command()
       all: options["all"],
       debug: options["debug"],
       logs: options["logs"],
+      ci: options["ci"],
       path,
     }, isInteractive);
   });
