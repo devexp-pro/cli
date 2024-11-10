@@ -2,8 +2,10 @@ import { Command } from "@cliffy/command";
 import { Select } from "@cliffy/prompt/select";
 import { Input } from "@cliffy/prompt/input";
 
+const shibuiVersion = "0.4.40";
+
 const taskFileText = (name: string) => `
-import { task } from "jsr:@vseplet/shibui@0.4.39/core";
+import { task } from "jsr:@vseplet/shibui@${shibuiVersion}/core";
 
 export default task()
   .name\`${name}\`
@@ -14,8 +16,8 @@ export default task()
 `;
 
 const workflowFileText = (name: string) => `
-import { workflow } from "jsr:@vseplet/shibui@0.4.39/core";
-import { ContextPot } from "jsr:@vseplet/shibui@0.4.39/core/pots";
+import { workflow } from "jsr:@vseplet/shibui@${shibuiVersion}/core";
+import { ContextPot } from "jsr:@vseplet/shibui@${shibuiVersion}/core/pots";
 
 class CTX_${name} extends ContextPot<{ x: number }> {
   override data = {

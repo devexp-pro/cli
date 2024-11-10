@@ -114,7 +114,7 @@ const action = async (
   if (!isFile) {
     for (const dir of Deno.readDirSync(resolvedPath)) {
       if (dir.isFile && dir.name.includes(".flow.ts")) {
-        console.log(colors.green(` found script "${dir.name}"`));
+        console.log(colors.green(`  found script "${dir.name}"`));
         builders[dir.name] =
           (await import("file://" + resolvedPath + "/" + dir.name)).default;
         selectOptions.push({ name: dir.name, value: dir.name });
@@ -164,7 +164,7 @@ const command = new Command()
   .option("-s, --simple", "run in simple mode", {
     conflicts: ["all", "debug", "logs"],
   })
-  .option("-c, --ci", "run in simple mode", {
+  .option("-c, --ci", "run in CI/CD mode for GitHub Actions, GitLab CI, etc.", {
     conflicts: ["all", "debug", "logs", "simple"],
   })
   .option("-a, --all", "run all scripts", {
