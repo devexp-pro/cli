@@ -1,5 +1,5 @@
 import { Command } from "@cliffy/command";
-import dashboard from "$/dashboard";
+import dashboard from "./gui.ts";
 import { config } from "$/constants";
 
 export const dash = new Command()
