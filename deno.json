@@ -4,7 +4,8 @@
   "license": "",
   "tasks": {
     "dev": "DEV=true deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts",
-    "prod": "DEV_PROD=true deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts"
+    "prod": "DEV_PROD=true deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts",
+    "compile": "deno compile --output devexp --no-check -A --unstable-kv --unstable-broadcast-channel ./source/main.ts"
   },
   "importMap": "./import-map.json"
 }
