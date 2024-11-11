@@ -11,9 +11,9 @@ import {
   syncProjects,
 } from "../project_commands.ts";
 
-// Главное меню для работы с проектами
+
 const projectMenu = async () => {
-  // Синхронизация проектов перед началом работы
+
   await syncProjects();
 
   const action = await Select.prompt({
@@ -36,13 +36,16 @@ const projectMenu = async () => {
       await createProjectCommand().parse([projectName]);
       break;
     case "select":
+      await displayCurrentProjectInfo();
       await selectProjectCommand().parse([]);
       break;
     case "rename":
+      await displayCurrentProjectInfo();
       const newName = await Input.prompt("Введите новое имя проекта:");
       await renameProjectCommand().parse([newName]);
       break;
     case "delete":
+      await displayCurrentProjectInfo();
       const deleteName = await Input.prompt(
         "Введите имя проекта для удаления:",
       );

@@ -14,8 +14,8 @@ tool
     Deno.exit();
   })
   .description("Centralized secrets management")
-  .command("project", projectCommand);
-// .command("env", envCommand)
+  .command("project", projectCommand)
+.command("env", envCommand)
 // .command("secret", secretCommand)
 // .command("invite", inviteCommand)
 // .command("run", runCommand);

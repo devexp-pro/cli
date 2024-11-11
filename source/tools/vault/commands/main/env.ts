@@ -1,3 +1,5 @@
+// source/tools/vault/commands/main/env.ts
+
 // deno-lint-ignore-file no-case-declarations
 import { Command } from "@cliffy/command";
 import {
@@ -8,9 +10,13 @@ import {
 } from "../env_commands.ts";
 import { Select } from "@cliffy/prompt/select";
 import { Input } from "../../deps.ts";
+import { displayCurrentProjectInfo, syncProjects } from "../project_commands.ts";
 
-// Главное меню для работы с окружениями
+
 const envMenu = async () => {
+
+  await syncProjects();
+
   const action = await Select.prompt({
     message: "Что вы хотите сделать с окружениями?",
     options: [
@@ -27,13 +33,16 @@ const envMenu = async () => {
       await createEnvCommand().parse([envName]);
       break;
     case "select":
+      await displayCurrentProjectInfo();
       await selectEnvCommand().parse([]);
       break;
     case "rename":
+      await displayCurrentProjectInfo();
       const newName = await Input.prompt("Введите новое имя окружения:");
       await renameEnvCommand().parse([newName]);
       break;
     case "delete":
+      await displayCurrentProjectInfo();
       const deleteName = await Input.prompt(
         "Введите имя окружения для удаления:",
       );

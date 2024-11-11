@@ -3,7 +3,7 @@ import { runCommand } from "../secondary/run.ts";
 
 const runCmd = new Command()
   .description("Выполнить команду с секретами как переменными окружения.")
-  .arguments("<cmd...:string>") // Ожидаем команду и флаги как аргументы
+  .arguments("<cmd...:string>") 
   .action(async (_options: any, ...cmd: string[]) => {
     if (cmd.length === 0) {
       runCmd.showHelp();

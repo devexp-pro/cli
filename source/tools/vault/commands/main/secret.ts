@@ -9,7 +9,7 @@ import {
 import { Select } from "@cliffy/prompt/select";
 import { Input } from "../../deps.ts";
 
-// Главное меню для работы с секретами
+
 const secretMenu = async () => {
   const action = await Select.prompt({
     message: "Что вы хотите сделать с секретами?",
