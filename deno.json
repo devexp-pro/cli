@@ -3,8 +3,8 @@
   "version": "0.1.16-alpha",
   "license": "",
   "tasks": {
-    "dev": "DEV=true CONFIG=dev deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts",
-    "prod": "deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts"
+    "dev": "DEV=true deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts",
+    "prod": "DEV_PROD=true deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts"
   },
   "importMap": "./import-map.json"
 }
