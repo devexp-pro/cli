@@ -137,9 +137,9 @@ export function deleteProjectCommand() {
   return new Command()
     .description("Удалить проект.")
     .arguments("<projectUUID:string>")
-    .action(async (_options: any, projectUUID: TUUID) => {
+    .action(async (_options: any, projectUUID: string) => {
       const client = await createClient();
-      const response = await client.call("deleteProject", [projectUUID]);
+      const response = await client.call("deleteProject", [projectUUID as TUUID]);
 
       if (!response.success) {
         console.error(red(`Не удалось удалить проект: ${response.message}`));
@@ -197,7 +197,7 @@ export function selectProjectCommand() {
         console.error(red("Проект не найден."));
       }
     });
-}
+})}
 
 export function renameProjectCommand() {
   return new Command()
@@ -228,3 +228,4 @@ export function renameProjectCommand() {
       }
     });
 }
+

@@ -8,21 +8,13 @@ import { red, green } from "./deps.ts";
 
 export async function createClient(): Promise<ApiflyClient<GuardenDefinition>> {
   const session = await getSession();
-<<<<<<< HEAD
+
   if (!session) {
     throw new Error("No SESSION! Authorize first");
   }
   if (!session.id) throw new Error("No SESSION ID! Authorize first");
 
-=======
-  if (session === null) throw new Error("No SESSION! Authorize first");
-  // key: string;
-  // email: string;
-  // id: string;
-  // username: string;
-  console.log(session);
-  if (session.id === null) throw new Error("No SESSION ID! Authorize first");
->>>>>>> develop
+
   return new apifly.client<GuardenDefinition>({
     baseURL: `${SERVICE_URL}/tool/vault`,
     headers: {
