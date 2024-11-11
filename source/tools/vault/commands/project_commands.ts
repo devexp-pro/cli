@@ -163,7 +163,16 @@ export function selectProjectCommand() {
     .action(async () => {
       const client = await createClient();
       const [response, error] = await client.get();
+  return new Command()
+    .description("Выбрать проект.")
+    .action(async () => {
+      const client = await createClient();
+      const [response, error] = await client.get();
 
+      if (error) {
+        console.error(red("Ошибка при получении списка проектов."));
+        return;
+      }
       if (error) {
         console.error(red("Ошибка при получении списка проектов."));
         return;

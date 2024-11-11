@@ -3,6 +3,7 @@ import { BaseCfgType } from "./base.tuner.ts";
 
 const prodCfg = Tuner.tune({
   parent: Tuner.Load.local.configDir<BaseCfgType>("base.tuner.ts"),
+
   data: {
     features: {
       auth: {
@@ -22,6 +23,9 @@ const prodCfg = Tuner.tune({
         hidden: true,
       },
       git: {
+        hidden: true,
+      },
+      alias: {
         hidden: true,
       },
     },

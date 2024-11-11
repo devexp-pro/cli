@@ -5,11 +5,16 @@ import secretCommand from "./commands/main/secret.ts";
 import inviteCommand from "./commands/main/invite.ts"; // Импортируем команду инвайта
 import runCommand from "./commands/main/run.ts";
 import { config } from "$/constants";
+import { config } from "$/constants";
 
 const tool = new Command();
 if (config.data.tools.vault.hidden) tool.hidden();
 tool
+const tool = new Command();
+if (config.data.tools.vault.hidden) tool.hidden();
+tool
   .action((_options: any, ..._args: any) => {
+    tool.showHelp();
     tool.showHelp();
     Deno.exit();
   })
@@ -20,4 +25,5 @@ tool
 // .command("invite", inviteCommand)
 // .command("run", runCommand);
 
+export default tool;
 export default tool;

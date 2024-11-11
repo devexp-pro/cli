@@ -1,10 +1,11 @@
 import { Command } from "@cliffy/command";
 import { Select } from "@cliffy/prompt/select";
 import { Input } from "@cliffy/prompt/input";
-import flow from "../mod.ts";
+
+const shibuiVersion = "0.4.40";
 
 const taskFileText = (name: string) => `
-import { task } from "jsr:@vseplet/shibui@0.4.36/core";
+import { task } from "jsr:@vseplet/shibui@${shibuiVersion}/core";
 
 export default task()
   .name\`${name}\`
@@ -15,8 +16,8 @@ export default task()
 `;
 
 const workflowFileText = (name: string) => `
-import { workflow } from "jsr:@vseplet/shibui@0.4.36/core";
-import { ContextPot } from "jsr:@vseplet/shibui@0.4.36/core/pots";
+import { workflow } from "jsr:@vseplet/shibui@${shibuiVersion}/core";
+import { ContextPot } from "jsr:@vseplet/shibui@${shibuiVersion}/core/pots";
 
 class CTX_${name} extends ContextPot<{ x: number }> {
   override data = {
@@ -62,13 +63,13 @@ const action = async () => {
       new TextEncoder().encode(workflowFileText(name)),
     );
   }
-  flow.action();
-  // Deno.exit(0);
+
+  Deno.exit(0);
 };
 
 const command = new Command()
   .name("create")
-  .description("create subcommand description")
+  .description("Create scripts")
   .action(async (_options: any, ..._args: any) => {
     await action();
   });

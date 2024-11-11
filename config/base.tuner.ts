@@ -10,6 +10,7 @@ const baseCfg = Tuner.tune({
         },
       },
     },
+
     commands: {
       dash: {
         hidden: false,
@@ -33,6 +34,9 @@ const baseCfg = Tuner.tune({
         hidden: false,
       },
       flow: {
+        hidden: false,
+      },
+      alias: {
         hidden: false,
       },
     },

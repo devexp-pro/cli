@@ -5,7 +5,7 @@ dbs
 local-kv
 local-kv-shm
 local-kv-wal
-ololo-kv
-ololo-kv-shm
-ololo-kv-wal
+
 *.flow.ts
+test
+devexp

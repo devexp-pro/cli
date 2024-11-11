@@ -1,7 +1,9 @@
 import { Command } from "@cliffy/command";
+import { config } from "$/constants";
 
 const tool = new Command()
-  .name("alias")
+if (config.data.tools?.alias?.hidden) tool.hidden();
+  tool.name("alias")
   .usage("")
   .action(() => {
     tool.showHelp();

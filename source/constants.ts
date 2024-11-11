@@ -9,7 +9,7 @@ const permissionEnv = Deno.permissions.querySync({ name: "env" }).state;
 export const OS_NAME = Deno.build.os;
 
 export const IS_DEVELOP = permissionEnv == "granted"
-  ? Deno.env.get("DEV") !== undefined || false
+  ? Deno.env.get("DEV") !== undefined && Deno.env.get("DEV") !== "false"
   : false;
 
 export const baseRepoPath =
@@ -23,7 +23,7 @@ export const VERSION = localDenoJson["version"];
 export const REMOTE_VERSION = remoteDenoJson["version"] || VERSION;
 
 export const config = await Tuner.use.loadConfig<BaseCfgType>({
-  absolutePathPrefix: IS_DEVELOP ? undefined : baseRepoPath,
+  absolutePathPrefix: IS_DEVELOP || Deno.env.get("DEV_PROD") ? undefined : baseRepoPath,
   configDirPath: "./config",
   configName: IS_DEVELOP ? "dev" : "prod",
 });

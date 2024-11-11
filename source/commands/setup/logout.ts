@@ -13,4 +13,6 @@ export const logout = new Command()
 
     await kv.delete(["auth", "session"]);
     console.log("Logged out successfully!");
+
+    Deno.exit(0);
   });
