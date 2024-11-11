@@ -17,7 +17,7 @@ import toolFlow from "$/tools/flow";
 import toolAlias from "$/tools/alias";
 import toolClip from "$/tools/clip";
 
-import { dash } from "./dash.ts";
+import { dash } from "./dash/mod.ts";
 import { intro } from "./intro.ts";
 import { setup } from "./setup/mod.ts";
 import { upgrade } from "./setup/upgrade.ts";
