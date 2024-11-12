@@ -85,8 +85,6 @@ export async function getCurrentConfig(): Promise<{
 }
 
 
-
-
 export async function syncProjects() {
   try {
     const client = await createClient();
@@ -105,8 +103,16 @@ export async function syncProjects() {
 
     let currentFullConfig = await getFullConfigKV() as ProjectData[] | null;
 
-    // Если currentFullConfig равен null, инициализируем его пустым массивом и выполняем setFullConfigKV
+
     if (currentFullConfig === null) {
+      await setCurrentConfigKV({
+        currentProjectName: null,
+        currentEnvName: null,
+        currentProjectUUID: null,
+        currentEnvUUID: null,
+      });
+      console.log(yellow("Текущая конфигурация сброшена."));
+
       await setFullConfigKV(newProjects);
       console.log(green("Конфигурация инициализирована, так как она отсутствовала."));
       return;
@@ -144,7 +150,7 @@ export async function syncProjects() {
               changesDetected = true;
             }
 
-            // Проверка изменений в секретах
+
             newEnv.secrets.forEach((newSecret) => {
               const currentSecret = currentEnv.secrets.find((s) => s.key === newSecret.key);
 
