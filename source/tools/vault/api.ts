@@ -98,6 +98,13 @@ export async function syncProjects() {
     const newProjects = response!.state.projects as ProjectData[];
     if (!newProjects || newProjects.length === 0) {
       console.log(red("Проекты отсутствуют."));
+      await setCurrentConfigKV({
+        currentProjectName: null,
+        currentEnvName: null,
+        currentProjectUUID: null,
+        currentEnvUUID: null,
+      });
+      console.log(yellow("Текущая конфигурация сброшена."));
       return;
     }
 
