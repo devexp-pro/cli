@@ -1,10 +1,9 @@
 import { Command } from "@cliffy/command";
 import projectCommand from "./commands/main/project.ts";
 import envCommand from "./commands/main/env.ts";
-import secretCommand from "./commands/main/secret.ts";
-import inviteCommand from "./commands/main/invite.ts"; // Импортируем команду инвайта
-import runCommand from "./commands/main/run.ts";
+
 import { config } from "$/constants";
+import secretCommand from "./commands/main/secret.ts";
 
 
 const tool = new Command();
@@ -21,7 +20,7 @@ tool
   .description("Centralized secrets management")
   .command("project", projectCommand)
 .command("env", envCommand)
-// .command("secret", secretCommand)
+.command("secret", secretCommand)
 // .command("invite", inviteCommand)
 // .command("run", runCommand);
 

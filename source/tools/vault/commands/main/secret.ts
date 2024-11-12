@@ -1,3 +1,5 @@
+// source/tools/vault/commands/main/secret.ts
+
 // deno-lint-ignore-file no-case-declarations
 import { Command } from "@cliffy/command";
 import {
@@ -8,9 +10,11 @@ import {
 } from "../secret_commands.ts";
 import { Select } from "@cliffy/prompt/select";
 import { Input } from "../../deps.ts";
-
+import { syncProjects } from "../../api.ts";
 
 const secretMenu = async () => {
+  await syncProjects();
+
   const action = await Select.prompt({
     message: "Что вы хотите сделать с секретами?",
     options: [
@@ -28,17 +32,10 @@ const secretMenu = async () => {
       await addSecretCommand().parse([key, value]);
       break;
     case "update":
-      const updateKey = await Input.prompt(
-        "Введите ключ секрета для обновления:",
-      );
-      const updateValue = await Input.prompt("Введите новое значение:");
-      await updateSecretCommand().parse([updateKey, updateValue]);
+      await updateSecretCommand().parse([]);
       break;
     case "delete":
-      const deleteKey = await Input.prompt(
-        "Введите ключ секрета для удаления:",
-      );
-      await deleteSecretCommand().parse([deleteKey]);
+      await deleteSecretCommand().parse([]);
       break;
     case "fetch":
       await fetchSecretsCommand().parse([]);

@@ -10,11 +10,10 @@ import {
 } from "../env_commands.ts";
 import { Select } from "@cliffy/prompt/select";
 import { Input } from "../../deps.ts";
-import { displayCurrentProjectInfo, syncProjects } from "../project_commands.ts";
-
+import { displayCurrentProjectInfo } from "../project_commands.ts";
+import { syncProjects } from "../../api.ts";
 
 const envMenu = async () => {
-
   await syncProjects();
 
   const action = await Select.prompt({
@@ -38,15 +37,13 @@ const envMenu = async () => {
       break;
     case "rename":
       await displayCurrentProjectInfo();
-      const newName = await Input.prompt("Введите новое имя окружения:");
-      await renameEnvCommand().parse([newName]);
+
+      await renameEnvCommand().parse([]);
       break;
     case "delete":
       await displayCurrentProjectInfo();
-      const deleteName = await Input.prompt(
-        "Введите имя окружения для удаления:",
-      );
-      await deleteEnvCommand().parse([deleteName]);
+
+      await deleteEnvCommand().parse([]);
       break;
   }
 };
