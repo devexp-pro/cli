@@ -40,6 +40,8 @@ export const WEBSOCKET_URL = `${
   IS_DEVELOP ? "ws" : "wss"
 }://wss.${SERVICE_DOMAIN}/wss`;
 
+export const SYSTEM_SHELL = Deno.env.get("SHELL") || Deno.env.get("ComSpec");
+
 export const logo = `
   ${colors.rgb24("██████╗ ███████╗██╗   ██╗", 0xFFA500)}${
   colors.magenta("███████╗██╗  ██╗██████╗")

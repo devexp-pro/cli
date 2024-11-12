@@ -2,7 +2,7 @@ import { Command } from "@cliffy/command";
 import { config, SERVICE_URL } from "$/constants";
 import fetchify from "@vseplet/fetchify";
 import { getSession } from "$/kv";
-import clipboard from "./clipboard.ts";
+import api from "./api.ts";
 
 const createClient = async () => {
   const session = await getSession();
@@ -30,7 +30,7 @@ const store = new Command()
   .action(async (options: any, ...args: any) => {
     const clipApi = await createClient();
 
-    const text = args.join(" ") || await clipboard.read();
+    const text = args.join(" ") || await api.clipboard.read();
 
     const res = await clipApi.post("/store", {
       body: text,
@@ -62,7 +62,7 @@ const load = new Command()
 
     if (res.status == 200) {
       const text = await res.text();
-      await clipboard.write(text);
+      await api.clipboard.write(text);
 
       if (options?.show) {
         console.log();

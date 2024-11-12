@@ -4,12 +4,12 @@ const action = async () => {
   Deno.exit(0);
 };
 
-const list = new Command()
-  .name("list")
-  .description("list alias")
+const remove = new Command()
+  .name("remove")
+  .description("remove alias")
   .action(action);
 
 export default {
-  command: list,
+  command: remove,
   action,
 };
