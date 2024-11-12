@@ -1,4 +1,3 @@
-import { colors } from "@std/colors";
 import { Command } from "@cliffy/command";
 
 import {
@@ -46,8 +45,8 @@ export const entry = new Command()
   .command("vault", toolVault)
   .command("flow", toolFlow.tool)
   .command("alias", toolAlias)
-  .command("git", toolGit)
-  .command("clip", toolClip)
+  .command("git", toolGit.tool)
+  .command("clip", toolClip.tool)
   // commands
   .command("dash", dash)
   .command("intro", intro)

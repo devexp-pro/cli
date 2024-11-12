@@ -91,4 +91,6 @@ tool
   .command("store", store)
   .command("load", load);
 
-export default tool;
+export default {
+  tool,
+};
