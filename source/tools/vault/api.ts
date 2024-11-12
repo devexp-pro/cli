@@ -87,7 +87,6 @@ export async function getCurrentConfig(): Promise<{
 
 
 
-
 export async function syncProjects() {
   try {
     const client = await createClient();
@@ -104,11 +103,19 @@ export async function syncProjects() {
       return;
     }
 
-    const currentFullConfig = await getFullConfigKV() as ProjectData[];
+    let currentFullConfig = await getFullConfigKV() as ProjectData[] | null;
+
+    // Если currentFullConfig равен null, инициализируем его пустым массивом и выполняем setFullConfigKV
+    if (currentFullConfig === null) {
+      await setFullConfigKV(newProjects);
+      console.log(green("Конфигурация инициализирована, так как она отсутствовала."));
+      return;
+    }
+
     let changesDetected = false;
 
     newProjects.forEach((newProject) => {
-      const currentProject = currentFullConfig.find((p) => p.uuid === newProject.uuid);
+      const currentProject = currentFullConfig!.find((p) => p.uuid === newProject.uuid);
 
       if (!currentProject) {
         console.log(yellow(`Добавлен новый проект: ${newProject.name}${IS_DEVELOP ? ` (UUID: ${newProject.uuid})` : ""}`));
@@ -178,7 +185,7 @@ export async function syncProjects() {
       }
     });
 
-    currentFullConfig.forEach((currentProject) => {
+    currentFullConfig!.forEach((currentProject) => {
       const newProject = newProjects.find((p) => p.uuid === currentProject.uuid);
       if (!newProject) {
         console.log(yellow(`Удален проект: ${currentProject.name}${IS_DEVELOP ? ` (UUID: ${currentProject.uuid})` : ""}`));
