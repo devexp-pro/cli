@@ -1,54 +1,28 @@
+// source/tools/vault/commands/project_commands.ts
+
+import { createClient, getCurrentConfig, getFullConfigKV, setCurrentConfigKV } from "../api.ts";
+import { Command, green, red, Input } from "../deps.ts";
+import {  TUUID } from "../GuardenDefinition.ts";
 import { Select } from "@cliffy/prompt/select";
-import { createClient, getCurrentProject, setCurrentProject } from "../api.ts";
-import { Command, green, red } from "../deps.ts";
-import { type TUUID } from "../GuardenDefinition.ts";
 
-// Команда для отображения текущего проекта
+
+
 export async function displayCurrentProjectInfo() {
-  const currentProject = await getCurrentProject();
+  const { currentConfig } = await getCurrentConfig();
 
-  if (!currentProject || !currentProject.currentProject) {
+  if (!currentConfig || !currentConfig.currentProjectName) {
     console.log(red("Текущий проект не выбран."));
     return;
   }
 
-  console.log(green(`Текущий проект: ${currentProject.currentProject}`));
-  if (currentProject.currentEnv) {
-    console.log(green(`Текущее окружение: ${currentProject.currentEnv}`));
+  console.log(green(`Текущий проект: ${currentConfig.currentProjectName}`));
+  if (currentConfig.currentEnvName) {
+    console.log(green(`Текущее окружение: ${currentConfig.currentEnvName}`));
   } else {
     console.log(red("Окружение не выбрано."));
   }
 }
 
-// Команда для синхронизации проектов с сервером
-export async function syncProjects() {
-  try {
-    const client = await createClient();
-    const [response, error] = await client.get();
-    response?.state.projects;
-    if (error) {
-      console.error(red("Ошибка при синхронизации проектов."));
-      return;
-    }
-
-    // Обновляем локальные данные с актуальной информацией с сервера
-    const projects = response!.state.projects!;
-    if (projects.length === 0) {
-      console.log(red("Проекты отсутствуют."));
-      return;
-    }
-
-    for (const project of projects) {
-      await setCurrentProject(project!.name!, project!.uuid!);
-    }
-
-    console.log(green("Синхронизация завершена."));
-  } catch (error) {
-    console.error(red("Ошибка синхронизации проектов:"), error);
-  }
-}
-
-// Команда для создания проекта
 export function createProjectCommand() {
   return new Command()
     .description("Создать новый проект.")
@@ -56,99 +30,151 @@ export function createProjectCommand() {
     .action(async (_options: any, projectName: string) => {
       try {
         const client = await createClient();
-
-        const response = await client.call("createProject", [
-          projectName,
-        ]);
+        const response = await client.call("createProject", [projectName]);
 
         if (!response.success) {
-          throw new Error(`Не удалось создать проект.`);
+          throw new Error(`Не удалось создать проект: ${response.message}`);
         }
 
+        await setCurrentConfigKV({
+          currentProjectName: response.project!.name,
+          currentProjectUUID: response.project!.uuid,
+          currentEnvName: response.project?.environments[0]?.name || null,
+          currentEnvUUID: response.project?.environments[0]?.uuid || null,
+        });
+
         console.log(green(`Проект '${projectName}' успешно создан.`));
+        Deno.exit(); // Завершаем процесс
       } catch (error) {
         console.error(red(`Ошибка: ${(error as Error).message}`));
+        Deno.exit();
       }
     });
 }
 
-// Команда для выбора проекта
+export function deleteProjectCommand() {
+  return new Command()
+    .description("Удалить проект.")
+    .action(async () => {
+      const projects = await getFullConfigKV();
+      const { currentConfig } = await getCurrentConfig();
+
+      if (projects === null || !projects.length) {
+        console.log(red("Проекты отсутствуют."));
+        Deno.exit();
+      }
+
+      const projectOptions = projects.map((p) => ({
+        name: p.uuid === currentConfig?.currentProjectUUID ? `${p.name} (Текущий)` : p.name,
+        value: p.uuid,
+      }));
+
+      const projectUUID = await Select.prompt({
+        message: "Выберите проект для удаления:",
+        options: projectOptions,
+      });
+
+      const client = await createClient();
+      const response = await client.call("deleteProject", [projectUUID as TUUID]);
+
+      if (!response.success) {
+        console.error(red(`Не удалось удалить проект: ${response.message}`));
+        Deno.exit();
+      }
+
+      if (currentConfig?.currentProjectUUID === projectUUID) {
+        console.log(red("Удален текущий проект, сброс текущей конфигурации."));
+        await setCurrentConfigKV({
+          currentProjectName: null,
+          currentProjectUUID: null,
+          currentEnvName: null,
+          currentEnvUUID: null,
+        });
+      }
+
+      console.log(green(`Проект успешно удален.`));
+      Deno.exit(); 
+    });
+}
+
 export function selectProjectCommand() {
   return new Command()
     .description("Выбрать проект.")
     .action(async () => {
-      const client = await createClient();
-      const [response, error] = await client.get();
+      const projects = await getFullConfigKV();
+      const { currentConfig } = await getCurrentConfig();
 
-      if (error) {
-        console.error(red("Ошибка при получении списка проектов."));
-        return;
-      }
-
-      const projects = response!.state!.projects!.map((p) => p!.name);
-      if (projects.length === 0) {
+      if (projects === null || !projects.length) {
         console.log(red("Проекты отсутствуют."));
-        return;
+        Deno.exit();
       }
 
-      const selectedProject = await Select.prompt({
+      const projectOptions = projects.map((p) => ({
+        name: p.uuid === currentConfig?.currentProjectUUID ? `${p.name} (Текущий)` : p.name,
+        value: p.uuid,
+      }));
+
+      const selectedProjectUUID = await Select.prompt({
         message: "Выберите проект:",
-        options: projects as string[],
+        options: projectOptions,
       });
 
-      // Установим текущий проект в kv хранилище
-      const project = response!.state!.projects!.find((p) =>
-        p!.name === selectedProject
-      );
-      if (project) {
-        await setCurrentProject(project!.name!, project.uuid!);
-        console.log(green(`Проект '${project.name}' выбран.`));
+      const selectedProject = projects.find((p) => p.uuid === selectedProjectUUID);
+      if (selectedProject) {
+        await setCurrentConfigKV({
+          currentProjectName: selectedProject.name,
+          currentProjectUUID: selectedProject.uuid,
+          currentEnvName: selectedProject.environments[0]?.name || null,
+          currentEnvUUID: selectedProject.environments[0]?.uuid || null,
+        });
+        console.log(green(`Выбран проект: ${selectedProject.name}`));
+      } else {
+        console.error(red("Проект не найден."));
       }
+      Deno.exit(); 
     });
 }
 
-// Команда для переименования проекта
 export function renameProjectCommand() {
   return new Command()
     .description("Переименовать проект.")
-    .arguments("<newProjectName:string>")
-    .action(async (_options: any, newProjectName: string) => {
-      const currentProject = await getCurrentProject();
+    .action(async () => {
+      const projects = await getFullConfigKV();
+      const { currentConfig } = await getCurrentConfig();
 
-      if (!currentProject || !currentProject.currentProjectUUID) {
-        console.error(red("Текущий проект не выбран."));
-        return;
+      if (projects === null || !projects.length) {
+        console.log(red("Проекты отсутствуют."));
+        Deno.exit();
       }
 
+      const projectOptions = projects.map((p) => ({
+        name: p.uuid === currentConfig?.currentProjectUUID ? `${p.name} (Текущий)` : p.name,
+        value: p.uuid,
+      }));
+
+      const projectUUID = await Select.prompt({
+        message: "Выберите проект для переименования:",
+        options: projectOptions,
+      });
+
+      const newProjectName = await Input.prompt("Введите новое имя проекта:");
       const client = await createClient();
-      const response = await client.call("updateProject", [
-        currentProject.currentProjectUUID,
-        newProjectName,
-      ]);
+      const response = await client.call("updateProject", [projectUUID as TUUID, newProjectName]);
 
       if (!response.success) {
-        console.error(red(`Не удалось переименовать проект.`));
-        return;
+        console.error(red(`Не удалось переименовать проект: ${response.message}`));
+        Deno.exit();
       }
 
-      console.log(green(`Проект переименован в '${newProjectName}'.`));
-    });
-}
-
-// Команда для удаления проекта
-export function deleteProjectCommand() {
-  return new Command()
-    .description("Удалить проект.")
-    .arguments("<projectName:string>")
-    .action(async (_options: any, projectName: TUUID) => {
-      const client = await createClient();
-      const response = await client.call("deleteProject", [projectName]);
-
-      if (!response.success) {
-        console.error(red(`Не удалось удалить проект.`));
-        return;
+      if (currentConfig?.currentProjectUUID === projectUUID) {
+        await setCurrentConfigKV({
+          ...currentConfig,
+          currentProjectName: newProjectName,
+        });
+        console.log(green("Текущий проект переименован и обновлен в конфигурации."));
+      } else {
+        console.log(green(`Проект переименован в '${newProjectName}'.`));
       }
-
-      console.log(green(`Проект '${projectName}' успешно удален.`));
+      Deno.exit();
     });
 }
