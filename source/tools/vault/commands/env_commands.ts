@@ -4,6 +4,7 @@ import { createClient, getCurrentConfig, getFullConfigKV, setCurrentConfigKV } f
 import { Command, green, red, Input, yellow } from "../deps.ts";
 import { TUUID } from "../GuardenDefinition.ts";
 import { Select } from "@cliffy/prompt/select";
+import { load as loadEnv } from "@std/dotenv"; 
 
 export async function displayCurrentEnvInfo() {
   const { currentConfig } = await getCurrentConfig();
@@ -223,4 +224,64 @@ export  function selectEnvCommand() {
       }
       Deno.exit();
     });
+}
+
+
+export async function promptAndLoadEnvFile() {
+  const { currentConfig } = await getCurrentConfig();
+
+  if (!currentConfig?.currentProjectUUID) {
+    console.error(red("Текущий проект не выбран."));
+    return;
+  }
+
+  const projects = await getFullConfigKV();
+  const currentProject = projects?.find(p => p.uuid === currentConfig.currentProjectUUID);
+
+  if (!currentProject || !currentProject.environments?.length) {
+    console.error(red("Окружения для текущего проекта отсутствуют."));
+    return;
+  }
+
+
+  const selectedEnvUUID = await Select.prompt({
+    message: "Выберите окружение для загрузки переменных:",
+    options: currentProject.environments.map(env => ({
+      name: env.name,
+      value: env.uuid,
+    })),
+  });
+
+  const envFilePath = await Input.prompt("Введите путь к файлу переменных окружения (по умолчанию .env):");
+  await loadEnvFileAndAddSecrets(envFilePath || ".env", selectedEnvUUID);
+}
+
+
+export async function loadEnvFileAndAddSecrets(filePath: string, envUUID: string) {
+  try {
+
+    const envVars = await loadEnv({ envPath: filePath, export: false });
+
+    console.log(green(`Переменные из файла ${filePath} успешно загружены.`));
+
+
+    const client = await createClient();
+    const addSecretPromises = Object.entries(envVars).map(([key, value]) =>
+      client.call("addSecret", [envUUID as TUUID, key, value])
+    );
+
+    const results = await Promise.allSettled(addSecretPromises);
+
+    results.forEach((result, idx) => {
+      const key = Object.keys(envVars)[idx];
+      if (result.status === "fulfilled" && result.value.success) {
+        console.log(green(`Секрет '${key}' успешно добавлен.`));
+      } else {
+        //@ts-ignore
+        console.error(red(`Ошибка при добавлении секрета '${key}': ${result.message || "неизвестная ошибка"}`));
+      }
+    });
+  } catch (error) {
+    console.error(red(`Ошибка при загрузке файла ${filePath}: ${(error as Error).message}`));
+  }
 }

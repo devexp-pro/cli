@@ -1,17 +1,17 @@
-// source/tools/vault/commands/main/env.ts
-
-// deno-lint-ignore-file no-case-declarations
+// deno-lint-ignore-file
 import { Command } from "@cliffy/command";
 import {
   createEnvCommand,
   deleteEnvCommand,
+  promptAndLoadEnvFile,
   renameEnvCommand,
   selectEnvCommand,
 } from "../env_commands.ts";
 import { Select } from "@cliffy/prompt/select";
-import { Input } from "../../deps.ts";
+import { green, Input, red } from "../../deps.ts";
 import { displayCurrentProjectInfo } from "../project_commands.ts";
-import { syncProjects } from "../../api.ts";
+import { syncProjects, createClient, getFullConfigKV, getCurrentConfig } from "../../api.ts";
+
 
 const envMenu = async () => {
   await syncProjects();
@@ -23,6 +23,7 @@ const envMenu = async () => {
       { name: "Выбрать окружение", value: "select" },
       { name: "Переименовать окружение", value: "rename" },
       { name: "Удалить окружение", value: "delete" },
+      { name: "Загрузить переменные из файла", value: "loadEnvFile" }, 
     ],
   });
 
@@ -37,16 +38,20 @@ const envMenu = async () => {
       break;
     case "rename":
       await displayCurrentProjectInfo();
-
       await renameEnvCommand().parse([]);
       break;
     case "delete":
       await displayCurrentProjectInfo();
-
       await deleteEnvCommand().parse([]);
+      break;
+    case "loadEnvFile":
+      await promptAndLoadEnvFile();
       break;
   }
 };
+
+
+
 
 const envCommand = new Command()
   .description("Управление окружениями")
