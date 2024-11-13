@@ -209,9 +209,7 @@ export async function syncProjects() {
     if (changesDetected) {
       await setFullConfigKV(newProjects);
       console.log(green("Конфигурация обновлена."));
-    } else {
-      console.log(green("Синхронизация завершена. Изменений не найдено."));
-    }
+    } 
   } catch (error) {
     console.error(red("Ошибка синхронизации проектов:"), error.message);
     Deno.exit();

@@ -1,6 +1,6 @@
+// deno-lint-ignore-file
 // source/tools/vault/commands/main/project.ts
 
-// deno-lint-ignore-file no-case-declarations no-fallthrough
 import { Command } from "@cliffy/command";
 import { Select } from "@cliffy/prompt/select";
 import { Input } from "@cliffy/prompt/input";
@@ -15,7 +15,7 @@ import { syncProjects } from "../../api.ts";
 
 const projectMenu = async () => {
   await syncProjects();
-
+  await displayCurrentProjectInfo();
   const action = await Select.prompt({
     message: "Что вы хотите сделать с проектами?",
     options: [
@@ -29,14 +29,14 @@ const projectMenu = async () => {
 
   switch (action) {
     case "view":
-      await displayCurrentProjectInfo();
-      Deno.exit()
+
+      Deno.exit();
     case "create":
       const projectName = await Input.prompt("Введите имя проекта:");
       await createProjectCommand().parse([projectName]);
       break;
     case "select":
-      await displayCurrentProjectInfo();
+
       await selectProjectCommand().parse([]);
       break;
     case "rename":
@@ -49,7 +49,28 @@ const projectMenu = async () => {
 };
 
 const projectCommand = new Command()
-  .description("Управление проектами")
-  .action(projectMenu);
+.description("Управление проектами: создание, выбор, переименование, удаление проектов.")
+.option("--action <action:string>", "Действие с проектом: 'create', 'select', 'rename' или 'delete'.")
+.option("--project-name <projectName:string>", "Название проекта для создания, выбора или удаления.")
+.option("--old-name <oldName:string>", "Старое имя проекта для переименования.")
+.option("--new-name <newName:string>", "Новое имя проекта для переименования.")
+.example("project --action=create --project-name=MyProject", "Создать проект с именем 'MyProject'")
+.example("project --action=select --project-name=MyProject", "Выбрать проект 'MyProject'")
+.example("project --action=rename --old-name=MyProject --new-name=NewProject", "Переименовать проект 'MyProject' в 'NewProject'")
+.example("project --action=delete --project-name=OldProject", "Удалить проект с именем 'OldProject'")
+.example("project", "Открыть меню для управления проектами")
+  .action((options) => {
+    if (options.action === "rename" && options.oldName && options.newName) {
+      renameProjectCommand().parse(["--old-name", options.oldName, "--new-name", options.newName]);
+    } else if (options.action === "delete" && options.projectName) {
+      deleteProjectCommand().parse(["--project-name", options.projectName]);
+    } else if (options.action === "create" && options.projectName) {
+      createProjectCommand().parse([options.projectName]);
+    } else if (options.action === "select" && options.projectName) {
+      selectProjectCommand().parse(["--project-name", options.projectName]);
+    } else {
+      projectMenu();
+    }
+  });
 
 export default projectCommand;
