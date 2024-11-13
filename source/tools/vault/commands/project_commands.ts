@@ -44,7 +44,7 @@ export function createProjectCommand() {
         });
 
         console.log(green(`Проект '${projectName}' успешно создан.`));
-        Deno.exit(); // Завершаем процесс
+        Deno.exit(); 
       } catch (error) {
         console.error(red(`Ошибка: ${(error as Error).message}`));
         Deno.exit();

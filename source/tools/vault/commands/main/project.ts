@@ -1,6 +1,6 @@
 // source/tools/vault/commands/main/project.ts
 
-// deno-lint-ignore-file no-case-declarations
+// deno-lint-ignore-file no-case-declarations no-fallthrough
 import { Command } from "@cliffy/command";
 import { Select } from "@cliffy/prompt/select";
 import { Input } from "@cliffy/prompt/input";
@@ -30,7 +30,7 @@ const projectMenu = async () => {
   switch (action) {
     case "view":
       await displayCurrentProjectInfo();
-      break;
+      Deno.exit()
     case "create":
       const projectName = await Input.prompt("Введите имя проекта:");
       await createProjectCommand().parse([projectName]);
