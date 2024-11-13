@@ -6,8 +6,8 @@ import show from "./commands/show.ts";
 import remove from "./commands/remove.ts";
 
 const tool = new Command()
-if (config.data.tools?.alias?.hidden) tool.hidden();
-tool.name("alias")
+if (config.data.tools?.cheat?.hidden) tool.hidden();
+tool.name("cheat")
   .usage("")
   .action(() => {
     tool.showHelp();

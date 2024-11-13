@@ -36,7 +36,7 @@ const baseCfg = Tuner.tune({
       flow: {
         hidden: false,
       },
-      alias: {
+      cheat: {
         hidden: false,
       },
     },

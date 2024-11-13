@@ -25,7 +25,7 @@ const prodCfg = Tuner.tune({
       git: {
         hidden: true,
       },
-      alias: {
+      cheat: {
         hidden: true,
       },
     },

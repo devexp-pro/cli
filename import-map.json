@@ -14,7 +14,7 @@
     "$/tools/config": "./source/tools/config/mod.ts",
     "$/tools/vault": "./source/tools/vault/mod.ts",
     "$/tools/flow": "./source/tools/flow/mod.ts",
-    "$/tools/alias": "./source/tools/alias/mod.ts",
+    "$/tools/cheat": "./source/tools/cheat/mod.ts",
     "$/tools/template": "./source/tools/template/mod.ts",
     "$/tools/hyper": "./source/tools/hyper/mod.ts",
     "$/tools/term": "./source/tools/term/mod.ts",
