@@ -1,4 +1,3 @@
-import { colors } from "@std/colors";
 import { Command } from "@cliffy/command";
 
 import {
@@ -14,7 +13,7 @@ import toolConfig from "$/tools/config";
 import toolVault from "$/tools/vault";
 import toolGit from "$/tools/git";
 import toolFlow from "$/tools/flow";
-import toolAlias from "$/tools/alias";
+import toolCheat from "$/tools/cheat";
 import toolClip from "$/tools/clip";
 
 import { dash } from "./dash/mod.ts";
@@ -45,9 +44,9 @@ export const entry = new Command()
   .command("config", toolConfig)
   .command("vault", toolVault)
   .command("flow", toolFlow.tool)
-  .command("alias", toolAlias)
-  .command("git", toolGit)
-  .command("clip", toolClip)
+  .command("cheat", toolCheat)
+  .command("git", toolGit.tool)
+  .command("clip", toolClip.tool)
   // commands
   .command("dash", dash)
   .command("intro", intro)

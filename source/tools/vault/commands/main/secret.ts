@@ -7,7 +7,6 @@ import {
   deleteSecretCommand,
   fetchSecretsCommand,
   updateSecretCommand,
-
 } from "../secret_commands.ts";
 import { Select } from "@cliffy/prompt/select";
 import { Input } from "../../deps.ts";
@@ -18,7 +17,7 @@ import { loadEnvFileCommand } from "../env_commands.ts";
 const secretMenu = async () => {
   await syncProjects();
   await displayCurrentProjectInfo();
-  
+
   const action = await Select.prompt({
     message: "Что вы хотите сделать с секретами?",
     options: [
@@ -52,17 +51,46 @@ const secretMenu = async () => {
 };
 
 const secretCommand = new Command()
-  .description("Управление секретами: добавление, обновление, удаление, просмотр и загрузка секретов из файла.")
-  .option("--action <action:string>", "Действие с секретом: 'add', 'update', 'delete', 'fetch' или 'loadEnvFile'.")
-  .option("--key <key:string>", "Ключ секрета для добавления, обновления или удаления.")
-  .option("--value <value:string>", "Значение для добавления или обновления секрета.")
+  .description(
+    "Управление секретами: добавление, обновление, удаление, просмотр и загрузка секретов из файла.",
+  )
+  .option(
+    "--action <action:string>",
+    "Действие с секретом: 'add', 'update', 'delete', 'fetch' или 'loadEnvFile'.",
+  )
+  .option(
+    "--key <key:string>",
+    "Ключ секрета для добавления, обновления или удаления.",
+  )
+  .option(
+    "--value <value:string>",
+    "Значение для добавления или обновления секрета.",
+  )
   .option("--file <filePath:string>", "Путь к файлу для загрузки секретов.")
-  .option("--env-name <envName:string>", "Имя окружения для загрузки секретов из файла.") // Дополнительный параметр
-  .example("secret --action=add --key=API_KEY --value=12345", "Добавить секрет с ключом 'API_KEY' и значением '12345'")
-  .example("secret --action=update --key=API_KEY --value=67890", "Обновить значение секрета 'API_KEY' на '67890'")
-  .example("secret --action=delete --key=API_KEY", "Удалить секрет с ключом 'API_KEY'")
-  .example("secret --action=fetch", "Получить и отобразить все секреты для текущего окружения")
-  .example("secret --action=loadEnvFile --file=config.env --env-name=prod", "Загрузить секреты из файла config.env в окружение 'prod'")
+  .option(
+    "--env-name <envName:string>",
+    "Имя окружения для загрузки секретов из файла.",
+  ) // Дополнительный параметр
+  .example(
+    "secret --action=add --key=API_KEY --value=12345",
+    "Добавить секрет с ключом 'API_KEY' и значением '12345'",
+  )
+  .example(
+    "secret --action=update --key=API_KEY --value=67890",
+    "Обновить значение секрета 'API_KEY' на '67890'",
+  )
+  .example(
+    "secret --action=delete --key=API_KEY",
+    "Удалить секрет с ключом 'API_KEY'",
+  )
+  .example(
+    "secret --action=fetch",
+    "Получить и отобразить все секреты для текущего окружения",
+  )
+  .example(
+    "secret --action=loadEnvFile --file=config.env --env-name=prod",
+    "Загрузить секреты из файла config.env в окружение 'prod'",
+  )
   .example("secret", "Открыть меню для управления секретами")
   .action(async (options) => {
     await syncProjects();
@@ -77,7 +105,12 @@ const secretCommand = new Command()
         break;
       case "update":
         if (options.key && options.value) {
-          updateSecretCommand().parse(["--key", options.key, "--value", options.value]);
+          updateSecretCommand().parse([
+            "--key",
+            options.key,
+            "--value",
+            options.value,
+          ]);
         } else {
           updateSecretCommand().parse([]);
         }

@@ -17,6 +17,6 @@ tool
   .command("project", projectCommand)
   .command("env", envCommand)
   .command("secret", secretCommand)
-  .command("run", runCommand); 
+  .command("run", runCommand);
 
 export default tool;

@@ -1,8 +1,12 @@
 import apifly, { ApiflyClient } from "@vseplet/apifly";
-import type { GuardenDefinition, ProjectData, TUUID } from "./GuardenDefinition.ts";
+import type {
+  GuardenDefinition,
+  ProjectData,
+  TUUID,
+} from "./GuardenDefinition.ts";
 import { getSession, kv } from "$/kv";
 import { IS_DEVELOP, SERVICE_URL } from "$/constants";
-import { red, green, yellow } from "./deps.ts";
+import { green, red, yellow } from "./deps.ts";
 
 export async function createClient(): Promise<ApiflyClient<GuardenDefinition>> {
   const session = await getSession();
@@ -29,10 +33,13 @@ interface VaultConfig {
   currentEnvUUID?: TUUID | null;
 }
 
-
 export async function getCurrentConfigKV(): Promise<VaultConfig | null> {
   try {
-    const configData = await kv.get<VaultConfig>(["service", "vault", "curConfig"]);
+    const configData = await kv.get<VaultConfig>([
+      "service",
+      "vault",
+      "curConfig",
+    ]);
     return configData.value || null;
   } catch (error) {
     console.error("Ошибка при получении текущей конфигурации:", error);
@@ -40,17 +47,19 @@ export async function getCurrentConfigKV(): Promise<VaultConfig | null> {
   }
 }
 
-
 export async function getFullConfigKV(): Promise<ProjectData[] | null> {
   try {
-    const fullConfigData = await kv.get<ProjectData[]>(["service", "vault", "fullConfig"]);
-    return fullConfigData.value
+    const fullConfigData = await kv.get<ProjectData[]>([
+      "service",
+      "vault",
+      "fullConfig",
+    ]);
+    return fullConfigData.value;
   } catch (error) {
     console.error("Ошибка при получении полного конфига:", error);
     return null;
   }
 }
-
 
 export async function setCurrentConfigKV(config: VaultConfig): Promise<void> {
   try {
@@ -61,8 +70,9 @@ export async function setCurrentConfigKV(config: VaultConfig): Promise<void> {
   }
 }
 
-
-export async function setFullConfigKV(fullConfig: ProjectData[]): Promise<void> {
+export async function setFullConfigKV(
+  fullConfig: ProjectData[],
+): Promise<void> {
   try {
     await kv.set(["service", "vault", "fullConfig"], fullConfig);
     console.log(green("Полный конфиг успешно сохранен."));
@@ -71,8 +81,7 @@ export async function setFullConfigKV(fullConfig: ProjectData[]): Promise<void> 
   }
 }
 
-
-export async function getCurrentConfig(): Promise<{ 
+export async function getCurrentConfig(): Promise<{
   currentConfig: VaultConfig | null;
   fullConfig: ProjectData[] | null;
 }> {
@@ -83,7 +92,6 @@ export async function getCurrentConfig(): Promise<{
 
   return { currentConfig, fullConfig };
 }
-
 
 export async function syncProjects() {
   try {
@@ -110,7 +118,6 @@ export async function syncProjects() {
 
     let currentFullConfig = await getFullConfigKV() as ProjectData[] | null;
 
-
     if (currentFullConfig === null) {
       await setCurrentConfigKV({
         currentProjectName: null,
@@ -121,66 +128,101 @@ export async function syncProjects() {
       console.log(yellow("Текущая конфигурация сброшена."));
 
       await setFullConfigKV(newProjects);
-      console.log(green("Конфигурация инициализирована, так как она отсутствовала."));
+      console.log(
+        green("Конфигурация инициализирована, так как она отсутствовала."),
+      );
       return;
     }
 
     let changesDetected = false;
 
     newProjects.forEach((newProject) => {
-      const currentProject = currentFullConfig!.find((p) => p.uuid === newProject.uuid);
+      const currentProject = currentFullConfig!.find((p) =>
+        p.uuid === newProject.uuid
+      );
 
       if (!currentProject) {
-        console.log(yellow(`Добавлен новый проект: ${newProject.name}${IS_DEVELOP ? ` (UUID: ${newProject.uuid})` : ""}`));
+        console.log(
+          yellow(
+            `Добавлен новый проект: ${newProject.name}${
+              IS_DEVELOP ? ` (UUID: ${newProject.uuid})` : ""
+            }`,
+          ),
+        );
         changesDetected = true;
       } else {
         if (currentProject.name !== newProject.name) {
           console.log(
-            yellow(`Изменение в проекте ${currentProject.name} -> ${newProject.name}${IS_DEVELOP ? ` (UUID: ${newProject.uuid})` : ""}`)
+            yellow(
+              `Изменение в проекте ${currentProject.name} -> ${newProject.name}${
+                IS_DEVELOP ? ` (UUID: ${newProject.uuid})` : ""
+              }`,
+            ),
           );
           changesDetected = true;
         }
 
         newProject.environments.forEach((newEnv) => {
-          const currentEnv = currentProject.environments.find((e) => e.uuid === newEnv.uuid);
+          const currentEnv = currentProject.environments.find((e) =>
+            e.uuid === newEnv.uuid
+          );
 
           if (!currentEnv) {
-            console.log(yellow(`Добавлено новое окружение: ${newEnv.name}${IS_DEVELOP ? ` (UUID: ${newEnv.uuid})` : ""} для проекта ${newProject.name}`));
+            console.log(
+              yellow(
+                `Добавлено новое окружение: ${newEnv.name}${
+                  IS_DEVELOP ? ` (UUID: ${newEnv.uuid})` : ""
+                } для проекта ${newProject.name}`,
+              ),
+            );
             changesDetected = true;
           } else {
             if (currentEnv.name !== newEnv.name) {
               console.log(
                 yellow(
-                  `Изменение в окружении ${currentEnv.name} -> ${newEnv.name}${IS_DEVELOP ? ` (UUID: ${newEnv.uuid})` : ""} для проекта ${newProject.name}`
-                )
+                  `Изменение в окружении ${currentEnv.name} -> ${newEnv.name}${
+                    IS_DEVELOP ? ` (UUID: ${newEnv.uuid})` : ""
+                  } для проекта ${newProject.name}`,
+                ),
               );
               changesDetected = true;
             }
 
-
             newEnv.secrets.forEach((newSecret) => {
-              const currentSecret = currentEnv.secrets.find((s) => s.key === newSecret.key);
+              const currentSecret = currentEnv.secrets.find((s) =>
+                s.key === newSecret.key
+              );
 
               if (!currentSecret) {
                 console.log(
-                  yellow(`Добавлен новый секрет: ${newSecret.key}${IS_DEVELOP ? ` (UUID: ${newSecret.uuid})` : ""} в окружение ${newEnv.name} проекта ${newProject.name}`)
+                  yellow(
+                    `Добавлен новый секрет: ${newSecret.key}${
+                      IS_DEVELOP ? ` (UUID: ${newSecret.uuid})` : ""
+                    } в окружение ${newEnv.name} проекта ${newProject.name}`,
+                  ),
                 );
                 changesDetected = true;
               } else if (currentSecret.value !== newSecret.value) {
                 console.log(
                   yellow(
-                    `Изменение в секрете ${currentSecret.key} (старое значение: ${currentSecret.value}, новое значение: ${newSecret.value}) в окружении ${newEnv.name} проекта ${newProject.name}`
-                  )
+                    `Изменение в секрете ${currentSecret.key} (старое значение: ${currentSecret.value}, новое значение: ${newSecret.value}) в окружении ${newEnv.name} проекта ${newProject.name}`,
+                  ),
                 );
                 changesDetected = true;
               }
             });
 
             currentEnv.secrets.forEach((currentSecret) => {
-              const newSecret = newEnv.secrets.find((s) => s.key === currentSecret.key);
+              const newSecret = newEnv.secrets.find((s) =>
+                s.key === currentSecret.key
+              );
               if (!newSecret) {
                 console.log(
-                  yellow(`Удален секрет: ${currentSecret.key}${IS_DEVELOP ? ` (UUID: ${currentSecret.uuid})` : ""} из окружения ${currentEnv.name} проекта ${currentProject.name}`)
+                  yellow(
+                    `Удален секрет: ${currentSecret.key}${
+                      IS_DEVELOP ? ` (UUID: ${currentSecret.uuid})` : ""
+                    } из окружения ${currentEnv.name} проекта ${currentProject.name}`,
+                  ),
                 );
                 changesDetected = true;
               }
@@ -189,9 +231,17 @@ export async function syncProjects() {
         });
 
         currentProject.environments.forEach((currentEnv) => {
-          const newEnv = newProject.environments.find((e) => e.uuid === currentEnv.uuid);
+          const newEnv = newProject.environments.find((e) =>
+            e.uuid === currentEnv.uuid
+          );
           if (!newEnv) {
-            console.log(yellow(`Удалено окружение: ${currentEnv.name}${IS_DEVELOP ? ` (UUID: ${currentEnv.uuid})` : ""} из проекта ${currentProject.name}`));
+            console.log(
+              yellow(
+                `Удалено окружение: ${currentEnv.name}${
+                  IS_DEVELOP ? ` (UUID: ${currentEnv.uuid})` : ""
+                } из проекта ${currentProject.name}`,
+              ),
+            );
             changesDetected = true;
           }
         });
@@ -199,9 +249,17 @@ export async function syncProjects() {
     });
 
     currentFullConfig!.forEach((currentProject) => {
-      const newProject = newProjects.find((p) => p.uuid === currentProject.uuid);
+      const newProject = newProjects.find((p) =>
+        p.uuid === currentProject.uuid
+      );
       if (!newProject) {
-        console.log(yellow(`Удален проект: ${currentProject.name}${IS_DEVELOP ? ` (UUID: ${currentProject.uuid})` : ""}`));
+        console.log(
+          yellow(
+            `Удален проект: ${currentProject.name}${
+              IS_DEVELOP ? ` (UUID: ${currentProject.uuid})` : ""
+            }`,
+          ),
+        );
         changesDetected = true;
       }
     });
@@ -209,7 +267,7 @@ export async function syncProjects() {
     if (changesDetected) {
       await setFullConfigKV(newProjects);
       console.log(green("Конфигурация обновлена."));
-    } 
+    }
   } catch (error) {
     console.error(red("Ошибка синхронизации проектов:"), error.message);
     Deno.exit();

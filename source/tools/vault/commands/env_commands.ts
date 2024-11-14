@@ -1,11 +1,16 @@
 // source/tools/vault/commands/env_commands.ts
 
 import { Tuple } from "jsr:@std/async@0.224.0/tee";
-import { createClient, getCurrentConfig, getFullConfigKV, setCurrentConfigKV } from "../api.ts";
-import { Command, green, red, Input, yellow } from "../deps.ts";
+import {
+  createClient,
+  getCurrentConfig,
+  getFullConfigKV,
+  setCurrentConfigKV,
+} from "../api.ts";
+import { Command, green, Input, red, yellow } from "../deps.ts";
 import { TUUID } from "../GuardenDefinition.ts";
 import { Select } from "@cliffy/prompt/select";
-import { load as loadEnv } from "@std/dotenv"; 
+import { load as loadEnv } from "@std/dotenv";
 
 export async function displayCurrentEnvInfo() {
   const { currentConfig } = await getCurrentConfig();
@@ -20,7 +25,11 @@ export async function displayCurrentEnvInfo() {
     return;
   }
 
-  console.log(green(`Текущий проект: ${currentConfig.currentProjectName}, Текущее окружение: ${currentConfig.currentEnvName}`));
+  console.log(
+    green(
+      `Текущий проект: ${currentConfig.currentProjectName}, Текущее окружение: ${currentConfig.currentEnvName}`,
+    ),
+  );
 }
 
 export function createEnvCommand() {
@@ -67,16 +76,23 @@ export function deleteEnvCommand() {
       }
 
       const projects = await getFullConfigKV();
-      const currentProject = projects?.find((project) => project.uuid === currentConfig.currentProjectUUID);
+      const currentProject = projects?.find((project) =>
+        project.uuid === currentConfig.currentProjectUUID
+      );
 
-      if (!currentProject || !currentProject.environments || !currentProject.environments.length) {
+      if (
+        !currentProject || !currentProject.environments ||
+        !currentProject.environments.length
+      ) {
         console.log(red("Окружения отсутствуют для текущего проекта."));
         Deno.exit();
       }
 
       let envUUID: TUUID;
       if (options.envName) {
-        const environment = currentProject.environments.find((env) => env.name === options.envName);
+        const environment = currentProject.environments.find((env) =>
+          env.name === options.envName
+        );
         if (!environment) {
           console.log(red(`Окружение с именем ${options.envName} не найдено.`));
           Deno.exit();
@@ -86,7 +102,9 @@ export function deleteEnvCommand() {
         envUUID = (await Select.prompt({
           message: "Выберите окружение для удаления:",
           options: currentProject.environments.map((env) => ({
-            name: env.uuid === currentConfig.currentEnvUUID ? `${env.name} (Текущее)` : env.name,
+            name: env.uuid === currentConfig.currentEnvUUID
+              ? `${env.name} (Текущее)`
+              : env.name,
             value: env.uuid,
           })),
         })) as TUUID;
@@ -106,7 +124,9 @@ export function deleteEnvCommand() {
           currentEnvName: null,
           currentEnvUUID: null,
         });
-        console.log(yellow("Текущее окружение сброшено, так как оно было удалено."));
+        console.log(
+          yellow("Текущее окружение сброшено, так как оно было удалено."),
+        );
       }
 
       console.log(green("Окружение успешно удалено."));
@@ -128,16 +148,23 @@ export function renameEnvCommand() {
       }
 
       const projects = await getFullConfigKV();
-      const currentProject = projects?.find((project) => project.uuid === currentConfig.currentProjectUUID);
+      const currentProject = projects?.find((project) =>
+        project.uuid === currentConfig.currentProjectUUID
+      );
 
-      if (!currentProject || !currentProject.environments || !currentProject.environments.length) {
+      if (
+        !currentProject || !currentProject.environments ||
+        !currentProject.environments.length
+      ) {
         console.log(red("Окружения отсутствуют для текущего проекта."));
         Deno.exit();
       }
 
       let envUUID: TUUID;
       if (options.oldName && options.newName) {
-        const environment = currentProject.environments.find((env) => env.name === options.oldName);
+        const environment = currentProject.environments.find((env) =>
+          env.name === options.oldName
+        );
         if (!environment) {
           console.log(red(`Окружение с именем ${options.oldName} не найдено.`));
           Deno.exit();
@@ -147,18 +174,25 @@ export function renameEnvCommand() {
         envUUID = (await Select.prompt({
           message: "Выберите окружение для переименования:",
           options: currentProject.environments.map((env) => ({
-            name: env.uuid === currentConfig.currentEnvUUID ? `${env.name} (Текущее)` : env.name,
+            name: env.uuid === currentConfig.currentEnvUUID
+              ? `${env.name} (Текущее)`
+              : env.name,
             value: env.uuid,
           })),
-        })) as TUUID
+        })) as TUUID;
         options.newName = await Input.prompt("Введите новое имя окружения:");
       }
 
       const client = await createClient();
-      const response = await client.call("updateEnvironment", [envUUID as TUUID, options.newName]);
+      const response = await client.call("updateEnvironment", [
+        envUUID as TUUID,
+        options.newName,
+      ]);
 
       if (!response.success) {
-        console.error(red(`Не удалось переименовать окружение: ${response.message}`));
+        console.error(
+          red(`Не удалось переименовать окружение: ${response.message}`),
+        );
         Deno.exit();
       }
 
@@ -167,7 +201,9 @@ export function renameEnvCommand() {
           ...currentConfig,
           currentEnvName: options.newName,
         });
-        console.log(green("Текущее окружение переименовано и обновлено в конфигурации."));
+        console.log(
+          green("Текущее окружение переименовано и обновлено в конфигурации."),
+        );
       } else {
         console.log(green(`Окружение переименовано в '${options.newName}'.`));
       }
@@ -188,9 +224,14 @@ export function selectEnvCommand() {
       }
 
       const projects = await getFullConfigKV();
-      const currentProject = projects?.find((project) => project.uuid === currentConfig.currentProjectUUID);
+      const currentProject = projects?.find((project) =>
+        project.uuid === currentConfig.currentProjectUUID
+      );
 
-      if (!currentProject || !currentProject.environments || !currentProject.environments.length) {
+      if (
+        !currentProject || !currentProject.environments ||
+        !currentProject.environments.length
+      ) {
         console.log(red("Окружения отсутствуют для текущего проекта."));
         Deno.exit();
       }
@@ -198,7 +239,9 @@ export function selectEnvCommand() {
       let selectedEnvUUID: TUUID;
 
       if (options.envName) {
-        const environment = currentProject.environments.find((env) => env.name === options.envName);
+        const environment = currentProject.environments.find((env) =>
+          env.name === options.envName
+        );
         if (!environment) {
           console.log(red(`Окружение с именем ${options.envName} не найдено.`));
           Deno.exit();
@@ -206,7 +249,9 @@ export function selectEnvCommand() {
         selectedEnvUUID = environment.uuid;
       } else {
         const envOptions = currentProject.environments.map((env) => ({
-          name: env.uuid === currentConfig.currentEnvUUID ? `${env.name} (Текущее)` : env.name,
+          name: env.uuid === currentConfig.currentEnvUUID
+            ? `${env.name} (Текущее)`
+            : env.name,
           value: env.uuid,
         }));
 
@@ -216,7 +261,9 @@ export function selectEnvCommand() {
         })) as TUUID;
       }
 
-      const selectedEnv = currentProject.environments.find((env) => env.uuid === selectedEnvUUID);
+      const selectedEnv = currentProject.environments.find((env) =>
+        env.uuid === selectedEnvUUID
+      );
       if (selectedEnv) {
         await setCurrentConfigKV({
           ...currentConfig,
@@ -231,13 +278,17 @@ export function selectEnvCommand() {
     });
 }
 
-
-
 export function loadEnvFileCommand() {
   return new Command()
     .description("Загрузить переменные окружения из файла.")
-    .option("--file <filePath:string>", "Путь к файлу переменных окружения (по умолчанию .env).")
-    .option("--env-name <envName:string>", "Имя окружения для загрузки переменных.")
+    .option(
+      "--file <filePath:string>",
+      "Путь к файлу переменных окружения (по умолчанию .env).",
+    )
+    .option(
+      "--env-name <envName:string>",
+      "Имя окружения для загрузки переменных.",
+    )
     .action(async (options) => {
       const { currentConfig } = await getCurrentConfig();
 
@@ -247,26 +298,27 @@ export function loadEnvFileCommand() {
       }
 
       const projects = await getFullConfigKV();
-      const currentProject = projects?.find((p) => p.uuid === currentConfig.currentProjectUUID);
+      const currentProject = projects?.find((p) =>
+        p.uuid === currentConfig.currentProjectUUID
+      );
 
       if (!currentProject || !currentProject.environments?.length) {
         console.error(red("Окружения для текущего проекта отсутствуют."));
         return;
       }
 
-
       let selectedEnvUUID: TUUID | undefined;
 
       if (options.envName) {
-
-        const environment = currentProject.environments.find((env) => env.name === options.envName);
+        const environment = currentProject.environments.find((env) =>
+          env.name === options.envName
+        );
         if (!environment) {
           console.log(red(`Окружение с именем ${options.envName} не найдено.`));
           Deno.exit();
         }
         selectedEnvUUID = environment.uuid;
       } else {
-
         selectedEnvUUID = (await Select.prompt({
           message: "Выберите окружение для загрузки переменных:",
           options: currentProject.environments.map((env) => ({
@@ -276,13 +328,19 @@ export function loadEnvFileCommand() {
         })) as TUUID;
       }
 
-      const envFilePath = options.file || await Input.prompt("Введите путь к файлу переменных окружения (по умолчанию .env):") || ".env";
+      const envFilePath = options.file ||
+        await Input.prompt(
+          "Введите путь к файлу переменных окружения (по умолчанию .env):",
+        ) || ".env";
       await loadEnvFileAndAddSecrets(envFilePath, selectedEnvUUID);
       Deno.exit();
     });
 }
 
-export async function loadEnvFileAndAddSecrets(filePath: string, envUUID: TUUID) {
+export async function loadEnvFileAndAddSecrets(
+  filePath: string,
+  envUUID: TUUID,
+) {
   try {
     const envVars = await loadEnv({ envPath: filePath, export: false });
     console.log(green(`Переменные из файла ${filePath} успешно загружены.`));
@@ -299,10 +357,18 @@ export async function loadEnvFileAndAddSecrets(filePath: string, envUUID: TUUID)
         console.log(green(`Секрет '${key}' успешно добавлен.`));
       } else {
         //@ts-ignore
-        console.error(red(`Ошибка при добавлении секрета '${key}': ${result.message || "неизвестная ошибка"}`));
+        console.error(
+          red(
+            `Ошибка при добавлении секрета '${key}': ${
+              result.message || "неизвестная ошибка"
+            }`,
+          ),
+        );
       }
     });
   } catch (error) {
-    console.error(red(`Ошибка при загрузке файла ${filePath}: ${(error as Error).message}`));
+    console.error(
+      red(`Ошибка при загрузке файла ${filePath}: ${(error as Error).message}`),
+    );
   }
 }

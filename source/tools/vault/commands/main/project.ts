@@ -29,14 +29,12 @@ const projectMenu = async () => {
 
   switch (action) {
     case "view":
-
       Deno.exit();
     case "create":
       const projectName = await Input.prompt("Введите имя проекта:");
       await createProjectCommand().parse([projectName]);
       break;
     case "select":
-
       await selectProjectCommand().parse([]);
       break;
     case "rename":
@@ -49,19 +47,50 @@ const projectMenu = async () => {
 };
 
 const projectCommand = new Command()
-.description("Управление проектами: создание, выбор, переименование, удаление проектов.")
-.option("--action <action:string>", "Действие с проектом: 'create', 'select', 'rename' или 'delete'.")
-.option("--project-name <projectName:string>", "Название проекта для создания, выбора или удаления.")
-.option("--old-name <oldName:string>", "Старое имя проекта для переименования.")
-.option("--new-name <newName:string>", "Новое имя проекта для переименования.")
-.example("project --action=create --project-name=MyProject", "Создать проект с именем 'MyProject'")
-.example("project --action=select --project-name=MyProject", "Выбрать проект 'MyProject'")
-.example("project --action=rename --old-name=MyProject --new-name=NewProject", "Переименовать проект 'MyProject' в 'NewProject'")
-.example("project --action=delete --project-name=OldProject", "Удалить проект с именем 'OldProject'")
-.example("project", "Открыть меню для управления проектами")
+  .description(
+    "Управление проектами: создание, выбор, переименование, удаление проектов.",
+  )
+  .option(
+    "--action <action:string>",
+    "Действие с проектом: 'create', 'select', 'rename' или 'delete'.",
+  )
+  .option(
+    "--project-name <projectName:string>",
+    "Название проекта для создания, выбора или удаления.",
+  )
+  .option(
+    "--old-name <oldName:string>",
+    "Старое имя проекта для переименования.",
+  )
+  .option(
+    "--new-name <newName:string>",
+    "Новое имя проекта для переименования.",
+  )
+  .example(
+    "project --action=create --project-name=MyProject",
+    "Создать проект с именем 'MyProject'",
+  )
+  .example(
+    "project --action=select --project-name=MyProject",
+    "Выбрать проект 'MyProject'",
+  )
+  .example(
+    "project --action=rename --old-name=MyProject --new-name=NewProject",
+    "Переименовать проект 'MyProject' в 'NewProject'",
+  )
+  .example(
+    "project --action=delete --project-name=OldProject",
+    "Удалить проект с именем 'OldProject'",
+  )
+  .example("project", "Открыть меню для управления проектами")
   .action((options) => {
     if (options.action === "rename" && options.oldName && options.newName) {
-      renameProjectCommand().parse(["--old-name", options.oldName, "--new-name", options.newName]);
+      renameProjectCommand().parse([
+        "--old-name",
+        options.oldName,
+        "--new-name",
+        options.newName,
+      ]);
     } else if (options.action === "delete" && options.projectName) {
       deleteProjectCommand().parse(["--project-name", options.projectName]);
     } else if (options.action === "create" && options.projectName) {
