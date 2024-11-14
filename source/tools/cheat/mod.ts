@@ -6,7 +6,7 @@ import show from "./commands/show.ts";
 import remove from "./commands/remove.ts";
 
 const tool = new Command();
-if (config.data.tools?.cheat?.hidden) tool.hidden();
+if (config.data.tools.cheat.hidden === true) tool.hidden();
 tool.name("cheat")
   .usage("")
   .action(() => {

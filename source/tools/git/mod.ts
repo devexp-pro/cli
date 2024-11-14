@@ -13,7 +13,7 @@ const action = async () => {
 };
 
 const tool = new Command();
-if (config.data.tools.git.hidden) tool.hidden();
+if (config.data.tools.git.hidden === true) tool.hidden();
 
 tool
   .name("git")
