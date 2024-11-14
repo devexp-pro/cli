@@ -21,6 +21,7 @@
     "$/tools/term": "./source/tools/term/mod.ts",
     "$/tools/radio": "./source/tools/radio/mod.ts",
     "$/tools/clip": "./source/tools/clip/mod.ts",
+    "$/tools/clip/": "./source/tools/clip/",
 
     "$/dashboard": "./source/dashboard/mod.ts",
 

@@ -20,6 +20,7 @@ import { dash } from "./dash/mod.ts";
 import { intro } from "./intro.ts";
 import { setup } from "./setup/mod.ts";
 import { upgrade } from "./setup/upgrade.ts";
+import { cfg } from "./config.ts";
 
 export const entry = new Command()
   .name("dx")
@@ -50,4 +51,5 @@ export const entry = new Command()
   // commands
   .command("dash", dash)
   .command("intro", intro)
+  .command("cfg", cfg)
   .command("setup", setup);

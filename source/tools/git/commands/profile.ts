@@ -5,6 +5,7 @@ import { HOME } from "$/constants";
 import { kv } from "$/kv";
 import { GitProfile } from "$/tools/git/types.ts";
 import { Table } from "@cliffy/table";
+import clip from "$/tools/clip/api.ts";
 
 const create = new Command()
   .name("create")
@@ -35,7 +36,7 @@ const create = new Command()
       // @ts-ignore
       email,
       "-f",
-      `${HOME}/.ssh/dx_git_${slug}`,
+      keyPath,
     ]);
 
     if (result.code !== 0) {
@@ -44,6 +45,8 @@ const create = new Command()
     }
 
     console.log(`\n${result.stdout}\n`);
+
+    const publicKey = await Deno.readTextFile(keyPath + ".pub");
 
     // @ts-ignore
     const res = await kv.set<GitProfile>(
@@ -57,7 +60,14 @@ const create = new Command()
     );
 
     if (res.ok) {
-      console.log("  Git profile created successfully");
+      console.log(
+        `  Git profile created successfully, profile public key added to your clipboard:\n\n ${
+          publicKey
+        }`,
+      );
+
+      await clip.clipboard.write(publicKey);
+
       Deno.exit(0);
     } else {
       Deno.exit(1);
