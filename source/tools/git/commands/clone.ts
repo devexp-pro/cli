@@ -19,7 +19,7 @@ const action = async (repoUrl: string) => {
       message: "Please select profile for clone:\n",
       options: profiles.map((entry) => ({
         // @ts-ignore
-        name: `${entry.value.slug} ${entry.value.name}`,
+        name: `${entry.value.slug} (${entry.value.email})`,
         // @ts-ignore
         value: {
           slug: entry.value.slug,
@@ -28,23 +28,26 @@ const action = async (repoUrl: string) => {
       })),
     });
 
-
   await inlineAction(profileForClone.slug, repoUrl);
 };
 
 const inlineAction = async (slug: string, repoUrl: string) => {
   const profile = await kv.get<GitProfile>(["tool", "git", "profile", slug]);
+  const repoPath = `${Deno.cwd()}/${
+    // @ts-ignore
+    repoUrl.split("/").pop().split(".").shift()}`;
+  const repoConfigPath = `${repoPath}/.git/config`;
 
-  if (!profile) {
+  if (!profile.value) {
     console.log(`Profile '${slug}' not found`);
     Deno.exit(-1);
   }
 
-  const res = await shelly([
+  let res = await shelly([
     "git",
     "clone",
     repoUrl,
-    Deno.cwd(),
+    repoPath,
   ], {
     env: {
       GIT_SSH_COMMAND: `ssh -i ${profile?.value?.keyPath}`,
@@ -56,7 +59,35 @@ const inlineAction = async (slug: string, repoUrl: string) => {
     Deno.exit(-1);
   }
 
-  console.log(`\n${res.stdout}\n`);
+  res = await shelly([
+    "git",
+    "config",
+    "--file",
+    repoConfigPath,
+    "user.name",
+    `"${profile.value.name}"`,
+  ]);
+
+  if (res.code !== 0) {
+    console.log(`\n${res.stderr}\n`);
+    Deno.exit(-1);
+  }
+
+  res = await shelly([
+    "git",
+    "config",
+    "--file",
+    repoConfigPath,
+    "user.email",
+    `"${profile.value.email}"`,
+  ]);
+
+  if (res.code !== 0) {
+    console.log(`\n${res.stderr}\n`);
+    Deno.exit(-1);
+  }
+
+  console.log(`  Repository cloned successfully <3`);
 
   Deno.exit(0);
 };
@@ -75,7 +106,6 @@ const command = new Command()
     } else {
       action(repoUrl);
     }
-
   });
 
 export default {

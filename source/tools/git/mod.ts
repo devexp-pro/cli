@@ -17,7 +17,9 @@ if (config.data.tools.git.hidden) tool.hidden();
 
 tool
   .name("git")
-  .description("git helpers for profile management, repository cloning and more")
+  .description(
+    "git helpers for profile management, repository cloning and more",
+  )
   .action(action)
   .command("profile", profile.command)
   .command("clone", clone.command)

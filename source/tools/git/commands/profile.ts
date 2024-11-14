@@ -4,6 +4,7 @@ import { shelly } from "@vseplet/shelly";
 import { HOME } from "$/constants";
 import { kv } from "$/kv";
 import { GitProfile } from "$/tools/git/types.ts";
+import { Table } from "@cliffy/table";
 
 const create = new Command()
   .name("create")
@@ -31,7 +32,7 @@ const create = new Command()
       "-t",
       "ed25519",
       "-C",
-       // @ts-ignore
+      // @ts-ignore
       email,
       "-f",
       `${HOME}/.ssh/dx_git_${slug}`,
@@ -106,6 +107,30 @@ const list = new Command()
   .name("list")
   .description("list git profiles")
   .action(async (_options: any, ..._args: any) => {
+    const profiles = await Array.fromAsync(
+      kv.list({ prefix: ["tool", "git", "profile"] }),
+    );
+
+    if (profiles.length > 0) {
+      const table = new Table()
+        .header(["slug", "email", "name"])
+        .border(true)
+        // .padding(1)
+        .indent(2);
+
+      profiles.forEach((profile, index) => {
+        const value = profile.value as any;
+        table.push([value.slug, value.email, value.name]);
+        // console.log(
+        //   `${index}: ${profile.key[1] as string}, port ${profile.value}`,
+        // );
+      });
+
+      table.render();
+    } else {
+      console.log(`  No tunnels found! Use set:`);
+    }
+
     Deno.exit(0);
   });
 
@@ -121,6 +146,7 @@ const command = new Command()
   })
   .command("create", create)
   .command("edit", edit)
+  .hidden()
   .command("remove", remove)
   .command("list", list);
 
