@@ -85,9 +85,6 @@ export async function getCurrentConfig(): Promise<{
 }
 
 
-
-
-
 export async function syncProjects() {
   try {
     const client = await createClient();
@@ -101,14 +98,37 @@ export async function syncProjects() {
     const newProjects = response!.state.projects as ProjectData[];
     if (!newProjects || newProjects.length === 0) {
       console.log(red("Проекты отсутствуют."));
+      await setCurrentConfigKV({
+        currentProjectName: null,
+        currentEnvName: null,
+        currentProjectUUID: null,
+        currentEnvUUID: null,
+      });
+      console.log(yellow("Текущая конфигурация сброшена."));
       return;
     }
 
-    const currentFullConfig = await getFullConfigKV() as ProjectData[];
+    let currentFullConfig = await getFullConfigKV() as ProjectData[] | null;
+
+
+    if (currentFullConfig === null) {
+      await setCurrentConfigKV({
+        currentProjectName: null,
+        currentEnvName: null,
+        currentProjectUUID: null,
+        currentEnvUUID: null,
+      });
+      console.log(yellow("Текущая конфигурация сброшена."));
+
+      await setFullConfigKV(newProjects);
+      console.log(green("Конфигурация инициализирована, так как она отсутствовала."));
+      return;
+    }
+
     let changesDetected = false;
 
     newProjects.forEach((newProject) => {
-      const currentProject = currentFullConfig.find((p) => p.uuid === newProject.uuid);
+      const currentProject = currentFullConfig!.find((p) => p.uuid === newProject.uuid);
 
       if (!currentProject) {
         console.log(yellow(`Добавлен новый проект: ${newProject.name}${IS_DEVELOP ? ` (UUID: ${newProject.uuid})` : ""}`));
@@ -137,7 +157,7 @@ export async function syncProjects() {
               changesDetected = true;
             }
 
-            // Проверка изменений в секретах
+
             newEnv.secrets.forEach((newSecret) => {
               const currentSecret = currentEnv.secrets.find((s) => s.key === newSecret.key);
 
@@ -178,7 +198,7 @@ export async function syncProjects() {
       }
     });
 
-    currentFullConfig.forEach((currentProject) => {
+    currentFullConfig!.forEach((currentProject) => {
       const newProject = newProjects.find((p) => p.uuid === currentProject.uuid);
       if (!newProject) {
         console.log(yellow(`Удален проект: ${currentProject.name}${IS_DEVELOP ? ` (UUID: ${currentProject.uuid})` : ""}`));
@@ -189,9 +209,7 @@ export async function syncProjects() {
     if (changesDetected) {
       await setFullConfigKV(newProjects);
       console.log(green("Конфигурация обновлена."));
-    } else {
-      console.log(green("Синхронизация завершена. Изменений не найдено."));
-    }
+    } 
   } catch (error) {
     console.error(red("Ошибка синхронизации проектов:"), error.message);
     Deno.exit();

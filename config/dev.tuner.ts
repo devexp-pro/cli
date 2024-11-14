@@ -8,7 +8,7 @@ const devCfg = Tuner.tune({
       auth: {
         times: {
           // ms
-          sessionTTL: 20 * 60 * 1000, //2 min
+          sessionTTL: 3 * 60 * 60 * 1000, //3 часа
         },
       },
     },

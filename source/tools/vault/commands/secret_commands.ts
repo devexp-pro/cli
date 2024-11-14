@@ -1,6 +1,6 @@
 // source/tools/vault/commands/secret_commands.ts
 
-import { createClient, getCurrentConfig, getFullConfigKV, setCurrentConfigKV } from "../api.ts";
+import { createClient, getCurrentConfig, getFullConfigKV } from "../api.ts";
 import { Command, green, red, Input } from "../deps.ts";
 import { Select } from "@cliffy/prompt";
 import { TUUID } from "../GuardenDefinition.ts";
@@ -8,7 +8,7 @@ import { TUUID } from "../GuardenDefinition.ts";
 async function getSecretsFromConfig(): Promise<Record<string, string>> {
   const { currentConfig } = await getCurrentConfig();
   const fullConfig = await getFullConfigKV();
-  if (fullConfig === null) {
+  if (!fullConfig) {
     console.log(red("Текущий проект или окружение не выбраны"));
     Deno.exit();
   }
@@ -59,26 +59,29 @@ export function addSecretCommand() {
 export function updateSecretCommand() {
   return new Command()
     .description("Обновить секрет в текущем окружении.")
-    .action(async () => {
+    .option("--key <key:string>", "Ключ секрета для обновления.")
+    .option("--value <value:string>", "Новое значение секрета.")
+    .action(async (options) => {
       const secrets = await getSecretsFromConfig();
       if (Object.keys(secrets).length === 0) {
         console.log(red("Секреты отсутствуют в текущем окружении."));
         Deno.exit();
       }
 
-      const selectedKey = await Select.prompt({
+      const selectedKey = options.key ?? await Select.prompt({
         message: "Выберите секрет для обновления:",
         options: Object.keys(secrets),
       });
 
-      const newValue = await Input.prompt("Введите новое значение для секрета:");
+      const newValue = options.value ?? await Input.prompt("Введите новое значение для секрета:");
       const { currentConfig } = await getCurrentConfig();
-      if (currentConfig === null || !currentConfig.currentEnvUUID) {
+      if (!currentConfig?.currentEnvUUID) {
         console.log(red("Текущий проект или окружение не выбраны"));
         Deno.exit();
       }
+
       const client = await createClient();
-      const response = await client.call("updateSecret", [currentConfig!.currentEnvUUID, selectedKey, newValue]);
+      const response = await client.call("updateSecret", [currentConfig.currentEnvUUID, selectedKey, newValue]);
 
       if (!response.success) {
         console.error(red(`Ошибка обновления секрета: ${response.message}`));
@@ -93,23 +96,25 @@ export function updateSecretCommand() {
 export function deleteSecretCommand() {
   return new Command()
     .description("Удалить секрет из текущего окружения.")
-    .action(async () => {
+    .option("--key <key:string>", "Ключ секрета для удаления.")
+    .action(async (options) => {
       const secrets = await getSecretsFromConfig();
       if (Object.keys(secrets).length === 0) {
         console.log(red("Секреты отсутствуют в текущем окружении."));
         Deno.exit();
       }
 
-      const selectedKey = await Select.prompt({
+      const selectedKey = options.key ?? await Select.prompt({
         message: "Выберите секрет для удаления:",
         options: Object.keys(secrets),
       });
 
       const { currentConfig } = await getCurrentConfig();
-      if (currentConfig === null || !currentConfig.currentEnvUUID) {
+      if (!currentConfig?.currentEnvUUID) {
         console.log(red("Текущий проект или окружение не выбраны"));
         Deno.exit();
       }
+
       const client = await createClient();
       const response = await client.call("deleteSecret", [currentConfig.currentEnvUUID, selectedKey]);
 
