@@ -1,10 +1,9 @@
 import { Command } from "@cliffy/command";
 import { createClient, getCurrentConfig } from "../api.ts";
-import { red, green } from "../deps.ts";
+import { green, red } from "../deps.ts";
 
 export async function runCommand(cmd: string[]) {
   try {
-
     const { currentConfig } = await getCurrentConfig();
 
     if (!currentConfig?.currentProjectUUID || !currentConfig.currentEnvUUID) {
@@ -13,7 +12,9 @@ export async function runCommand(cmd: string[]) {
     }
 
     const client = await createClient();
-    const response = await client.call("getSecrets", [currentConfig.currentEnvUUID]);
+    const response = await client.call("getSecrets", [
+      currentConfig.currentEnvUUID,
+    ]);
 
     if (!response.success) {
       console.error(red(`Ошибка получения секретов: ${response.message}`));
@@ -22,10 +23,13 @@ export async function runCommand(cmd: string[]) {
 
     const { secrets } = response;
     if (Object.keys(secrets).length === 0) {
-      console.log(green(`Нет секретов в окружении '${currentConfig.currentEnvName}' проекта '${currentConfig.currentProjectName}'.`));
+      console.log(
+        green(
+          `Нет секретов в окружении '${currentConfig.currentEnvName}' проекта '${currentConfig.currentProjectName}'.`,
+        ),
+      );
       return;
     }
-
 
     // console.log("Executing:", cmd);
     const denoCommand = new Deno.Command(cmd[0], {

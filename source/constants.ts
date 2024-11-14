@@ -23,7 +23,9 @@ export const VERSION = localDenoJson["version"];
 export const REMOTE_VERSION = remoteDenoJson["version"] || VERSION;
 
 export const config = await Tuner.use.loadConfig<BaseCfgType>({
-  absolutePathPrefix: IS_DEVELOP || Deno.env.get("DEV_PROD") ? undefined : baseRepoPath,
+  absolutePathPrefix: IS_DEVELOP || Deno.env.get("DEV_PROD")
+    ? undefined
+    : baseRepoPath,
   configDirPath: "./config",
   configName: IS_DEVELOP ? "dev" : "prod",
 });
@@ -41,6 +43,7 @@ export const WEBSOCKET_URL = `${
 }://wss.${SERVICE_DOMAIN}/wss`;
 
 export const SYSTEM_SHELL = Deno.env.get("SHELL") || Deno.env.get("ComSpec");
+export const HOME = Deno.env.get("HOME") || Deno.env.get("USERPROFILE");
 
 export const logo = `
   ${colors.rgb24("██████╗ ███████╗██╗   ██╗", 0xFFA500)}${

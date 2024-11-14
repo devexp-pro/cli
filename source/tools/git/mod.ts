@@ -10,7 +10,7 @@ import release from "./commands/release.ts";
 const action = async () => {
   tool.showHelp();
   Deno.exit(0);
-}
+};
 
 const tool = new Command();
 if (config.data.tools.git.hidden) tool.hidden();

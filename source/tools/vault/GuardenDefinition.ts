@@ -31,7 +31,6 @@ export type GuardenDefinition = ApiflyDefinition<
     projects: ProjectData[];
   },
   {
-
     createProject: {
       args: [projectName: string];
       returns: { success: boolean; project?: ProjectData; message?: string };
@@ -52,7 +51,6 @@ export type GuardenDefinition = ApiflyDefinition<
       args: [userUUID: TUUID];
       returns: { success: boolean; projects: ProjectData[] };
     };
-
 
     createEnvironment: {
       args: [projectUUID: TUUID, envName: string];
@@ -83,7 +81,6 @@ export type GuardenDefinition = ApiflyDefinition<
       returns: { success: boolean; message?: string };
     };
 
-
     addSecret: {
       args: [envUUID: TUUID, key: string, value: string];
       returns: { success: boolean; secret?: SecretData; message?: string };
@@ -104,7 +101,6 @@ export type GuardenDefinition = ApiflyDefinition<
       args: [envUUID: TUUID, key: string];
       returns: { success: boolean; message?: string };
     };
-
 
     linkProjectToUser: {
       args: [userUUID: TUUID, projectUUID: TUUID];

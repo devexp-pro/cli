@@ -1,7 +1,12 @@
 // source/tools/vault/commands/project_commands.ts
 
-import { createClient, getCurrentConfig, getFullConfigKV, setCurrentConfigKV } from "../api.ts";
-import { Command, green, red, Input } from "../deps.ts";
+import {
+  createClient,
+  getCurrentConfig,
+  getFullConfigKV,
+  setCurrentConfigKV,
+} from "../api.ts";
+import { Command, green, Input, red } from "../deps.ts";
 import { TUUID } from "../GuardenDefinition.ts";
 import { Select } from "@cliffy/prompt/select";
 
@@ -53,7 +58,10 @@ export function createProjectCommand() {
 export function deleteProjectCommand() {
   return new Command()
     .description("Удалить проект.")
-    .option("--project-name <projectName:string>", "Название проекта для удаления.")
+    .option(
+      "--project-name <projectName:string>",
+      "Название проекта для удаления.",
+    )
     .action(async (options) => {
       const projects = await getFullConfigKV();
       const { currentConfig } = await getCurrentConfig();
@@ -73,7 +81,9 @@ export function deleteProjectCommand() {
         projectUUID = project.uuid;
       } else {
         const projectOptions = projects.map((p) => ({
-          name: p.uuid === currentConfig?.currentProjectUUID ? `${p.name} (Текущий)` : p.name,
+          name: p.uuid === currentConfig?.currentProjectUUID
+            ? `${p.name} (Текущий)`
+            : p.name,
           value: p.uuid,
         }));
         projectUUID = (await Select.prompt({
@@ -132,7 +142,9 @@ export function renameProjectCommand() {
         newProjectName = options.newName;
       } else {
         const projectOptions = projects.map((p) => ({
-          name: p.uuid === currentConfig?.currentProjectUUID ? `${p.name} (Текущий)` : p.name,
+          name: p.uuid === currentConfig?.currentProjectUUID
+            ? `${p.name} (Текущий)`
+            : p.name,
           value: p.uuid,
         }));
 
@@ -145,10 +157,15 @@ export function renameProjectCommand() {
       }
 
       const client = await createClient();
-      const response = await client.call("updateProject", [projectUUID, newProjectName]);
+      const response = await client.call("updateProject", [
+        projectUUID,
+        newProjectName,
+      ]);
 
       if (!response.success) {
-        console.error(red(`Не удалось переименовать проект: ${response.message}`));
+        console.error(
+          red(`Не удалось переименовать проект: ${response.message}`),
+        );
         Deno.exit();
       }
 
@@ -157,7 +174,9 @@ export function renameProjectCommand() {
           ...currentConfig,
           currentProjectName: newProjectName,
         });
-        console.log(green("Текущий проект переименован и обновлен в конфигурации."));
+        console.log(
+          green("Текущий проект переименован и обновлен в конфигурации."),
+        );
       } else {
         console.log(green(`Проект переименован в '${newProjectName}'.`));
       }
@@ -165,7 +184,7 @@ export function renameProjectCommand() {
     });
 }
 
-export  function selectProjectCommand() {
+export function selectProjectCommand() {
   return new Command()
     .description("Выбрать проект.")
     .option("--project-name <projectName:string>", "Имя проекта для выбора.")
@@ -189,17 +208,21 @@ export  function selectProjectCommand() {
         selectedProjectUUID = project.uuid;
       } else {
         const projectOptions = projects.map((p) => ({
-          name: p.uuid === currentConfig?.currentProjectUUID ? `${p.name} (Текущий)` : p.name,
+          name: p.uuid === currentConfig?.currentProjectUUID
+            ? `${p.name} (Текущий)`
+            : p.name,
           value: p.uuid,
         }));
-        
-        selectedProjectUUID =( await Select.prompt({
+
+        selectedProjectUUID = (await Select.prompt({
           message: "Выберите проект:",
           options: projectOptions,
         })) as TUUID;
       }
 
-      const selectedProject = projects.find((p) => p.uuid === selectedProjectUUID);
+      const selectedProject = projects.find((p) =>
+        p.uuid === selectedProjectUUID
+      );
       if (selectedProject) {
         await setCurrentConfigKV({
           currentProjectName: selectedProject.name,

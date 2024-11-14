@@ -206,7 +206,6 @@ const command = new Command()
     }, isInteractive);
   });
 
-
 export default {
   action,
   command,

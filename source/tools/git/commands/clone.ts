@@ -10,7 +10,6 @@ const command = new Command()
     Deno.exit(0);
   });
 
-
 export default {
   action,
   command,

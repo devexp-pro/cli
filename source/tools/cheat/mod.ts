@@ -5,7 +5,7 @@ import edit from "./commands/edit.ts";
 import show from "./commands/show.ts";
 import remove from "./commands/remove.ts";
 
-const tool = new Command()
+const tool = new Command();
 if (config.data.tools?.cheat?.hidden) tool.hidden();
 tool.name("cheat")
   .usage("")

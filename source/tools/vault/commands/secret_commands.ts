@@ -1,7 +1,7 @@
 // source/tools/vault/commands/secret_commands.ts
 
 import { createClient, getCurrentConfig, getFullConfigKV } from "../api.ts";
-import { Command, green, red, Input } from "../deps.ts";
+import { Command, green, Input, red } from "../deps.ts";
 import { Select } from "@cliffy/prompt";
 import { TUUID } from "../GuardenDefinition.ts";
 
@@ -18,8 +18,12 @@ async function getSecretsFromConfig(): Promise<Record<string, string>> {
     Deno.exit();
   }
 
-  const project = fullConfig.find((proj) => proj.uuid === currentConfig.currentProjectUUID);
-  const environment = project?.environments.find((env) => env.uuid === currentConfig.currentEnvUUID);
+  const project = fullConfig.find((proj) =>
+    proj.uuid === currentConfig.currentProjectUUID
+  );
+  const environment = project?.environments.find((env) =>
+    env.uuid === currentConfig.currentEnvUUID
+  );
 
   if (!environment || !environment.secrets) {
     console.log(red("Секреты отсутствуют для текущего окружения."));
@@ -44,14 +48,20 @@ export function addSecretCommand() {
       }
 
       const client = await createClient();
-      const response = await client.call("addSecret", [currentConfig.currentEnvUUID, key, value]);
+      const response = await client.call("addSecret", [
+        currentConfig.currentEnvUUID,
+        key,
+        value,
+      ]);
 
       if (!response.success) {
         console.error(red(`Ошибка добавления секрета: ${response.message}`));
         Deno.exit();
       }
 
-      console.log(green(`Секрет '${key}' успешно добавлен в текущее окружение.`));
+      console.log(
+        green(`Секрет '${key}' успешно добавлен в текущее окружение.`),
+      );
       Deno.exit();
     });
 }
@@ -73,7 +83,8 @@ export function updateSecretCommand() {
         options: Object.keys(secrets),
       });
 
-      const newValue = options.value ?? await Input.prompt("Введите новое значение для секрета:");
+      const newValue = options.value ??
+        await Input.prompt("Введите новое значение для секрета:");
       const { currentConfig } = await getCurrentConfig();
       if (!currentConfig?.currentEnvUUID) {
         console.log(red("Текущий проект или окружение не выбраны"));
@@ -81,7 +92,11 @@ export function updateSecretCommand() {
       }
 
       const client = await createClient();
-      const response = await client.call("updateSecret", [currentConfig.currentEnvUUID, selectedKey, newValue]);
+      const response = await client.call("updateSecret", [
+        currentConfig.currentEnvUUID,
+        selectedKey,
+        newValue,
+      ]);
 
       if (!response.success) {
         console.error(red(`Ошибка обновления секрета: ${response.message}`));
@@ -116,14 +131,19 @@ export function deleteSecretCommand() {
       }
 
       const client = await createClient();
-      const response = await client.call("deleteSecret", [currentConfig.currentEnvUUID, selectedKey]);
+      const response = await client.call("deleteSecret", [
+        currentConfig.currentEnvUUID,
+        selectedKey,
+      ]);
 
       if (!response.success) {
         console.error(red(`Ошибка удаления секрета: ${response.message}`));
         Deno.exit();
       }
 
-      console.log(green(`Секрет '${selectedKey}' успешно удален из окружения.`));
+      console.log(
+        green(`Секрет '${selectedKey}' успешно удален из окружения.`),
+      );
       Deno.exit();
     });
 }
