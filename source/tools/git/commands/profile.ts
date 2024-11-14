@@ -31,6 +31,7 @@ const create = new Command()
       "-t",
       "ed25519",
       "-C",
+       // @ts-ignore
       email,
       "-f",
       `${HOME}/.ssh/dx_git_${slug}`,

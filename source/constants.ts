@@ -44,6 +44,7 @@ export const WEBSOCKET_URL = `${
 
 export const SYSTEM_SHELL = Deno.env.get("SHELL") || Deno.env.get("ComSpec");
 export const HOME = Deno.env.get("HOME") || Deno.env.get("USERPROFILE");
+export const CWD = Deno.cwd();
 
 export const logo = `
   ${colors.rgb24("██████╗ ███████╗██╗   ██╗", 0xFFA500)}${

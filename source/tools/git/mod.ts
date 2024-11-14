@@ -17,14 +17,18 @@ if (config.data.tools.git.hidden) tool.hidden();
 
 tool
   .name("git")
-  .description("git tool")
+  .description("git helpers for profile management, repository cloning and more")
   .action(action)
   .command("profile", profile.command)
   .command("clone", clone.command)
   .command("commit", commit.command)
+  .hidden()
   .command("feature", feature.command)
+  .hidden()
   .command("fix", fix.command)
-  .command("release", release.command);
+  .hidden()
+  .command("release", release.command)
+  .hidden();
 
 export default {
   tool,
