@@ -1,4 +1,4 @@
-// source/tools/vault/GuardenDefinition.ts
+
 
 import { type ApiflyDefinition } from "@vseplet/apifly/types";
 
@@ -27,7 +27,7 @@ export interface SecretData {
 
 export type GuardenDefinition = ApiflyDefinition<
   {
-    user: { uuid: TUUID; email: string };
+    user: { uuid: TUUID };
     projects: ProjectData[];
   },
   {
@@ -48,11 +48,6 @@ export type GuardenDefinition = ApiflyDefinition<
       args: [projectUUID: TUUID];
       returns: { success: boolean; message?: string };
     };
-    getProjectsByUser: {
-      args: [userUUID: TUUID];
-      returns: { success: boolean; projects: ProjectData[] };
-    };
-
 
     createEnvironment: {
       args: [projectUUID: TUUID, envName: string];
@@ -82,8 +77,6 @@ export type GuardenDefinition = ApiflyDefinition<
       args: [envUUID: TUUID];
       returns: { success: boolean; message?: string };
     };
-
-
     addSecret: {
       args: [envUUID: TUUID, key: string, value: string];
       returns: { success: boolean; secret?: SecretData; message?: string };
@@ -105,7 +98,6 @@ export type GuardenDefinition = ApiflyDefinition<
       returns: { success: boolean; message?: string };
     };
 
-
     linkProjectToUser: {
       args: [userUUID: TUUID, projectUUID: TUUID];
       returns: { success: boolean; message?: string };
@@ -113,6 +105,14 @@ export type GuardenDefinition = ApiflyDefinition<
     isProjectLinkedToUser: {
       args: [userUUID: TUUID, projectUUID: TUUID];
       returns: { success: boolean; isLinked: boolean };
+    };
+    createIntegration: {
+      args: [accessToken: string, denoDeployProjectId: string, vaultEnvUUID: string];
+      returns: { success: boolean; integrationId?: TUUID; message?: string };
+    };
+    updateIntegration: {
+      args: [integrationId: TUUID, accessToken: string, denoDeployProjectId: string, vaultEnvUUID: string];
+      returns: { success: boolean; integrationId?: TUUID; message?: string };
     };
   },
   { userId: TUUID }
