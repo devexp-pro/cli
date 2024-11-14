@@ -14,8 +14,6 @@ import { displayCurrentProjectInfo } from "../project_commands.ts";
 import { syncProjects } from "../../api.ts";
 
 const envMenu = async () => {
-  await syncProjects();
-  await displayCurrentProjectInfo();
   
   const action = await Select.prompt({
     message: "Что вы хотите сделать с окружениями?",
@@ -54,7 +52,9 @@ const envCommand = new Command()
   .example("env --action=rename --env-name=dev --new-name=prod", "Переименовать окружение 'dev' в 'prod'")
   .example("env --action=delete --env-name=prod", "Удалить окружение с именем 'prod'")
   .example("env", "Открыть меню для управления окружениями")
-  .action((options) => {
+  .action(async (options) => {
+    await syncProjects();
+    await displayCurrentProjectInfo();
     if (options.action === "create" && options.envName) {
       createEnvCommand().parse([options.envName]);
     } else if (options.action === "select" && options.envName) {

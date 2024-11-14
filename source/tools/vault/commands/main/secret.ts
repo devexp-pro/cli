@@ -16,8 +16,8 @@ import { displayCurrentProjectInfo } from "../project_commands.ts";
 import { loadEnvFileCommand } from "../env_commands.ts";
 
 const secretMenu = async () => {
-  await syncProjects();
-  await displayCurrentProjectInfo();
+
+
   
   const action = await Select.prompt({
     message: "Что вы хотите сделать с секретами?",

@@ -14,8 +14,7 @@ import {
 import { syncProjects } from "../../api.ts";
 
 const projectMenu = async () => {
-  await syncProjects();
-  await displayCurrentProjectInfo();
+
   const action = await Select.prompt({
     message: "Что вы хотите сделать с проектами?",
     options: [
@@ -59,7 +58,9 @@ const projectCommand = new Command()
 .example("project --action=rename --old-name=MyProject --new-name=NewProject", "Переименовать проект 'MyProject' в 'NewProject'")
 .example("project --action=delete --project-name=OldProject", "Удалить проект с именем 'OldProject'")
 .example("project", "Открыть меню для управления проектами")
-  .action((options) => {
+  .action(async (options) => {
+    await syncProjects();
+    await displayCurrentProjectInfo();
     if (options.action === "rename" && options.oldName && options.newName) {
       renameProjectCommand().parse(["--old-name", options.oldName, "--new-name", options.newName]);
     } else if (options.action === "delete" && options.projectName) {

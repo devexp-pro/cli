@@ -1,4 +1,4 @@
-
+// source/tools/vault/GuardenDefinition.ts
 
 import { type ApiflyDefinition } from "@vseplet/apifly/types";
 
@@ -25,13 +25,21 @@ export interface SecretData {
   environment_id: TUUID;
 }
 
+export interface IntegrationData {
+  id: TUUID;
+access_token: string
+  envUUID: TUUID;
+  projectUUID: TUUID;
+  denoDeployProjectId: string;
+  auto_redeploy: boolean;
+}
+
 export type GuardenDefinition = ApiflyDefinition<
   {
     user: { uuid: TUUID };
     projects: ProjectData[];
   },
   {
-
     createProject: {
       args: [projectName: string];
       returns: { success: boolean; project?: ProjectData; message?: string };
@@ -106,13 +114,31 @@ export type GuardenDefinition = ApiflyDefinition<
       args: [userUUID: TUUID, projectUUID: TUUID];
       returns: { success: boolean; isLinked: boolean };
     };
+
+    // Команды интеграции
     createIntegration: {
-      args: [accessToken: string, denoDeployProjectId: string, vaultEnvUUID: string];
+      args: [accessToken: string, denoDeployProjectId: string, vaultEnvUUID: TUUID, auto_redeploy: boolean];
       returns: { success: boolean; integrationId?: TUUID; message?: string };
     };
     updateIntegration: {
-      args: [integrationId: TUUID, accessToken: string, denoDeployProjectId: string, vaultEnvUUID: string];
+      args: [integrationId: TUUID, denoDeployProjectId: string, vaultEnvUUID: TUUID, auto_redeploy: boolean];
       returns: { success: boolean; integrationId?: TUUID; message?: string };
+    };
+    deleteIntegration: {
+      args: [integrationId: TUUID];
+      returns: { success: boolean; message?: string };
+    };
+    getIntegrations: {
+      args: [];
+      returns: {
+        success: boolean;
+        integrations?: IntegrationData[];
+        message?: string;
+      };
+    };
+    forceRedeployIntegration: {
+      args: [integrationId: TUUID];
+      returns: { success: boolean; message?: string };
     };
   },
   { userId: TUUID }
