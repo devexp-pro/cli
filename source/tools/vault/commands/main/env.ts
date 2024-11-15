@@ -18,18 +18,18 @@ const envMenu = async () => {
   await displayCurrentProjectInfo();
 
   const action = await Select.prompt({
-    message: "Что вы хотите сделать с окружениями?",
+    message: "What would you like to do with environments?",
     options: [
-      { name: "Создать окружение", value: "create" },
-      { name: "Выбрать окружение", value: "select" },
-      { name: "Переименовать окружение", value: "rename" },
-      { name: "Удалить окружение", value: "delete" },
+      { name: "Create environment", value: "create" },
+      { name: "Select environment", value: "select" },
+      { name: "Rename environment", value: "rename" },
+      { name: "Delete environment", value: "delete" },
     ],
   });
 
   switch (action) {
     case "create":
-      const envName = await Input.prompt("Введите имя окружения:");
+      const envName = await Input.prompt("Enter the environment name:");
       await createEnvCommand().parse([envName]);
       break;
     case "select":
@@ -46,34 +46,34 @@ const envMenu = async () => {
 
 const envCommand = new Command()
   .description(
-    "Управление окружениями проекта: создание, выбор, переименование и удаление окружений.",
+    "Manage project environments: create, select, rename, and delete environments.",
   )
   .option(
     "--action <action:string>",
-    "Действие с окружением: 'create', 'select', 'rename' или 'delete'.",
+    "Action with environment: 'create', 'select', 'rename', or 'delete'.",
   )
   .option(
     "--env-name <envName:string>",
-    "Имя окружения для создания, выбора или удаления.",
+    "Environment name for creation, selection, or deletion.",
   )
   .option(
     "--new-name <newName:string>",
-    "Новое имя для переименования окружения.",
+    "New name for renaming the environment.",
   )
   .example(
     "env --action=create --env-name=dev",
-    "Создать окружение с именем 'dev'",
+    "Create an environment named 'dev'",
   )
-  .example("env --action=select --env-name=prod", "Выбрать окружение 'prod'")
+  .example("env --action=select --env-name=prod", "Select environment 'prod'")
   .example(
     "env --action=rename --env-name=dev --new-name=prod",
-    "Переименовать окружение 'dev' в 'prod'",
+    "Rename environment 'dev' to 'prod'",
   )
   .example(
     "env --action=delete --env-name=prod",
-    "Удалить окружение с именем 'prod'",
+    "Delete environment named 'prod'",
   )
-  .example("env", "Открыть меню для управления окружениями")
+  .example("env", "Open the menu for environment management")
   .action((options) => {
     if (options.action === "create" && options.envName) {
       createEnvCommand().parse([options.envName]);

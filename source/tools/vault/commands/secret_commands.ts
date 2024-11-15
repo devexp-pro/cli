@@ -1,5 +1,3 @@
-// source/tools/vault/commands/secret_commands.ts
-
 import { createClient, getCurrentConfig, getFullConfigKV } from "../api.ts";
 import { Command, green, Input, red } from "../deps.ts";
 import { Select } from "@cliffy/prompt";
@@ -9,12 +7,12 @@ async function getSecretsFromConfig(): Promise<Record<string, string>> {
   const { currentConfig } = await getCurrentConfig();
   const fullConfig = await getFullConfigKV();
   if (!fullConfig) {
-    console.log(red("Текущий проект или окружение не выбраны"));
+    console.log(red("The current project or environment is not selected."));
     Deno.exit();
   }
 
   if (!currentConfig?.currentProjectUUID || !currentConfig.currentEnvUUID) {
-    console.error(red("Текущее окружение или проект не выбраны."));
+    console.error(red("The current environment or project is not selected."));
     Deno.exit();
   }
 
@@ -26,7 +24,7 @@ async function getSecretsFromConfig(): Promise<Record<string, string>> {
   );
 
   if (!environment || !environment.secrets) {
-    console.log(red("Секреты отсутствуют для текущего окружения."));
+    console.log(red("No secrets found for the current environment."));
     Deno.exit();
   }
 
@@ -38,12 +36,12 @@ async function getSecretsFromConfig(): Promise<Record<string, string>> {
 
 export function addSecretCommand() {
   return new Command()
-    .description("Добавить секрет в текущее окружение.")
+    .description("Add a secret to the current environment.")
     .arguments("<key:string> <value:string>")
     .action(async (_options: any, key: string, value: string) => {
       const { currentConfig } = await getCurrentConfig();
       if (!currentConfig?.currentEnvUUID) {
-        console.error(red("Текущее окружение не выбрано."));
+        console.error(red("The current environment is not selected."));
         Deno.exit();
       }
 
@@ -55,12 +53,14 @@ export function addSecretCommand() {
       ]);
 
       if (!response.success) {
-        console.error(red(`Ошибка добавления секрета: ${response.message}`));
+        console.error(red(`Error adding secret: ${response.message}`));
         Deno.exit();
       }
 
       console.log(
-        green(`Секрет '${key}' успешно добавлен в текущее окружение.`),
+        green(
+          `Secret '${key}' has been successfully added to the current environment.`,
+        ),
       );
       Deno.exit();
     });
@@ -68,26 +68,26 @@ export function addSecretCommand() {
 
 export function updateSecretCommand() {
   return new Command()
-    .description("Обновить секрет в текущем окружении.")
-    .option("--key <key:string>", "Ключ секрета для обновления.")
-    .option("--value <value:string>", "Новое значение секрета.")
+    .description("Update a secret in the current environment.")
+    .option("--key <key:string>", "The key of the secret to update.")
+    .option("--value <value:string>", "The new value for the secret.")
     .action(async (options) => {
       const secrets = await getSecretsFromConfig();
       if (Object.keys(secrets).length === 0) {
-        console.log(red("Секреты отсутствуют в текущем окружении."));
+        console.log(red("No secrets found in the current environment."));
         Deno.exit();
       }
 
       const selectedKey = options.key ?? await Select.prompt({
-        message: "Выберите секрет для обновления:",
+        message: "Select a secret to update:",
         options: Object.keys(secrets),
       });
 
       const newValue = options.value ??
-        await Input.prompt("Введите новое значение для секрета:");
+        await Input.prompt("Enter the new value for the secret:");
       const { currentConfig } = await getCurrentConfig();
       if (!currentConfig?.currentEnvUUID) {
-        console.log(red("Текущий проект или окружение не выбраны"));
+        console.log(red("The current project or environment is not selected."));
         Deno.exit();
       }
 
@@ -99,34 +99,36 @@ export function updateSecretCommand() {
       ]);
 
       if (!response.success) {
-        console.error(red(`Ошибка обновления секрета: ${response.message}`));
+        console.error(red(`Error updating secret: ${response.message}`));
         Deno.exit();
       }
 
-      console.log(green(`Секрет '${selectedKey}' успешно обновлен.`));
+      console.log(
+        green(`Secret '${selectedKey}' has been successfully updated.`),
+      );
       Deno.exit();
     });
 }
 
 export function deleteSecretCommand() {
   return new Command()
-    .description("Удалить секрет из текущего окружения.")
-    .option("--key <key:string>", "Ключ секрета для удаления.")
+    .description("Delete a secret from the current environment.")
+    .option("--key <key:string>", "The key of the secret to delete.")
     .action(async (options) => {
       const secrets = await getSecretsFromConfig();
       if (Object.keys(secrets).length === 0) {
-        console.log(red("Секреты отсутствуют в текущем окружении."));
+        console.log(red("No secrets found in the current environment."));
         Deno.exit();
       }
 
       const selectedKey = options.key ?? await Select.prompt({
-        message: "Выберите секрет для удаления:",
+        message: "Select a secret to delete:",
         options: Object.keys(secrets),
       });
 
       const { currentConfig } = await getCurrentConfig();
       if (!currentConfig?.currentEnvUUID) {
-        console.log(red("Текущий проект или окружение не выбраны"));
+        console.log(red("The current project or environment is not selected."));
         Deno.exit();
       }
 
@@ -137,12 +139,14 @@ export function deleteSecretCommand() {
       ]);
 
       if (!response.success) {
-        console.error(red(`Ошибка удаления секрета: ${response.message}`));
+        console.error(red(`Error deleting secret: ${response.message}`));
         Deno.exit();
       }
 
       console.log(
-        green(`Секрет '${selectedKey}' успешно удален из окружения.`),
+        green(
+          `Secret '${selectedKey}' has been successfully deleted from the environment.`,
+        ),
       );
       Deno.exit();
     });
@@ -150,15 +154,15 @@ export function deleteSecretCommand() {
 
 export function fetchSecretsCommand() {
   return new Command()
-    .description("Получить и вывести секреты для текущего окружения.")
+    .description("Retrieve and display secrets for the current environment.")
     .action(async () => {
       const secrets = await getSecretsFromConfig();
       if (Object.keys(secrets).length === 0) {
-        console.log(red("Секреты отсутствуют в текущем окружении."));
+        console.log(red("No secrets found in the current environment."));
         Deno.exit();
       }
 
-      console.log(green("Секреты для текущего окружения:"));
+      console.log(green("Secrets for the current environment:"));
       for (const [key, value] of Object.entries(secrets)) {
         console.log(green(`${key}: ${value}`));
       }

@@ -7,7 +7,7 @@ export async function runCommand(cmd: string[]) {
     const { currentConfig } = await getCurrentConfig();
 
     if (!currentConfig?.currentProjectUUID || !currentConfig.currentEnvUUID) {
-      console.error(red("Проект или окружение не выбрано."));
+      console.error(red("Project or environment is not selected."));
       return;
     }
 
@@ -17,7 +17,7 @@ export async function runCommand(cmd: string[]) {
     ]);
 
     if (!response.success) {
-      console.error(red(`Ошибка получения секретов: ${response.message}`));
+      console.error(red(`Failed to fetch secrets: ${response.message}`));
       return;
     }
 
@@ -25,13 +25,12 @@ export async function runCommand(cmd: string[]) {
     if (Object.keys(secrets).length === 0) {
       console.log(
         green(
-          `Нет секретов в окружении '${currentConfig.currentEnvName}' проекта '${currentConfig.currentProjectName}'.`,
+          `No secrets found in environment '${currentConfig.currentEnvName}' of project '${currentConfig.currentProjectName}'.`,
         ),
       );
       return;
     }
 
-    // console.log("Executing:", cmd);
     const denoCommand = new Deno.Command(cmd[0], {
       args: cmd.slice(1),
       env: { ...Deno.env.toObject(), ...secrets },
@@ -41,19 +40,17 @@ export async function runCommand(cmd: string[]) {
 
     const { code, stdout, stderr } = await denoCommand.output();
     if (code === 0) {
-      // console.log(green("Команда успешно выполнена."));
       console.log(new TextDecoder().decode(stdout));
     } else {
-      // console.error(red("Команда завершилась с ошибкой:"));
       console.error(new TextDecoder().decode(stderr));
     }
   } catch (error) {
-    console.error(red(`Ошибка: ${(error as Error).message}`));
+    console.error(red(`Error: ${(error as Error).message}`));
   }
 }
 
 const runCmd = new Command()
-  .description("Выполнить команду с секретами как переменными окружения.")
+  .description("Execute a command with secrets as environment variables.")
   .arguments("<cmd:string>")
   .action(async (_options: any, cmd: string) => {
     if (cmd.length === 0) {

@@ -1,5 +1,3 @@
-// source/tools/vault/commands/project_commands.ts
-
 import {
   createClient,
   getCurrentConfig,
@@ -14,21 +12,21 @@ export async function displayCurrentProjectInfo() {
   const { currentConfig } = await getCurrentConfig();
 
   if (!currentConfig || !currentConfig.currentProjectName) {
-    console.log(red("Текущий проект не выбран."));
+    console.log(red("No project is currently selected."));
     return;
   }
 
-  console.log(green(`Текущий проект: ${currentConfig.currentProjectName}`));
+  console.log(green(`Current project: ${currentConfig.currentProjectName}`));
   if (currentConfig.currentEnvName) {
-    console.log(green(`Текущее окружение: ${currentConfig.currentEnvName}`));
+    console.log(green(`Current environment: ${currentConfig.currentEnvName}`));
   } else {
-    console.log(red("Окружение не выбрано."));
+    console.log(red("No environment is selected."));
   }
 }
 
 export function createProjectCommand() {
   return new Command()
-    .description("Создать новый проект.")
+    .description("Create a new project.")
     .arguments("<projectName:string>")
     .action(async (_options: any, projectName: string) => {
       try {
@@ -36,7 +34,7 @@ export function createProjectCommand() {
         const response = await client.call("createProject", [projectName]);
 
         if (!response.success) {
-          throw new Error(`Не удалось создать проект: ${response.message}`);
+          throw new Error(`Failed to create project: ${response.message}`);
         }
 
         await setCurrentConfigKV({
@@ -46,10 +44,10 @@ export function createProjectCommand() {
           currentEnvUUID: response.project?.environments[0]?.uuid || null,
         });
 
-        console.log(green(`Проект '${projectName}' успешно создан.`));
+        console.log(green(`Project '${projectName}' successfully created.`));
         Deno.exit();
       } catch (error) {
-        console.error(red(`Ошибка: ${(error as Error).message}`));
+        console.error(red(`Error: ${(error as Error).message}`));
         Deno.exit();
       }
     });
@@ -57,17 +55,17 @@ export function createProjectCommand() {
 
 export function deleteProjectCommand() {
   return new Command()
-    .description("Удалить проект.")
+    .description("Delete a project.")
     .option(
       "--project-name <projectName:string>",
-      "Название проекта для удаления.",
+      "The name of the project to delete.",
     )
     .action(async (options) => {
       const projects = await getFullConfigKV();
       const { currentConfig } = await getCurrentConfig();
 
       if (projects === null || !projects.length) {
-        console.log(red("Проекты отсутствуют."));
+        console.log(red("No projects available."));
         Deno.exit();
       }
 
@@ -75,19 +73,21 @@ export function deleteProjectCommand() {
       if (options.projectName) {
         const project = projects.find((p) => p.name === options.projectName);
         if (!project) {
-          console.log(red(`Проект с именем ${options.projectName} не найден.`));
+          console.log(
+            red(`Project with name ${options.projectName} not found.`),
+          );
           Deno.exit();
         }
         projectUUID = project.uuid;
       } else {
         const projectOptions = projects.map((p) => ({
           name: p.uuid === currentConfig?.currentProjectUUID
-            ? `${p.name} (Текущий)`
+            ? `${p.name} (Current)`
             : p.name,
           value: p.uuid,
         }));
         projectUUID = (await Select.prompt({
-          message: "Выберите проект для удаления:",
+          message: "Select the project to delete:",
           options: projectOptions,
         })) as TUUID;
       }
@@ -96,12 +96,14 @@ export function deleteProjectCommand() {
       const response = await client.call("deleteProject", [projectUUID]);
 
       if (!response.success) {
-        console.error(red(`Не удалось удалить проект: ${response.message}`));
+        console.error(red(`Failed to delete project: ${response.message}`));
         Deno.exit();
       }
 
       if (currentConfig?.currentProjectUUID === projectUUID) {
-        console.log(red("Удален текущий проект, сброс текущей конфигурации."));
+        console.log(
+          red("The current project was deleted. Resetting configuration."),
+        );
         await setCurrentConfigKV({
           currentProjectName: null,
           currentProjectUUID: null,
@@ -110,22 +112,22 @@ export function deleteProjectCommand() {
         });
       }
 
-      console.log(green(`Проект успешно удален.`));
+      console.log(green(`Project successfully deleted.`));
       Deno.exit();
     });
 }
 
 export function renameProjectCommand() {
   return new Command()
-    .description("Переименовать проект.")
-    .option("--old-name <oldName:string>", "Старое имя проекта.")
-    .option("--new-name <newName:string>", "Новое имя проекта.")
+    .description("Rename a project.")
+    .option("--old-name <oldName:string>", "The current name of the project.")
+    .option("--new-name <newName:string>", "The new name of the project.")
     .action(async (options) => {
       const projects = await getFullConfigKV();
       const { currentConfig } = await getCurrentConfig();
 
       if (projects === null || !projects.length) {
-        console.log(red("Проекты отсутствуют."));
+        console.log(red("No projects available."));
         Deno.exit();
       }
 
@@ -135,7 +137,7 @@ export function renameProjectCommand() {
       if (options.oldName && options.newName) {
         const project = projects.find((p) => p.name === options.oldName);
         if (!project) {
-          console.log(red(`Проект с именем ${options.oldName} не найден.`));
+          console.log(red(`Project with name ${options.oldName} not found.`));
           Deno.exit();
         }
         projectUUID = project.uuid;
@@ -143,17 +145,17 @@ export function renameProjectCommand() {
       } else {
         const projectOptions = projects.map((p) => ({
           name: p.uuid === currentConfig?.currentProjectUUID
-            ? `${p.name} (Текущий)`
+            ? `${p.name} (Current)`
             : p.name,
           value: p.uuid,
         }));
 
         projectUUID = (await Select.prompt({
-          message: "Выберите проект для переименования:",
+          message: "Select the project to rename:",
           options: projectOptions,
         })) as TUUID;
 
-        newProjectName = await Input.prompt("Введите новое имя проекта:");
+        newProjectName = await Input.prompt("Enter the new project name:");
       }
 
       const client = await createClient();
@@ -164,7 +166,7 @@ export function renameProjectCommand() {
 
       if (!response.success) {
         console.error(
-          red(`Не удалось переименовать проект: ${response.message}`),
+          red(`Failed to rename project: ${response.message}`),
         );
         Deno.exit();
       }
@@ -175,10 +177,12 @@ export function renameProjectCommand() {
           currentProjectName: newProjectName,
         });
         console.log(
-          green("Текущий проект переименован и обновлен в конфигурации."),
+          green(
+            "The current project was renamed and updated in the configuration.",
+          ),
         );
       } else {
-        console.log(green(`Проект переименован в '${newProjectName}'.`));
+        console.log(green(`Project renamed to '${newProjectName}'.`));
       }
       Deno.exit();
     });
@@ -186,14 +190,17 @@ export function renameProjectCommand() {
 
 export function selectProjectCommand() {
   return new Command()
-    .description("Выбрать проект.")
-    .option("--project-name <projectName:string>", "Имя проекта для выбора.")
+    .description("Select a project.")
+    .option(
+      "--project-name <projectName:string>",
+      "The name of the project to select.",
+    )
     .action(async (options) => {
       const projects = await getFullConfigKV();
       const { currentConfig } = await getCurrentConfig();
 
       if (projects === null || !projects.length) {
-        console.log(red("Проекты отсутствуют."));
+        console.log(red("No projects available."));
         Deno.exit();
       }
 
@@ -202,20 +209,22 @@ export function selectProjectCommand() {
       if (options.projectName) {
         const project = projects.find((p) => p.name === options.projectName);
         if (!project) {
-          console.log(red(`Проект с именем ${options.projectName} не найден.`));
+          console.log(
+            red(`Project with name ${options.projectName} not found.`),
+          );
           Deno.exit();
         }
         selectedProjectUUID = project.uuid;
       } else {
         const projectOptions = projects.map((p) => ({
           name: p.uuid === currentConfig?.currentProjectUUID
-            ? `${p.name} (Текущий)`
+            ? `${p.name} (Current)`
             : p.name,
           value: p.uuid,
         }));
 
         selectedProjectUUID = (await Select.prompt({
-          message: "Выберите проект:",
+          message: "Select a project:",
           options: projectOptions,
         })) as TUUID;
       }
@@ -230,9 +239,9 @@ export function selectProjectCommand() {
           currentEnvName: selectedProject.environments[0]?.name || null,
           currentEnvUUID: selectedProject.environments[0]?.uuid || null,
         });
-        console.log(green(`Выбран проект: ${selectedProject.name}`));
+        console.log(green(`Project selected: ${selectedProject.name}`));
       } else {
-        console.error(red("Проект не найден."));
+        console.error(red("Project not found."));
       }
       Deno.exit();
     });

@@ -12,9 +12,9 @@ export async function createClient(): Promise<ApiflyClient<GuardenDefinition>> {
   const session = await getSession();
 
   if (!session) {
-    throw new Error("No SESSION! Authorize first");
+    throw new Error("No SESSION! Please authorize first.");
   }
-  if (!session.id) throw new Error("No SESSION ID! Authorize first");
+  if (!session.id) throw new Error("No SESSION ID! Please authorize first.");
 
   return new apifly.client<GuardenDefinition>({
     baseURL: `${SERVICE_URL}/tool/vault`,
@@ -42,7 +42,7 @@ export async function getCurrentConfigKV(): Promise<VaultConfig | null> {
     ]);
     return configData.value || null;
   } catch (error) {
-    console.error("Ошибка при получении текущей конфигурации:", error);
+    console.error("Error while fetching the current configuration:", error);
     return null;
   }
 }
@@ -56,7 +56,7 @@ export async function getFullConfigKV(): Promise<ProjectData[] | null> {
     ]);
     return fullConfigData.value;
   } catch (error) {
-    console.error("Ошибка при получении полного конфига:", error);
+    console.error("Error while fetching the full configuration:", error);
     return null;
   }
 }
@@ -64,9 +64,9 @@ export async function getFullConfigKV(): Promise<ProjectData[] | null> {
 export async function setCurrentConfigKV(config: VaultConfig): Promise<void> {
   try {
     await kv.set(["service", "vault", "curConfig"], config);
-    console.log(green("Текущая конфигурация успешно обновлена."));
+    console.log(green("Current configuration successfully updated."));
   } catch (error) {
-    console.error("Ошибка при обновлении текущей конфигурации:", error);
+    console.error("Error while updating the current configuration:", error);
   }
 }
 
@@ -75,9 +75,9 @@ export async function setFullConfigKV(
 ): Promise<void> {
   try {
     await kv.set(["service", "vault", "fullConfig"], fullConfig);
-    console.log(green("Полный конфиг успешно сохранен."));
+    // console.log(green("Full configuration successfully saved."));
   } catch (error) {
-    console.error("Ошибка при сохранении полного конфига:", error);
+    console.error("Error while saving the full configuration:", error);
   }
 }
 
@@ -99,20 +99,20 @@ export async function syncProjects() {
     const [response, error] = await client.get();
 
     if (error) {
-      console.error(red("Ошибка при синхронизации проектов."));
+      console.error(red("Error synchronizing projects."));
       return;
     }
 
     const newProjects = response!.state.projects as ProjectData[];
     if (!newProjects || newProjects.length === 0) {
-      console.log(red("Проекты отсутствуют."));
+      console.log(red("No projects available."));
       await setCurrentConfigKV({
         currentProjectName: null,
         currentEnvName: null,
         currentProjectUUID: null,
         currentEnvUUID: null,
       });
-      console.log(yellow("Текущая конфигурация сброшена."));
+      console.log(yellow("Current configuration reset."));
       return;
     }
 
@@ -125,11 +125,11 @@ export async function syncProjects() {
         currentProjectUUID: null,
         currentEnvUUID: null,
       });
-      console.log(yellow("Текущая конфигурация сброшена."));
+      console.log(yellow("Current configuration reset."));
 
       await setFullConfigKV(newProjects);
       console.log(
-        green("Конфигурация инициализирована, так как она отсутствовала."),
+        green("Configuration initialized as it was previously missing."),
       );
       return;
     }
@@ -144,7 +144,7 @@ export async function syncProjects() {
       if (!currentProject) {
         console.log(
           yellow(
-            `Добавлен новый проект: ${newProject.name}${
+            `New project added: ${newProject.name}${
               IS_DEVELOP ? ` (UUID: ${newProject.uuid})` : ""
             }`,
           ),
@@ -154,7 +154,7 @@ export async function syncProjects() {
         if (currentProject.name !== newProject.name) {
           console.log(
             yellow(
-              `Изменение в проекте ${currentProject.name} -> ${newProject.name}${
+              `Project renamed: ${currentProject.name} -> ${newProject.name}${
                 IS_DEVELOP ? ` (UUID: ${newProject.uuid})` : ""
               }`,
             ),
@@ -170,9 +170,9 @@ export async function syncProjects() {
           if (!currentEnv) {
             console.log(
               yellow(
-                `Добавлено новое окружение: ${newEnv.name}${
+                `New environment added: ${newEnv.name}${
                   IS_DEVELOP ? ` (UUID: ${newEnv.uuid})` : ""
-                } для проекта ${newProject.name}`,
+                } to project ${newProject.name}`,
               ),
             );
             changesDetected = true;
@@ -180,9 +180,9 @@ export async function syncProjects() {
             if (currentEnv.name !== newEnv.name) {
               console.log(
                 yellow(
-                  `Изменение в окружении ${currentEnv.name} -> ${newEnv.name}${
+                  `Environment renamed: ${currentEnv.name} -> ${newEnv.name}${
                     IS_DEVELOP ? ` (UUID: ${newEnv.uuid})` : ""
-                  } для проекта ${newProject.name}`,
+                  } in project ${newProject.name}`,
                 ),
               );
               changesDetected = true;
@@ -196,16 +196,16 @@ export async function syncProjects() {
               if (!currentSecret) {
                 console.log(
                   yellow(
-                    `Добавлен новый секрет: ${newSecret.key}${
+                    `New secret added: ${newSecret.key}${
                       IS_DEVELOP ? ` (UUID: ${newSecret.uuid})` : ""
-                    } в окружение ${newEnv.name} проекта ${newProject.name}`,
+                    } in environment ${newEnv.name} of project ${newProject.name}`,
                   ),
                 );
                 changesDetected = true;
               } else if (currentSecret.value !== newSecret.value) {
                 console.log(
                   yellow(
-                    `Изменение в секрете ${currentSecret.key} (старое значение: ${currentSecret.value}, новое значение: ${newSecret.value}) в окружении ${newEnv.name} проекта ${newProject.name}`,
+                    `Secret updated: ${currentSecret.key} (old: ${currentSecret.value}, new: ${newSecret.value}) in environment ${newEnv.name} of project ${newProject.name}`,
                   ),
                 );
                 changesDetected = true;
@@ -219,9 +219,9 @@ export async function syncProjects() {
               if (!newSecret) {
                 console.log(
                   yellow(
-                    `Удален секрет: ${currentSecret.key}${
+                    `Secret removed: ${currentSecret.key}${
                       IS_DEVELOP ? ` (UUID: ${currentSecret.uuid})` : ""
-                    } из окружения ${currentEnv.name} проекта ${currentProject.name}`,
+                    } from environment ${currentEnv.name} of project ${currentProject.name}`,
                   ),
                 );
                 changesDetected = true;
@@ -237,9 +237,9 @@ export async function syncProjects() {
           if (!newEnv) {
             console.log(
               yellow(
-                `Удалено окружение: ${currentEnv.name}${
+                `Environment removed: ${currentEnv.name}${
                   IS_DEVELOP ? ` (UUID: ${currentEnv.uuid})` : ""
-                } из проекта ${currentProject.name}`,
+                } from project ${currentProject.name}`,
               ),
             );
             changesDetected = true;
@@ -255,7 +255,7 @@ export async function syncProjects() {
       if (!newProject) {
         console.log(
           yellow(
-            `Удален проект: ${currentProject.name}${
+            `Project removed: ${currentProject.name}${
               IS_DEVELOP ? ` (UUID: ${currentProject.uuid})` : ""
             }`,
           ),
@@ -266,10 +266,11 @@ export async function syncProjects() {
 
     if (changesDetected) {
       await setFullConfigKV(newProjects);
-      console.log(green("Конфигурация обновлена."));
+      console.log(green("Configuration updated."));
     }
   } catch (error) {
-    console.error(red("Ошибка синхронизации проектов:"), error.message);
+    //@ts-ignore
+    console.error(red("Error synchronizing projects:"), error.message);
     Deno.exit();
   }
 }

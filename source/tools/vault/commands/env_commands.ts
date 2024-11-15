@@ -16,31 +16,33 @@ export async function displayCurrentEnvInfo() {
   const { currentConfig } = await getCurrentConfig();
 
   if (!currentConfig || !currentConfig.currentProjectName) {
-    console.log(red("Текущий проект не выбран."));
+    console.log(red("The current project is not selected."));
     return;
   }
 
   if (!currentConfig.currentEnvName) {
-    console.log(red("Текущее окружение не выбрано для проекта."));
+    console.log(
+      red("The current environment is not selected for the project."),
+    );
     return;
   }
 
   console.log(
     green(
-      `Текущий проект: ${currentConfig.currentProjectName}, Текущее окружение: ${currentConfig.currentEnvName}`,
+      `Current project: ${currentConfig.currentProjectName}, Current environment: ${currentConfig.currentEnvName}`,
     ),
   );
 }
 
 export function createEnvCommand() {
   return new Command()
-    .description("Создать новое окружение.")
+    .description("Create a new environment.")
     .arguments("<envName:string>")
     .action(async (_options: any, envName: string) => {
       try {
         const { currentConfig } = await getCurrentConfig();
         if (!currentConfig || !currentConfig.currentProjectUUID) {
-          console.log(red("Текущий проект не выбран."));
+          console.log(red("The current project is not selected."));
           Deno.exit();
         }
 
@@ -51,13 +53,13 @@ export function createEnvCommand() {
         ]);
 
         if (!response.success) {
-          throw new Error(`Не удалось создать окружение: ${response.message}`);
+          throw new Error(`Failed to create environment: ${response.message}`);
         }
 
-        console.log(green(`Окружение '${envName}' успешно создано.`));
+        console.log(green(`Environment '${envName}' created successfully.`));
         Deno.exit();
       } catch (error) {
-        console.error(red(`Ошибка: ${(error as Error).message}`));
+        console.error(red(`Error: ${(error as Error).message}`));
         Deno.exit();
       }
     });
@@ -65,13 +67,13 @@ export function createEnvCommand() {
 
 export function deleteEnvCommand() {
   return new Command()
-    .description("Удалить окружение.")
-    .option("--env-name <envName:string>", "Имя окружения для удаления.")
+    .description("Delete an environment.")
+    .option("--env-name <envName:string>", "Name of the environment to delete.")
     .action(async (options) => {
       const { currentConfig } = await getCurrentConfig();
 
       if (!currentConfig || !currentConfig.currentProjectUUID) {
-        console.log(red("Текущий проект не выбран."));
+        console.log(red("The current project is not selected."));
         Deno.exit();
       }
 
@@ -84,7 +86,7 @@ export function deleteEnvCommand() {
         !currentProject || !currentProject.environments ||
         !currentProject.environments.length
       ) {
-        console.log(red("Окружения отсутствуют для текущего проекта."));
+        console.log(red("No environments available for the current project."));
         Deno.exit();
       }
 
@@ -94,16 +96,18 @@ export function deleteEnvCommand() {
           env.name === options.envName
         );
         if (!environment) {
-          console.log(red(`Окружение с именем ${options.envName} не найдено.`));
+          console.log(
+            red(`Environment with the name ${options.envName} not found.`),
+          );
           Deno.exit();
         }
         envUUID = environment.uuid;
       } else {
         envUUID = (await Select.prompt({
-          message: "Выберите окружение для удаления:",
+          message: "Select the environment to delete:",
           options: currentProject.environments.map((env) => ({
             name: env.uuid === currentConfig.currentEnvUUID
-              ? `${env.name} (Текущее)`
+              ? `${env.name} (Current)`
               : env.name,
             value: env.uuid,
           })),
@@ -114,7 +118,7 @@ export function deleteEnvCommand() {
       const response = await client.call("deleteEnvironment", [envUUID]);
 
       if (!response.success) {
-        console.error(red(`Не удалось удалить окружение: ${response.message}`));
+        console.error(red(`Failed to delete environment: ${response.message}`));
         Deno.exit();
       }
 
@@ -125,25 +129,25 @@ export function deleteEnvCommand() {
           currentEnvUUID: null,
         });
         console.log(
-          yellow("Текущее окружение сброшено, так как оно было удалено."),
+          yellow("The current environment was reset as it was deleted."),
         );
       }
 
-      console.log(green("Окружение успешно удалено."));
+      console.log(green("Environment deleted successfully."));
       Deno.exit();
     });
 }
 
 export function renameEnvCommand() {
   return new Command()
-    .description("Переименовать окружение.")
-    .option("--old-name <oldName:string>", "Текущее имя окружения.")
-    .option("--new-name <newName:string>", "Новое имя окружения.")
+    .description("Rename an environment.")
+    .option("--old-name <oldName:string>", "Current name of the environment.")
+    .option("--new-name <newName:string>", "New name of the environment.")
     .action(async (options) => {
       const { currentConfig } = await getCurrentConfig();
 
       if (!currentConfig || !currentConfig.currentProjectUUID) {
-        console.log(red("Текущий проект не выбран."));
+        console.log(red("The current project is not selected."));
         Deno.exit();
       }
 
@@ -156,7 +160,7 @@ export function renameEnvCommand() {
         !currentProject || !currentProject.environments ||
         !currentProject.environments.length
       ) {
-        console.log(red("Окружения отсутствуют для текущего проекта."));
+        console.log(red("No environments available for the current project."));
         Deno.exit();
       }
 
@@ -166,21 +170,23 @@ export function renameEnvCommand() {
           env.name === options.oldName
         );
         if (!environment) {
-          console.log(red(`Окружение с именем ${options.oldName} не найдено.`));
+          console.log(
+            red(`Environment with the name ${options.oldName} not found.`),
+          );
           Deno.exit();
         }
         envUUID = environment.uuid;
       } else {
         envUUID = (await Select.prompt({
-          message: "Выберите окружение для переименования:",
+          message: "Select the environment to rename:",
           options: currentProject.environments.map((env) => ({
             name: env.uuid === currentConfig.currentEnvUUID
-              ? `${env.name} (Текущее)`
+              ? `${env.name} (Current)`
               : env.name,
             value: env.uuid,
           })),
         })) as TUUID;
-        options.newName = await Input.prompt("Введите новое имя окружения:");
+        options.newName = await Input.prompt("Enter the new environment name:");
       }
 
       const client = await createClient();
@@ -191,7 +197,7 @@ export function renameEnvCommand() {
 
       if (!response.success) {
         console.error(
-          red(`Не удалось переименовать окружение: ${response.message}`),
+          red(`Failed to rename environment: ${response.message}`),
         );
         Deno.exit();
       }
@@ -202,10 +208,12 @@ export function renameEnvCommand() {
           currentEnvName: options.newName,
         });
         console.log(
-          green("Текущее окружение переименовано и обновлено в конфигурации."),
+          green(
+            "The current environment was renamed and updated in the configuration.",
+          ),
         );
       } else {
-        console.log(green(`Окружение переименовано в '${options.newName}'.`));
+        console.log(green(`Environment renamed to '${options.newName}'.`));
       }
       Deno.exit();
     });
@@ -213,13 +221,13 @@ export function renameEnvCommand() {
 
 export function selectEnvCommand() {
   return new Command()
-    .description("Выбрать окружение.")
-    .option("--env-name <envName:string>", "Имя окружения для выбора.")
+    .description("Select an environment.")
+    .option("--env-name <envName:string>", "Name of the environment to select.")
     .action(async (options) => {
       const { currentConfig } = await getCurrentConfig();
 
       if (!currentConfig || !currentConfig.currentProjectUUID) {
-        console.log(red("Текущий проект не выбран."));
+        console.log(red("The current project is not selected."));
         Deno.exit();
       }
 
@@ -232,7 +240,7 @@ export function selectEnvCommand() {
         !currentProject || !currentProject.environments ||
         !currentProject.environments.length
       ) {
-        console.log(red("Окружения отсутствуют для текущего проекта."));
+        console.log(red("No environments available for the current project."));
         Deno.exit();
       }
 
@@ -243,20 +251,22 @@ export function selectEnvCommand() {
           env.name === options.envName
         );
         if (!environment) {
-          console.log(red(`Окружение с именем ${options.envName} не найдено.`));
+          console.log(
+            red(`Environment with the name ${options.envName} not found.`),
+          );
           Deno.exit();
         }
         selectedEnvUUID = environment.uuid;
       } else {
         const envOptions = currentProject.environments.map((env) => ({
           name: env.uuid === currentConfig.currentEnvUUID
-            ? `${env.name} (Текущее)`
+            ? `${env.name} (Current)`
             : env.name,
           value: env.uuid,
         }));
 
         selectedEnvUUID = (await Select.prompt({
-          message: "Выберите окружение:",
+          message: "Select an environment:",
           options: envOptions,
         })) as TUUID;
       }
@@ -270,9 +280,9 @@ export function selectEnvCommand() {
           currentEnvName: selectedEnv.name,
           currentEnvUUID: selectedEnv.uuid,
         });
-        console.log(green(`Окружение '${selectedEnv.name}' выбрано.`));
+        console.log(green(`Environment '${selectedEnv.name}' selected.`));
       } else {
-        console.error(red("Окружение не найдено."));
+        console.error(red("Environment not found."));
       }
       Deno.exit();
     });
@@ -280,20 +290,20 @@ export function selectEnvCommand() {
 
 export function loadEnvFileCommand() {
   return new Command()
-    .description("Загрузить переменные окружения из файла.")
+    .description("Load environment variables from a file.")
     .option(
       "--file <filePath:string>",
-      "Путь к файлу переменных окружения (по умолчанию .env).",
+      "Path to the environment variables file (default is .env).",
     )
     .option(
       "--env-name <envName:string>",
-      "Имя окружения для загрузки переменных.",
+      "Name of the environment to load variables into.",
     )
     .action(async (options) => {
       const { currentConfig } = await getCurrentConfig();
 
       if (!currentConfig?.currentProjectUUID) {
-        console.error(red("Текущий проект не выбран."));
+        console.error(red("The current project is not selected."));
         return;
       }
 
@@ -303,7 +313,9 @@ export function loadEnvFileCommand() {
       );
 
       if (!currentProject || !currentProject.environments?.length) {
-        console.error(red("Окружения для текущего проекта отсутствуют."));
+        console.error(
+          red("No environments available for the current project."),
+        );
         return;
       }
 
@@ -314,13 +326,15 @@ export function loadEnvFileCommand() {
           env.name === options.envName
         );
         if (!environment) {
-          console.log(red(`Окружение с именем ${options.envName} не найдено.`));
+          console.log(
+            red(`Environment with the name ${options.envName} not found.`),
+          );
           Deno.exit();
         }
         selectedEnvUUID = environment.uuid;
       } else {
         selectedEnvUUID = (await Select.prompt({
-          message: "Выберите окружение для загрузки переменных:",
+          message: "Select the environment to load variables into:",
           options: currentProject.environments.map((env) => ({
             name: env.name,
             value: env.uuid,
@@ -330,7 +344,7 @@ export function loadEnvFileCommand() {
 
       const envFilePath = options.file ||
         await Input.prompt(
-          "Введите путь к файлу переменных окружения (по умолчанию .env):",
+          "Enter the path to the environment variables file (default is .env):",
         ) || ".env";
       await loadEnvFileAndAddSecrets(envFilePath, selectedEnvUUID);
       Deno.exit();
@@ -343,7 +357,9 @@ export async function loadEnvFileAndAddSecrets(
 ) {
   try {
     const envVars = await loadEnv({ envPath: filePath, export: false });
-    console.log(green(`Переменные из файла ${filePath} успешно загружены.`));
+    console.log(
+      green(`Variables from the file ${filePath} loaded successfully.`),
+    );
 
     const client = await createClient();
     const addSecretPromises = Object.entries(envVars).map(([key, value]) =>
@@ -354,20 +370,20 @@ export async function loadEnvFileAndAddSecrets(
     results.forEach((result, idx) => {
       const key = Object.keys(envVars)[idx];
       if (result.status === "fulfilled" && result.value.success) {
-        console.log(green(`Секрет '${key}' успешно добавлен.`));
+        console.log(green(`Secret '${key}' added successfully.`));
       } else {
         console.error(
           red(
-            `Ошибка при добавлении секрета '${key}': ${
+            `Error adding secret '${key}': ${
               //@ts-ignore
-              result.message || "неизвестная ошибка"}`,
+              result.message || "unknown error"}`,
           ),
         );
       }
     });
   } catch (error) {
     console.error(
-      red(`Ошибка при загрузке файла ${filePath}: ${(error as Error).message}`),
+      red(`Error loading file ${filePath}: ${(error as Error).message}`),
     );
   }
 }

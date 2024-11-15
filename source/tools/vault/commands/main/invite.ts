@@ -14,15 +14,17 @@ async function inviteUserToProject(projectUUID: TUUID, userEmail: string) {
     const response = await client.call("inviteUser", [projectUUID, userEmail]);
 
     if (!response.success) {
-      console.error(`Ошибка приглашения пользователя: ${response.message}`);
+      console.error(`Failed to invite user: ${response.message}`);
       return;
     }
 
     console.log(
-      green(`Пользователь с email '${userEmail}' успешно приглашен в проект.`),
+      green(
+        `User with email '${userEmail}' was successfully invited to the project.`,
+      ),
     );
   } catch (error) {
-    console.error(red(`Ошибка: ${(error as Error).message}`));
+    console.error(red(`Error: ${(error as Error).message}`));
   }
 }
 
@@ -31,13 +33,13 @@ async function findProjectUUIDByName(
 ): Promise<TUUID | null> {
   const projects = await getFullConfigKV();
   if (!projects) {
-    console.error(red("Проекты отсутствуют в локальном конфиге."));
+    console.error(red("Projects are missing in the local config."));
     return null;
   }
 
   const project = projects.find((p) => p.name === projectName);
   if (!project) {
-    console.error(red(`Проект с именем '${projectName}' не найден.`));
+    console.error(red(`Project with name '${projectName}' not found.`));
     return null;
   }
   return project.uuid;
@@ -49,12 +51,12 @@ const inviteMenu = async () => {
 
   const projects = await getFullConfigKV();
   if (projects === null) {
-    console.log(red("Проекты отсутствуют."));
+    console.log(red("No projects available."));
     Deno.exit();
   }
 
   const projectUUID = await Select.prompt({
-    message: "Выберите проект для приглашения пользователя:",
+    message: "Select a project to invite the user to:",
     options: projects.map((project) => ({
       name: project.name,
       value: project.uuid,
@@ -62,21 +64,21 @@ const inviteMenu = async () => {
   });
 
   const userEmail = await Input.prompt(
-    "Введите email пользователя для приглашения:",
+    "Enter the email of the user to invite:",
   );
 
   await inviteUserToProject(projectUUID as TUUID, userEmail);
 };
 
 const inviteCommand = new Command()
-  .description("Пригласить пользователя в проект.")
-  .option("--project-name <projectName:string>", "Название проекта.")
-  .option("--email <email:string>", "Email пользователя для приглашения.")
+  .description("Invite a user to a project.")
+  .option("--project-name <projectName:string>", "Project name.")
+  .option("--email <email:string>", "User's email to invite.")
   .example(
     "invite --project-name=MyProject --email=user@example.com",
-    "Пригласить пользователя с email 'user@example.com' в проект 'MyProject'.",
+    "Invite user with email 'user@example.com' to project 'MyProject'.",
   )
-  .example("invite", "Открыть меню для приглашения пользователей")
+  .example("invite", "Open the menu to invite users")
   .action(async (options) => {
     await syncProjects();
     await displayCurrentProjectInfo();
@@ -84,7 +86,7 @@ const inviteCommand = new Command()
     if (options.projectName && options.email) {
       const projectUUID = await findProjectUUIDByName(options.projectName);
       if (!projectUUID) {
-        console.error(red(`Проект '${options.projectName}' не найден.`));
+        console.error(red(`Project '${options.projectName}' not found.`));
         Deno.exit();
       }
 
