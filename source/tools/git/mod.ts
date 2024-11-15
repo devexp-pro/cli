@@ -6,6 +6,7 @@ import profile from "./commands/profile.ts";
 import feature from "./commands/feature.ts";
 import fix from "./commands/fix.ts";
 import release from "./commands/release.ts";
+import { addMAN } from "$/helpers";
 
 const action = async () => {
   tool.showHelp();
@@ -31,6 +32,8 @@ tool
   .hidden()
   .command("release", release.command)
   .hidden();
+
+addMAN(tool);
 
 export default {
   tool,

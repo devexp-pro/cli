@@ -6,6 +6,7 @@ import envCommand from "./commands/main/env.ts";
 import secretCommand from "./commands/main/secret.ts";
 import runCommand from "./commands/run_command.ts"; // Импорт команды run
 import inviteCommand from "./commands/main/invite.ts";
+import { addMAN } from "$/helpers";
 
 const tool = new Command();
 
@@ -20,5 +21,7 @@ tool
   .command("secret", secretCommand)
   .command("invite", inviteCommand)
   .command("run", runCommand);
+
+addMAN(tool);
 
 export default tool;
