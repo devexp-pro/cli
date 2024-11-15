@@ -61,9 +61,7 @@ const create = new Command()
 
     if (res.ok) {
       console.log(
-        `  Git profile created successfully, profile public key added to your clipboard:\n\n ${
-          publicKey
-        }`,
+        `  Git profile created successfully, profile public key added to your clipboard:\n\n ${publicKey}`,
       );
 
       await clip.clipboard.write(publicKey);
