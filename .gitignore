@@ -1,0 +1,12 @@
+.vscode
+.DS_Store
+.zed
+.helix
+dbs
+local-kv
+local-kv-shm
+local-kv-wal
+
+*.flow.ts
+test
+devexp
