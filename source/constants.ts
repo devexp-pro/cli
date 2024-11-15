@@ -1,6 +1,5 @@
 import localDenoJson from "$deno-json" with { type: "json" };
 import { fetchJSON } from "$/helpers";
-import { colors } from "@std/colors";
 import Tuner from "@artpani/tuner";
 import { BaseCfgType } from "$config/base.tuner.ts";
 
