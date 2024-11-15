@@ -52,6 +52,11 @@ export type GuardenDefinition = ApiflyDefinition<
       returns: { success: boolean; projects: ProjectData[] };
     };
 
+    inviteUser: {
+      args: [projectUUID: TUUID, userEmail: string];
+      returns: { success: boolean; message?: string };
+    };
+
     createEnvironment: {
       args: [projectUUID: TUUID, envName: string];
       returns: {
@@ -100,15 +105,6 @@ export type GuardenDefinition = ApiflyDefinition<
     deleteSecret: {
       args: [envUUID: TUUID, key: string];
       returns: { success: boolean; message?: string };
-    };
-
-    linkProjectToUser: {
-      args: [userUUID: TUUID, projectUUID: TUUID];
-      returns: { success: boolean; message?: string };
-    };
-    isProjectLinkedToUser: {
-      args: [userUUID: TUUID, projectUUID: TUUID];
-      returns: { success: boolean; isLinked: boolean };
     };
   },
   { userId: TUUID }

@@ -356,12 +356,11 @@ export async function loadEnvFileAndAddSecrets(
       if (result.status === "fulfilled" && result.value.success) {
         console.log(green(`Секрет '${key}' успешно добавлен.`));
       } else {
-        //@ts-ignore
         console.error(
           red(
             `Ошибка при добавлении секрета '${key}': ${
-              result.message || "неизвестная ошибка"
-            }`,
+              //@ts-ignore
+              result.message || "неизвестная ошибка"}`,
           ),
         );
       }
