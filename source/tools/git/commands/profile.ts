@@ -147,6 +147,7 @@ const action = async () => {
 
 const command = new Command()
   .name("profile")
+  .noGlobals()
   .description("update or create git profile")
   .action(async (_options: any, ..._args: any) => {
     command.showHelp();
