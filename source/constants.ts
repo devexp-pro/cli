@@ -45,31 +45,3 @@ export const WEBSOCKET_URL = `${
 export const SYSTEM_SHELL = Deno.env.get("SHELL") || Deno.env.get("ComSpec");
 export const HOME = Deno.env.get("HOME") || Deno.env.get("USERPROFILE");
 export const CWD = Deno.cwd();
-
-export const logo = `
-  ${colors.rgb24("██████╗ ███████╗██╗   ██╗", 0xFFA500)}${
-  colors.magenta("███████╗██╗  ██╗██████╗")
-}
-  ${colors.rgb24("██╔══██╗██╔════╝██║   ██║", 0xFFA500)}${
-  colors.magenta("██╔════╝╚██╗██╔╝██╔══██╗")
-}
-  ${colors.rgb24("██║  ██║█████╗  ██║   ██║", 0xFFA500)}${
-  colors.magenta("█████╗   ╚███╔╝ ██████╔╝")
-}
-  ${colors.rgb24("██║  ██║██╔══╝  ╚██╗ ██╔╝", 0xFFA500)}${
-  colors.magenta("██╔══╝   ██╔██╗ ██╔═══╝")
-}
-  ${colors.rgb24("██████╔╝███████╗ ╚████╔╝ ", 0xFFA500)}${
-  colors.magenta("███████╗██╔╝ ██╗██║")
-}
-  ${colors.rgb24("╚═════╝ ╚══════╝  ╚═══╝  ", 0xFFA500)}${
-  colors.magenta("╚══════╝╚═╝  ╚═╝╚═╝")
-}
-
-  https://devexp.pro`;
-
-export const introText = `
-  Version ${colors.green(VERSION)}
-  Crafted with ${colors.red("<3")} by DevExp
-  Use "dx -h" to get help on commands.
-  ${IS_DEVELOP ? colors.bgRed("\n  This is develop version!!!") : ""}`;

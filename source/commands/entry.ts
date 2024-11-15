@@ -1,12 +1,8 @@
 import { Command } from "@cliffy/command";
 
-import {
-  introText,
-  IS_DEVELOP,
-  logo,
-  REMOTE_VERSION,
-  VERSION,
-} from "$/constants";
+import { IS_DEVELOP, REMOTE_VERSION, VERSION } from "$/constants";
+
+import { colors } from "@std/colors";
 
 import toolTunnel from "$/tools/tunnel";
 import toolConfig from "$/tools/config";
@@ -21,6 +17,34 @@ import { intro } from "./intro.ts";
 import { setup } from "./setup/mod.ts";
 import { upgrade } from "./setup/upgrade.ts";
 import { cfg } from "./config.ts";
+
+export const logo = `
+  ${colors.rgb24("██████╗ ███████╗██╗   ██╗", 0xFFA500)}${
+  colors.magenta("███████╗██╗  ██╗██████╗")
+}
+  ${colors.rgb24("██╔══██╗██╔════╝██║   ██║", 0xFFA500)}${
+  colors.magenta("██╔════╝╚██╗██╔╝██╔══██╗")
+}
+  ${colors.rgb24("██║  ██║█████╗  ██║   ██║", 0xFFA500)}${
+  colors.magenta("█████╗   ╚███╔╝ ██████╔╝")
+}
+  ${colors.rgb24("██║  ██║██╔══╝  ╚██╗ ██╔╝", 0xFFA500)}${
+  colors.magenta("██╔══╝   ██╔██╗ ██╔═══╝")
+}
+  ${colors.rgb24("██████╔╝███████╗ ╚████╔╝ ", 0xFFA500)}${
+  colors.magenta("███████╗██╔╝ ██╗██║")
+}
+  ${colors.rgb24("╚═════╝ ╚══════╝  ╚═══╝  ", 0xFFA500)}${
+  colors.magenta("╚══════╝╚═╝  ╚═╝╚═╝")
+}
+
+  https://devexp.pro`;
+
+export const introText = `
+  Version ${colors.green(VERSION)}
+  Crafted with ${colors.red("<3")} by DevExp
+  Use "dx -h" to get help on commands.
+  ${IS_DEVELOP ? colors.bgRed("\n  This is develop version!!!") : ""}`;
 
 export const entry = new Command()
   .name("dx")
