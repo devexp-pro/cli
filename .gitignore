@@ -1,6 +1,7 @@
 .vscode
 .DS_Store
 .zed
+.helix
 dbs
 local-kv
 local-kv-shm
