@@ -64,6 +64,20 @@ const inlineAction = async (slug: string, repoUrl: string) => {
     "config",
     "--file",
     repoConfigPath,
+    "core.sshCommand",
+    `"ssh -i ${profile?.value?.keyPath}"`,
+  ]);
+
+  if (res.code !== 0) {
+    console.log(`\n${res.stderr}\n`);
+    Deno.exit(-1);
+  }
+
+  res = await shelly([
+    "git",
+    "config",
+    "--file",
+    repoConfigPath,
     "user.name",
     `"${profile.value.name}"`,
   ]);
