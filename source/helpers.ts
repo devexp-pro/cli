@@ -7,14 +7,14 @@ export async function fetchJSON(url: URL | string): Promise<string> {
   return await response.json();
 }
 
-export const addMAN = (command: Command, type: "tool" = "tool") => {
+export const addMAN = (command: Command, type: "tools" = "tools") => {
   const nameOfParentCommand = command.getName();
 
   const manCommand = new Command()
     .name("man")
     .description(`user manual for '${nameOfParentCommand}'`)
     .action(() => {
-      const pathToMan = `./docs/${type}/${nameOfParentCommand}/MAN.md`;
+      const pathToMan = `./source/${type}/${nameOfParentCommand}/MAN.md`;
       if (!nameOfParentCommand) Deno.exit(-1);
 
       try {
