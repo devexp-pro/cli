@@ -11,6 +11,7 @@ import { addMAN } from "$/helpers";
 const tool = new Command();
 
 tool
+  .name("vault")
   .action((_options: any, ..._args: any) => {
     tool.showHelp();
     Deno.exit();

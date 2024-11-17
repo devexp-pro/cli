@@ -35,11 +35,9 @@ interface VaultConfig {
 
 export async function getCurrentConfigKV(): Promise<VaultConfig | null> {
   try {
-    const configData = await kv.get<VaultConfig>([
-      "service",
-      "vault",
-      "curConfig",
-    ]);
+    const projectPath = Deno.cwd();
+    const configKey = ["service", "vault", "curConfig", projectPath];
+    const configData = await kv.get<VaultConfig>(configKey);
     return configData.value || null;
   } catch (error) {
     console.error("Error while fetching the current configuration:", error);
@@ -63,8 +61,14 @@ export async function getFullConfigKV(): Promise<ProjectData[] | null> {
 
 export async function setCurrentConfigKV(config: VaultConfig): Promise<void> {
   try {
-    await kv.set(["service", "vault", "curConfig"], config);
-    console.log(green("Current configuration successfully updated."));
+    const projectPath = Deno.cwd();
+    const configKey = ["service", "vault", "curConfig", projectPath];
+    await kv.set(configKey, config);
+    console.log(
+      green(
+        `The current configuration has been successfully updated for the directory: ${projectPath}`,
+      ),
+    );
   } catch (error) {
     console.error("Error while updating the current configuration:", error);
   }
@@ -75,7 +79,6 @@ export async function setFullConfigKV(
 ): Promise<void> {
   try {
     await kv.set(["service", "vault", "fullConfig"], fullConfig);
-    // console.log(green("Full configuration successfully saved."));
   } catch (error) {
     console.error("Error while saving the full configuration:", error);
   }
