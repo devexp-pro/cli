@@ -3,16 +3,33 @@ import { fetchJSON } from "$/helpers";
 import Tuner from "@artpani/tuner";
 import { BaseCfgType } from "$config/base.tuner.ts";
 
-const permissionEnv = Deno.permissions.querySync({ name: "env" }).state;
-
 export const OS_NAME = Deno.build.os;
 
-export const IS_DEVELOP = permissionEnv == "granted"
-  ? Deno.env.get("DEV") !== undefined && Deno.env.get("DEV") !== "false"
-  : false;
+export const IMU = import.meta.url;
+
+export const IS_REMOTE = IMU.includes("raw.githubusercontent.com");
+
+export const GIT_REMOTE_BRANCH = IS_REMOTE
+  ? IMU.match(/\/refs\/heads\/([a-zA-Z0-9\-_]+)/)[1]
+  : undefined;
+
+export const IS_DEVELOP = IS_REMOTE
+  ? GIT_REMOTE_BRANCH === "develop"
+  : (Deno.env.get("DEV") !== undefined &&
+    Deno.env.get("DEV") !== "false");
+
+export const GIT_BRANCH = IS_REMOTE
+  ? GIT_REMOTE_BRANCH
+  : IS_DEVELOP
+  ? "develop"
+  : "main";
+
+// export const IS_DEVELOP = permissionEnv == "granted"
+//   ? Deno.env.get("DEV") !== undefined && Deno.env.get("DEV") !== "false"
+//   : false;
 
 export const baseRepoPath =
-  `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/develop`;
+  `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/${GIT_BRANCH}`;
 
 const remoteDenoJson = await fetchJSON(
   `${baseRepoPath}/deno.json`,
@@ -21,16 +38,17 @@ const remoteDenoJson = await fetchJSON(
 export const VERSION = localDenoJson["version"];
 export const REMOTE_VERSION = remoteDenoJson["version"] || VERSION;
 
+export const REPO_PATH_BY_TAG = "";
+
+export const IMPORT_MAP_URL = `${baseRepoPath}/import-map.json`;
+
 export const config = await Tuner.use.loadConfig<BaseCfgType>({
-  absolutePathPrefix: IS_DEVELOP || Deno.env.get("DEV_PROD")
-    ? undefined
-    : baseRepoPath,
+  absolutePathPrefix: IS_REMOTE ? undefined : baseRepoPath,
   configDirPath: "./config",
   configName: IS_DEVELOP ? "dev" : "prod",
 });
 
 export const ENTRYPOINT_SOURCE_URL = `${baseRepoPath}/source/main.ts`;
-export const IMPORT_MAP_URL = `${baseRepoPath}/import-map.json`;
 
 export const SERVICE_DOMAIN = IS_DEVELOP ? "127.0.0.1:4000" : "devexp.cloud";
 
