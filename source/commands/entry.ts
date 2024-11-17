@@ -1,6 +1,13 @@
 import { Command } from "@cliffy/command";
 
-import { IS_DEVELOP, LOCAL_VERSION, REMOTE_VERSION } from "$/constants";
+import {
+  GIT_REMOTE_BRANCH,
+  GIT_REMOTE_TAG,
+  IS_DEVELOP,
+  IS_REMOTE,
+  LOCAL_VERSION,
+  REMOTE_VERSION,
+} from "$/constants";
 
 import { colors } from "@std/colors";
 
@@ -39,7 +46,11 @@ export const logo = `
 
   https://devexp.pro`;
 
-export const introText = `
+export const introText = `${
+  GIT_REMOTE_BRANCH ? `  Branch ${GIT_REMOTE_BRANCH}\n` : ""
+}${GIT_REMOTE_TAG ? `  Tag ${GIT_REMOTE_TAG}\n` : ""}${
+  !IS_REMOTE ? `  IS LOCAL VARSION\n` : ""
+}
   Version ${colors.green(LOCAL_VERSION)}
   Crafted with ${colors.red("<3")} by DevExp
   Use "dx -h" to get help on commands.

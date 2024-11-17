@@ -1,7 +1,5 @@
 import localDenoJson from "$deno-json" with { type: "json" };
-import { fetchJSON } from "$/helpers";
-
-import { loadConfig } from "$/helpers";
+import { fetchJSON, loadConfig } from "$/helpers";
 
 export const IMU = import.meta.url;
 export const IS_REMOTE = IMU.includes("raw.githubusercontent.com");
@@ -12,11 +10,10 @@ export const IS_DEVELOP = IS_REMOTE
 export const IS_REMOTE_BRANCH = IS_REMOTE && IMU.includes("heads");
 export const GIT_REMOTE_BRANCH = IS_REMOTE_BRANCH
   ? IMU.match(/\/refs\/heads\/([a-zA-Z0-9\-_]+)/)?.[1]
-  : undefined;
-
-export const GIT_REMOTE_TAG = !IS_REMOTE_BRANCH
+  : null;
+export const GIT_REMOTE_TAG = IS_REMOTE
   ? IMU.match(/\/refs\/tags\/([a-zA-Z0-9\.\-\+_]+)/)?.[1]
-  : undefined;
+  : null;
 export const BASE_REPO_PATH = IS_REMOTE_BRANCH
   ? `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/${GIT_REMOTE_BRANCH}`
   : `https://raw.githubusercontent.com/devexp-pro/cli/refs/tags/${GIT_REMOTE_TAG}`;
