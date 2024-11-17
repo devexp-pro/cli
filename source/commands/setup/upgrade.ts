@@ -1,8 +1,8 @@
 import {
   ENTRYPOINT_SOURCE_URL,
   IMPORT_MAP_URL,
+  LOCAL_VERSION,
   REMOTE_VERSION,
-  VERSION,
 } from "$/constants";
 import { shelly } from "@vseplet/shelly";
 import { Command } from "@cliffy/command";
@@ -10,7 +10,7 @@ import { Command } from "@cliffy/command";
 export const upgrade = new Command()
   .description("Upgrade the DevExp CLI")
   .action(async (_options: any, ..._args: any) => {
-    if (REMOTE_VERSION != VERSION) {
+    if (REMOTE_VERSION != LOCAL_VERSION) {
       const res = await shelly([
         "deno",
         "install",

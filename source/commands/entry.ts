@@ -1,6 +1,13 @@
 import { Command } from "@cliffy/command";
 
-import { IS_DEVELOP, REMOTE_VERSION, VERSION } from "$/constants";
+import {
+  GIT_REMOTE_BRANCH,
+  GIT_REMOTE_TAG,
+  IS_DEVELOP,
+  IS_REMOTE,
+  LOCAL_VERSION,
+  REMOTE_VERSION,
+} from "$/constants";
 
 import { colors } from "@std/colors";
 
@@ -39,8 +46,12 @@ export const logo = `
 
   https://devexp.pro`;
 
-export const introText = `
-  Version ${colors.green(VERSION)}
+export const introText = `${
+  GIT_REMOTE_BRANCH ? `  Branch ${GIT_REMOTE_BRANCH}\n` : ""
+}${GIT_REMOTE_TAG ? `  Tag ${GIT_REMOTE_TAG}\n` : ""}${
+  !IS_REMOTE ? `  IS LOCAL VARSION\n` : ""
+}
+  Version ${colors.green(LOCAL_VERSION)}
   Crafted with ${colors.red("<3")} by DevExp
   Use "dx -h" to get help on commands.
   ${IS_DEVELOP ? colors.bgRed("\n  This is develop version!!!") : ""}`;
@@ -55,7 +66,7 @@ export const entry = new Command()
     console.log(logo);
     console.log(introText);
 
-    if (REMOTE_VERSION !== VERSION && !IS_DEVELOP) {
+    if (REMOTE_VERSION !== LOCAL_VERSION && !IS_DEVELOP) {
       upgrade.showHelp();
       Deno.exit();
     }
