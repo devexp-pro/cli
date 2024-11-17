@@ -1,6 +1,6 @@
 import { Command } from "@cliffy/command";
 
-import { IS_DEVELOP, REMOTE_VERSION, VERSION } from "$/constants";
+import { IS_DEVELOP, LOCAL_VERSION, REMOTE_VERSION } from "$/constants";
 
 import { colors } from "@std/colors";
 
@@ -40,7 +40,7 @@ export const logo = `
   https://devexp.pro`;
 
 export const introText = `
-  Version ${colors.green(VERSION)}
+  Version ${colors.green(LOCAL_VERSION)}
   Crafted with ${colors.red("<3")} by DevExp
   Use "dx -h" to get help on commands.
   ${IS_DEVELOP ? colors.bgRed("\n  This is develop version!!!") : ""}`;
@@ -55,7 +55,7 @@ export const entry = new Command()
     console.log(logo);
     console.log(introText);
 
-    if (REMOTE_VERSION !== VERSION && !IS_DEVELOP) {
+    if (REMOTE_VERSION !== LOCAL_VERSION && !IS_DEVELOP) {
       upgrade.showHelp();
       Deno.exit();
     }
