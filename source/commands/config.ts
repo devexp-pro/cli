@@ -10,6 +10,7 @@ export const cfg = new Command()
     // console.log(JSON.stringify(config, null, 2));
     console.log("--------------------------------");
     console.log(JSON.stringify(constants, null, 2));
+    console.log(JSON.stringify(import.meta, null, 2));
     console.log("--------------------------------");
     Deno.exit();
   });
