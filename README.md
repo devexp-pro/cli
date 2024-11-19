@@ -4,7 +4,7 @@
 
 Production version (Not available, still in development):
 ```sh
-  curl -fsSL https://devexp.pro/install.sh | sh
+curl -fsSL https://devexp.pro/install.sh | sh
 ```
 
 Development version (For testing the latest changes, new features, and more):
