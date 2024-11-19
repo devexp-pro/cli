@@ -19,9 +19,10 @@ layout {
         pane command="lazygit"
     }
 
-    tab name="edit" split_direction="vertical" {
-        pane command="hx"
-        pane command="hx"
+    tab name="edit" {
+        pane command="hx" {
+            args "./"
+        }
     }
 
     tab name="term" split_direction="vertical"  {
