@@ -35,7 +35,7 @@ export const SERVICE_DOMAIN = IS_REMOTE
   : "devexp.cloud";
 
 export const SERVICE_URL = IS_REMOTE
-  ? "https://"
+  ? "https://" + SERVICE_DOMAIN
   : (IS_DEVELOP ? "http://" : "https://") +
     SERVICE_DOMAIN;
 
