@@ -65,7 +65,7 @@ const inlineAction = async (slug: string, repoUrl: string) => {
     "--file",
     repoConfigPath,
     "core.sshCommand",
-    `"ssh -i ${profile?.value?.keyPath}"`,
+    `ssh -i ${profile?.value?.keyPath}`,
   ]);
 
   if (res.code !== 0) {
@@ -79,7 +79,7 @@ const inlineAction = async (slug: string, repoUrl: string) => {
     "--file",
     repoConfigPath,
     "user.name",
-    `"${profile.value.name}"`,
+    `${profile.value.name}`,
   ]);
 
   if (res.code !== 0) {
@@ -93,7 +93,7 @@ const inlineAction = async (slug: string, repoUrl: string) => {
     "--file",
     repoConfigPath,
     "user.email",
-    `"${profile.value.email}"`,
+    `${profile.value.email}`,
   ]);
 
   if (res.code !== 0) {
