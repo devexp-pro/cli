@@ -8,7 +8,7 @@ export const logout = new Command()
 
     if (!session) {
       console.log("No active session found. You are not logged in.");
-      return;
+      Deno.exit(-1);
     }
 
     await kv.delete(["auth", "session"]);
