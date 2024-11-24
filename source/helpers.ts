@@ -4,6 +4,7 @@ import { BASE_REPO_PATH, IS_DEVELOP, IS_REMOTE } from "$/constants";
 import Tuner from "@artpani/tuner";
 import { BaseCfgType } from "$config/base.tuner.ts";
 import { kv } from "$/kv";
+import { resolve } from "@std/path";
 
 export async function fetchJSON(url: URL | string): Promise<string> {
   const response = await fetch(url);
@@ -40,16 +41,27 @@ export const addMAN = (command: Command, type: "tools" = "tools") => {
   const manCommand = new Command()
     .name("man")
     .description(`user manual for '${nameOfParentCommand}'`)
-    .action(() => {
-      const pathToMan = `./source/${type}/${nameOfParentCommand}/MAN.md`;
+    .action(async () => {
       if (!nameOfParentCommand) Deno.exit(-1);
 
       try {
-        Deno.lstatSync(pathToMan);
-        console.clear();
-        console.log(renderMarkdown(
-          Deno.readTextFileSync(pathToMan),
-        ));
+        if (!IS_REMOTE) {
+          const pathToMan = `./source/${type}/${nameOfParentCommand}/MAN.md`;
+          Deno.lstatSync(pathToMan);
+          console.clear();
+          console.log(renderMarkdown(
+            Deno.readTextFileSync(pathToMan),
+          ));
+        } else {
+          const pathToMan = BASE_REPO_PATH +
+            `/source/${type}/${nameOfParentCommand}/MAN.md`;
+
+          console.clear();
+          console.log(renderMarkdown(
+            await (await fetch(pathToMan)).text(),
+          ));
+        }
+
         Deno.exit(0);
       } catch (e) {
         console.log(` user manual for '${nameOfParentCommand}' not found =(`);
