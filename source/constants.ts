@@ -1,5 +1,5 @@
 import localDenoJson from "$deno-json" with { type: "json" };
-import { fetchJSON, loadConfig } from "$/helpers";
+import { fetchJSON } from "$/helpers";
 
 export const IMU = import.meta.url;
 export const IS_REMOTE = IMU.includes("raw.githubusercontent.com");
@@ -27,7 +27,6 @@ export const LOCAL_VERSION = localDenoJson["version"];
 export const REMOTE_VERSION = REMOTE_DENO_JSON["version"] || LOCAL_VERSION;
 export const IMPORT_MAP_URL = `${BASE_REPO_PATH}/import-map.json`;
 
-export const config = await loadConfig();
 export const SERVICE_DOMAIN = IS_REMOTE
   ? "devexp.cloud"
   : IS_DEVELOP

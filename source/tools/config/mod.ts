@@ -3,7 +3,7 @@ import { Command } from "@cliffy/command";
 import { ensureDir } from "@std/fs";
 import { Input } from "@cliffy/prompt/input";
 import { Confirm } from "@cliffy/prompt";
-import { config } from "$/constants";
+import { config } from "$/providers/config.ts";
 
 async function getPackageVersion(): Promise<string> {
   try {

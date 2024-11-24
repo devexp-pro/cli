@@ -4,7 +4,8 @@ import type {
   ProjectData,
   TUUID,
 } from "./GuardenDefinition.ts";
-import { getSession, kv } from "$/kv";
+import { kv } from "$/repositories/kv.ts";
+import { getSession } from "$/providers/session.ts";
 import { IS_DEVELOP, SERVICE_URL } from "$/constants";
 import { green, red, yellow } from "./deps.ts";
 

@@ -1,5 +1,5 @@
 import { Command } from "@cliffy/command";
-import { getSession } from "$/kv";
+import { getSession } from "$/providers/session.ts";
 import { LOCAL_VERSION } from "$/constants";
 import { colors } from "@std/colors";
 

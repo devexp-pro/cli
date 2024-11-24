@@ -1,4 +1,4 @@
-import { config } from "$/constants";
+import { config } from "$/providers/config.ts";
 import { Command } from "@cliffy/command";
 import clone from "./commands/clone.ts";
 import commit from "./commands/commit.ts";

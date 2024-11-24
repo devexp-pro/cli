@@ -1,5 +1,5 @@
 import { Command } from "@cliffy/command";
-import { kv } from "$/kv";
+import { kv } from "$/repositories/kv.ts";
 import { GitProfile } from "$/tools/git/types.ts";
 import { shelly } from "@vseplet/shelly";
 import { Select } from "@cliffy/prompt";

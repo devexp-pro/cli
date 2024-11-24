@@ -4,7 +4,7 @@ import remove from "./commands/remove.ts";
 import set from "./commands/set.ts";
 import start from "./commands/start.ts";
 import { Select } from "@cliffy/prompt";
-import { config } from "$/constants";
+import { config } from "$/providers/config.ts";
 import { addMAN } from "$/helpers";
 
 // https://www.asciiart.eu/text-to-ascii-art font Pagga

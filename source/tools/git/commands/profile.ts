@@ -2,7 +2,7 @@ import { Command } from "@cliffy/command";
 import { Checkbox, Input, prompt } from "@cliffy/prompt";
 import { shelly } from "@vseplet/shelly";
 import { HOME } from "$/constants";
-import { kv } from "$/kv";
+import { kv } from "$/repositories/kv.ts";
 import { GitProfile } from "$/tools/git/types.ts";
 import { Table } from "@cliffy/table";
 import clip from "$/tools/clip/api.ts";

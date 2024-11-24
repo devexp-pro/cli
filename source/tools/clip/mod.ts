@@ -1,7 +1,8 @@
 import { Command } from "@cliffy/command";
-import { config, SERVICE_URL } from "$/constants";
+import { SERVICE_URL } from "$/constants";
 import fetchify from "@vseplet/fetchify";
-import { getSession } from "$/kv";
+import { getSession } from "$/providers/session.ts";
+import { config } from "$/providers/config.ts";
 import api from "./api.ts";
 import { addMAN } from "$/helpers";
 

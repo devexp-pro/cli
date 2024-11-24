@@ -1,11 +1,12 @@
-// source/kv.ts
+import { kv } from "$/repositories/kv.ts";
+import { config } from "$/providers/config.ts";
 
-import { SessionData } from "$/types";
-import { config } from "$/constants";
-
-export const kv = Deno.env.get("DEV")
-  ? await Deno.openKv("local-kv")
-  : await Deno.openKv();
+export type SessionData = {
+  key: string;
+  email: string;
+  id: string;
+  username: string;
+};
 
 export async function getSessionID(): Promise<string | null> {
   try {

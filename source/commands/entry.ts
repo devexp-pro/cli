@@ -22,7 +22,7 @@ import { dash } from "./dash/mod.ts";
 import { intro } from "./intro.ts";
 import { setup } from "./setup/mod.ts";
 import { upgrade } from "./setup/upgrade.ts";
-import { cfg } from "./config.ts";
+import { cfg } from "./cfg.ts";
 
 export const logo = `
   ${colors.rgb24("██████╗ ███████╗██╗   ██╗", 0xFFA500)}${

@@ -175,7 +175,7 @@ const command = new Command()
     conflicts: ["simple"],
   })
   .option("-l, --logs [level:string]", "set logging level", {
-    action: (options) => {
+    action: (options: any) => {
       const res = availableLoggingLevels.indexOf(options.logs as string);
 
       if (res == -1) {

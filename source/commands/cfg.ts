@@ -1,5 +1,5 @@
 import { Command } from "@cliffy/command";
-import { config } from "$/constants";
+import { config } from "$/providers/config.ts";
 import * as constants from "$/constants";
 
 export const cfg = new Command()
@@ -7,7 +7,8 @@ export const cfg = new Command()
   .description("show config")
   .hidden()
   .action(async () => {
-    // console.log(JSON.stringify(config, null, 2));
+    console.log("--------------------------------");
+    console.log(JSON.stringify(config, null, 2));
     console.log("--------------------------------");
     console.log(JSON.stringify(constants, null, 2));
     console.log(JSON.stringify(import.meta, null, 2));

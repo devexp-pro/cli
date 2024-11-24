@@ -5,6 +5,8 @@
     "$/constants": "./source/constants.ts",
     "$/helpers": "./source/helpers.ts",
     "$/types": "./source/types.ts",
+    "$/providers/": "./source/providers/",
+    "$/repositories/": "./source/repositories/",
     "$/kv": "./source/kv.ts",
     "$config/": "./config/",
 
