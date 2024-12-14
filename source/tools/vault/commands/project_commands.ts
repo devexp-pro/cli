@@ -1,12 +1,13 @@
-import {
-  createClient,
-  getCurrentConfig,
-  getFullConfigKV,
-  setCurrentConfigKV,
-} from "../api.ts";
-import { Command, green, Input, red } from "../deps.ts";
-import { TUUID } from "../GuardenDefinition.ts";
+// deno-lint-ignore-file no-fallthrough
+
+
+import { Command } from "@cliffy/command";
 import { Select } from "@cliffy/prompt/select";
+
+import projectHandlers from "./handlers/project_handlers.ts";
+import { getCurrentConfig, syncProjects } from "../api.ts";
+import { red, green } from "../deps.ts";
+
 
 export async function displayCurrentProjectInfo() {
   const { currentConfig } = await getCurrentConfig();
@@ -24,225 +25,142 @@ export async function displayCurrentProjectInfo() {
   }
 }
 
-export function createProjectCommand() {
-  return new Command()
-    .description("Create a new project.")
-    .arguments("<projectName:string>")
-    .action(async (_options: any, projectName: string) => {
-      try {
-        const client = await createClient();
-        const response = await client.call("createProject", [projectName]);
+const projectMenu = async () => {
+  await syncProjects();
 
-        if (!response.success) {
-          throw new Error(`Failed to create project: ${response.message}`);
+  const action = await Select.prompt({
+    message: "What would you like to do with projects?",
+    options: [
+      { name: "View the current project", value: "view" },
+      { name: "Create a new project", value: "create" },
+      { name: "Rename a project", value: "rename" },
+      { name: "Delete a project", value: "delete" },
+      { name: "Select a project", value: "select" },
+    ],
+  });
+
+  switch (action) {
+
+    case "view":
+      await projectHandlers.viewCurrentProject();
+      Deno.exit()
+    case "create":
+      await projectHandlers.interactiveCreateProject();
+      Deno.exit()
+    case "rename":
+      await projectHandlers.interactiveRenameProject();
+       Deno.exit();
+    case "delete":
+      await projectHandlers.interactiveDeleteProject();
+       Deno.exit();
+    case "select":
+      await projectHandlers.interactiveSelectProject();
+       Deno.exit();
+    default:
+      console.error("Invalid action. Please try again.");
+  }
+};
+
+
+const projectCommand = new Command()
+  .description("Manage projects: create, select, rename, or delete.")
+  .option("--action <action:string>", "Action: 'view', 'create', 'rename', 'delete', 'select'.")
+  .option("--name <name:string>", "Name of the project for action.")
+  .option("--new-name <newName:string>", "New name for renaming.")
+  .example("project --action=view", "View the current project.")
+  .example("project --action=create --name=MyProject", "Create a project named 'MyProject'.")
+  .example(
+    "project --action=rename --name=MyProject --new-name=NewProject",
+    "Rename 'MyProject' to 'NewProject'."
+  )
+  .example("project --action=delete --name=MyProject", "Delete the project 'MyProject'.")
+  .example("project --action=select --name=MyProject", "Select the project 'MyProject'.")
+  .example("project", "Open the menu to manage projects.")
+  .action(async (options) => {
+    try {
+      await syncProjects();
+
+      if (!options.action) {
+
+        await projectMenu();
+      } else {
+
+        switch (options.action) {
+          case "view":
+            await projectHandlers.viewCurrentProject();
+            break;
+          case "create":
+            if (options.name) {
+              await projectHandlers.createProject(options.name);
+            } else {
+              await projectHandlers.interactiveCreateProject();
+            }
+            break;
+          case "rename":
+            if (options.name && options.newName) {
+              await projectHandlers.renameProjectByName(options.name, options.newName);
+            } else {
+              await projectHandlers.interactiveRenameProject();
+            }
+            break;
+          case "delete":
+            if (options.name) {
+              await projectHandlers.deleteProjectByName(options.name);
+            } else {
+              await projectHandlers.interactiveDeleteProject();
+            }
+            break;
+          case "select":
+            if (options.name) {
+              await projectHandlers.selectProjectByName(options.name);
+            } else {
+              await projectHandlers.interactiveSelectProject();
+            }
+            break;
+          default:
+            console.error("Invalid action. Use --help to see available options.");
         }
-
-        await setCurrentConfigKV({
-          currentProjectName: response.project!.name,
-          currentProjectUUID: response.project!.uuid,
-          currentEnvName: response.project?.environments[0]?.name || null,
-          currentEnvUUID: response.project?.environments[0]?.uuid || null,
-        });
-
-        console.log(green(`Project '${projectName}' successfully created.`));
-        Deno.exit();
-      } catch (error) {
-        console.error(red(`Error: ${(error as Error).message}`));
-        Deno.exit();
       }
-    });
-}
+    } catch (error) {
+      console.error((error as Error).message);
+    }
+  });
 
-export function deleteProjectCommand() {
-  return new Command()
-    .description("Delete a project.")
-    .option(
-      "--project-name <projectName:string>",
-      "The name of the project to delete.",
-    )
-    .action(async (options) => {
-      const projects = await getFullConfigKV();
-      const { currentConfig } = await getCurrentConfig();
+  // try {
+  //   console.log("\n--- Testing API chain ---");
 
-      if (projects === null || !projects.length) {
-        console.log(red("No projects available."));
-        Deno.exit();
-      }
+  //   // Step 1: Create a new project
+  //   console.log("\n[1] Creating a project...");
+  //   const projectName = "TestProject";
+  //   await syncProjects();
+  //   await projectHandlers.createProject(projectName);
 
-      let projectUUID: TUUID;
-      if (options.projectName) {
-        const project = projects.find((p) => p.name === options.projectName);
-        if (!project) {
-          console.log(
-            red(`Project with name ${options.projectName} not found.`),
-          );
-          Deno.exit();
-        }
-        projectUUID = project.uuid;
-      } else {
-        const projectOptions = projects.map((p) => ({
-          name: p.uuid === currentConfig?.currentProjectUUID
-            ? `${p.name} (Current)`
-            : p.name,
-          value: p.uuid,
-        }));
-        projectUUID = (await Select.prompt({
-          message: "Select the project to delete:",
-          options: projectOptions,
-        })) as TUUID;
-      }
+  //   // Step 2: View the current project
+  //   console.log("\n[2] Viewing the current project...");
+  //   await syncProjects();
+  //   await projectHandlers.viewCurrentProject();
 
-      const client = await createClient();
-      const response = await client.call("deleteProject", [projectUUID]);
+  //   // Step 3: Rename the project
+  //   console.log("\n[3] Renaming the project...");
+  //   const newProjectName = "RenamedProject";
+  //   await syncProjects();
+  //   await projectHandlers.renameProjectByName(projectName, newProjectName);
 
-      if (!response.success) {
-        console.error(red(`Failed to delete project: ${response.message}`));
-        Deno.exit();
-      }
+  //   // Step 4: Select the renamed project
+  //   console.log("\n[4] Selecting the renamed project...");
+  //   await syncProjects();
+  //   await projectHandlers.selectProjectByName(newProjectName);
 
-      if (currentConfig?.currentProjectUUID === projectUUID) {
-        console.log(
-          red("The current project was deleted. Resetting configuration."),
-        );
-        await setCurrentConfigKV({
-          currentProjectName: null,
-          currentProjectUUID: null,
-          currentEnvName: null,
-          currentEnvUUID: null,
-        });
-      }
+  //   // Step 5: Delete the renamed project
+  //   console.log("\n[5] Deleting the renamed project...");
+  //   await syncProjects();
+  //   await projectHandlers.deleteProjectByName(newProjectName);
 
-      console.log(green(`Project successfully deleted.`));
-      Deno.exit();
-    });
-}
+  //   console.log("\n--- API chain test completed successfully ---");
+  // } catch (testError) {
+  //   console.error("\n--- Error during API chain test ---");
+  //   console.error((testError as Error).message);
+  // }
 
-export function renameProjectCommand() {
-  return new Command()
-    .description("Rename a project.")
-    .option("--old-name <oldName:string>", "The current name of the project.")
-    .option("--new-name <newName:string>", "The new name of the project.")
-    .action(async (options) => {
-      const projects = await getFullConfigKV();
-      const { currentConfig } = await getCurrentConfig();
 
-      if (projects === null || !projects.length) {
-        console.log(red("No projects available."));
-        Deno.exit();
-      }
-
-      let projectUUID: TUUID;
-      let newProjectName: string;
-
-      if (options.oldName && options.newName) {
-        const project = projects.find((p) => p.name === options.oldName);
-        if (!project) {
-          console.log(red(`Project with name ${options.oldName} not found.`));
-          Deno.exit();
-        }
-        projectUUID = project.uuid;
-        newProjectName = options.newName;
-      } else {
-        const projectOptions = projects.map((p) => ({
-          name: p.uuid === currentConfig?.currentProjectUUID
-            ? `${p.name} (Current)`
-            : p.name,
-          value: p.uuid,
-        }));
-
-        projectUUID = (await Select.prompt({
-          message: "Select the project to rename:",
-          options: projectOptions,
-        })) as TUUID;
-
-        newProjectName = await Input.prompt("Enter the new project name:");
-      }
-
-      const client = await createClient();
-      const response = await client.call("updateProject", [
-        projectUUID,
-        newProjectName,
-      ]);
-
-      if (!response.success) {
-        console.error(
-          red(`Failed to rename project: ${response.message}`),
-        );
-        Deno.exit();
-      }
-
-      if (currentConfig?.currentProjectUUID === projectUUID) {
-        await setCurrentConfigKV({
-          ...currentConfig,
-          currentProjectName: newProjectName,
-        });
-        console.log(
-          green(
-            "The current project was renamed and updated in the configuration.",
-          ),
-        );
-      } else {
-        console.log(green(`Project renamed to '${newProjectName}'.`));
-      }
-      Deno.exit();
-    });
-}
-
-export function selectProjectCommand() {
-  return new Command()
-    .description("Select a project.")
-    .option(
-      "--project-name <projectName:string>",
-      "The name of the project to select.",
-    )
-    .action(async (options) => {
-      const projects = await getFullConfigKV();
-      const { currentConfig } = await getCurrentConfig();
-
-      if (projects === null || !projects.length) {
-        console.log(red("No projects available."));
-        Deno.exit();
-      }
-
-      let selectedProjectUUID: TUUID;
-
-      if (options.projectName) {
-        const project = projects.find((p) => p.name === options.projectName);
-        if (!project) {
-          console.log(
-            red(`Project with name ${options.projectName} not found.`),
-          );
-          Deno.exit();
-        }
-        selectedProjectUUID = project.uuid;
-      } else {
-        const projectOptions = projects.map((p) => ({
-          name: p.uuid === currentConfig?.currentProjectUUID
-            ? `${p.name} (Current)`
-            : p.name,
-          value: p.uuid,
-        }));
-
-        selectedProjectUUID = (await Select.prompt({
-          message: "Select a project:",
-          options: projectOptions,
-        })) as TUUID;
-      }
-
-      const selectedProject = projects.find((p) =>
-        p.uuid === selectedProjectUUID
-      );
-      if (selectedProject) {
-        await setCurrentConfigKV({
-          currentProjectName: selectedProject.name,
-          currentProjectUUID: selectedProject.uuid,
-          currentEnvName: selectedProject.environments[0]?.name || null,
-          currentEnvUUID: selectedProject.environments[0]?.uuid || null,
-        });
-        console.log(green(`Project selected: ${selectedProject.name}`));
-      } else {
-        console.error(red("Project not found."));
-      }
-      Deno.exit();
-    });
-}
+export default projectCommand;
