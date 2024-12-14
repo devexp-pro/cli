@@ -12,7 +12,7 @@ import { Select } from "@cliffy/prompt/select";
 import { Input } from "../../deps.ts";
 import { syncProjects } from "../../api.ts";
 import { displayCurrentProjectInfo } from "../project_commands.ts";
-import { loadEnvFileCommand } from "../env_commands.ts";
+// import { loadEnvFileCommand } from "../env_commands.ts";
 
 const secretMenu = async () => {
   await syncProjects();
@@ -44,9 +44,9 @@ const secretMenu = async () => {
     case "fetch":
       await fetchSecretsCommand().parse([]);
       break;
-    case "loadEnvFile":
-      await loadEnvFileCommand().parse([]);
-      break;
+    // case "loadEnvFile":
+    //   await loadEnvFileCommand().parse([]);
+    //   break;
   }
 };
 
@@ -128,11 +128,11 @@ const secretCommand = new Command()
       case "fetch":
         fetchSecretsCommand().parse([]);
         break;
-      case "loadEnvFile":
-        const args = options.file ? ["--file", options.file] : [];
-        if (options.envName) args.push("--env-name", options.envName);
-        loadEnvFileCommand().parse(args);
-        break;
+      // case "loadEnvFile":
+      //   const args = options.file ? ["--file", options.file] : [];
+      //   if (options.envName) args.push("--env-name", options.envName);
+      //   loadEnvFileCommand().parse(args);
+      //   break;
       default:
         secretMenu();
     }

@@ -84,11 +84,12 @@ export async function deleteProjectByUUID(uuid: TUUID) {
 }
 
 
-export async function selectProjectByUUID(uuid: TUUID) {
+export async function selectProjectByUUID(uuid: TUUID, projectName: string) {
   const { currentConfig } = await getCurrentConfig();
   await setCurrentConfigKV({
     ...currentConfig,
     currentProjectUUID: uuid,
+    currentProjectName: projectName
   });
 
   console.log(green(`Project with UUID '${uuid}' selected.`));

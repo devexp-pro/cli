@@ -11,7 +11,6 @@ import { red, green } from "../deps.ts";
 
 export async function displayCurrentProjectInfo() {
   const { currentConfig } = await getCurrentConfig();
-
   if (!currentConfig || !currentConfig.currentProjectName) {
     console.log(red("No project is currently selected."));
     return;
@@ -26,7 +25,6 @@ export async function displayCurrentProjectInfo() {
 }
 
 const projectMenu = async () => {
-  await syncProjects();
 
   const action = await Select.prompt({
     message: "What would you like to do with projects?",
@@ -78,8 +76,8 @@ const projectCommand = new Command()
   .example("project", "Open the menu to manage projects.")
   .action(async (options) => {
     try {
-      await syncProjects();
-
+      await syncProjects(); 
+      await displayCurrentProjectInfo();
       if (!options.action) {
 
         await projectMenu();

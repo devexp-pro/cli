@@ -45,5 +45,5 @@ export async function selectProjectByName(name: string) {
     throw new Error(`Project with name '${name}' not found.`);
   }
 
-  await selectProjectByUUID(project.uuid);
+  await selectProjectByUUID(project.uuid, project.name);
 }

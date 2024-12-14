@@ -2,12 +2,13 @@
 
 import { Command } from "@cliffy/command";
 
-import envCommand from "./commands/main/env.ts";
+
 import secretCommand from "./commands/main/secret.ts";
 import runCommand from "./commands/run_command.ts"; // Импорт команды run
 import inviteCommand from "./commands/main/invite.ts";
 import { addMAN } from "$/helpers";
 import projectCommand from "./commands/project_commands.ts";
+import envCommand from "./commands/env_commands.ts";
 
 const tool = new Command();
 

@@ -62,7 +62,7 @@ export async function interactiveSelectProject() {
     throw new Error("No projects available.");
   }
 
-  const selectedProjectUUID = await Select.prompt({
+  const selectedProject = await Select.prompt({
     message: "Select a project:",
     options: projects.map((p) => ({
       name: p.name,
@@ -70,5 +70,11 @@ export async function interactiveSelectProject() {
     })),
   });
 
-  await selectProjectByUUID(selectedProjectUUID as TUUID);
+  const projectName = projects.find((p) => p.uuid === selectedProject)?.name;
+  if (!projectName) {
+    throw new Error("Selected project not found.");
+  }
+
+  await selectProjectByUUID(selectedProject as TUUID, projectName);
 }
+
