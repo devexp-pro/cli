@@ -1,13 +1,13 @@
 import { Select } from "@cliffy/prompt/select";
 import { Input } from "@cliffy/prompt/input";
-import { getCurrentConfig, getFullConfigKV } from "../../../api.ts";
+import { getCurrentConfig, getFullConfigKV } from "../../api.ts";
 import {
   createEnvironment,
   deleteEnvironmentByUUID,
   renameEnvironmentByUUID,
   selectEnvironmentByUUID,
 } from "./env_low_level_handlers.ts";
-import { TUUID } from "../../../GuardenDefinition.ts";
+import { TUUID } from "../../GuardenDefinition.ts";
 import { loadEnvironmentVariablesByName } from "./env_mid_level_handlers.ts";
 
 export async function interactiveCreateEnvironment() {

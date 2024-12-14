@@ -1,5 +1,5 @@
 import { Input, Select } from "@cliffy/prompt";
-import { getCurrentConfig, getFullConfigKV } from "../../../api.ts";
+import { getCurrentConfig, getFullConfigKV } from "../../api.ts";
 import {
   addSecretByName,
   deleteSecretByName,

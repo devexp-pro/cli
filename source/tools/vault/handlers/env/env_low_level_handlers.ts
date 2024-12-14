@@ -1,6 +1,6 @@
-import { createClient, getCurrentConfig, setCurrentConfigKV } from "../../../api.ts";
-import { green, red, yellow } from "../../../deps.ts";
-import { TUUID } from "../../../GuardenDefinition.ts";
+import { createClient, getCurrentConfig, setCurrentConfigKV } from "../../api.ts";
+import { green, red, yellow } from "../../deps.ts";
+import { TUUID } from "../../GuardenDefinition.ts";
 import { load as loadEnv } from "@std/dotenv";
 
 export async function viewCurrentEnv() {

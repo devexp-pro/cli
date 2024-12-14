@@ -4,12 +4,12 @@ import { Command } from "@cliffy/command";
 
 
 
-import runCommand from "./commands/run_command.ts"; // Импорт команды run
-import inviteCommand from "./commands/main/invite.ts";
+import runCommand from "./commands/run_commands.ts";
 import { addMAN } from "$/helpers";
 import projectCommand from "./commands/project_commands.ts";
 import envCommand from "./commands/env_commands.ts";
 import secretCommand from "./commands/secret_commands.ts";
+import inviteCommand from "./commands/invite_commands.ts";
 
 const tool = new Command();
 

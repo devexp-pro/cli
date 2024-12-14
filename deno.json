@@ -9,4 +9,6 @@
     "zj": "zellij --layout .zellij/layout.kdl"
   },
   "importMap": "./import-map.json"
+
+
 }

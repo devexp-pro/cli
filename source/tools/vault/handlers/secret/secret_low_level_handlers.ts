@@ -1,6 +1,6 @@
-import { createClient, getCurrentConfig, getFullConfigKV } from "../../../api.ts";
-import { green, red } from "../../../deps.ts";
-import { TUUID } from "../../../GuardenDefinition.ts";
+import { createClient, getCurrentConfig, getFullConfigKV } from "../../api.ts";
+import { green, red } from "../../deps.ts";
+import { TUUID } from "../../GuardenDefinition.ts";
 
 export async function addSecret(envUUID: TUUID, key: string, value: string) {
   const client = await createClient();

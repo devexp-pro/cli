@@ -1,6 +1,6 @@
 // deno-lint-ignore-file no-fallthrough
 import { Command } from "@cliffy/command";
-import secretHandlers from "./handlers/secret/secret_handlers.ts";
+import secretHandlers from "../handlers/secret/secret_handlers.ts";
 import { Select, Input } from "@cliffy/prompt";
 import { syncProjects } from "../api.ts";
 import { displayCurrentProjectInfo } from "./project_commands.ts";

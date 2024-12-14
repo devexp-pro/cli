@@ -1,8 +1,8 @@
 
 
-import { createClient, getCurrentConfig, setCurrentConfigKV } from "../../../api.ts";
-import { green, red } from "../../../deps.ts";
-import { TUUID } from "../../../GuardenDefinition.ts";
+import { createClient, getCurrentConfig, setCurrentConfigKV } from "../../api.ts";
+import { green, red } from "../../deps.ts";
+import { TUUID } from "../../GuardenDefinition.ts";
 
 
 export async function viewCurrentProject() {

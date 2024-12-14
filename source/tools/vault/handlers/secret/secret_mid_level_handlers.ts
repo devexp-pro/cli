@@ -1,4 +1,4 @@
-import { getCurrentConfig, getFullConfigKV } from "../../../api.ts";
+import { getCurrentConfig, getFullConfigKV } from "../../api.ts";
 import { addSecret, deleteSecret, fetchSecrets, updateSecret } from "./secret_low_level_handlers.ts";
 
 export async function addSecretByName(envName: string, key: string, value: string) {
