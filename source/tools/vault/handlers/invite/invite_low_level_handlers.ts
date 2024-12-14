@@ -1,4 +1,4 @@
-import { createClient } from "../../api.ts";
+import { createClient } from "../../config_sync.ts";
 import { green, red } from "../../deps.ts";
 import { TUUID } from "../../GuardenDefinition.ts";
 

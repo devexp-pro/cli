@@ -1,6 +1,6 @@
 import { Select } from "@cliffy/prompt/select";
 import { Input } from "@cliffy/prompt/input";
-import { getCurrentConfig, getFullConfigKV } from "../../api.ts";
+import { getCurrentConfig, getFullConfigKV } from "../../config_sync.ts";
 import {
   createEnvironment,
   deleteEnvironmentByUUID,

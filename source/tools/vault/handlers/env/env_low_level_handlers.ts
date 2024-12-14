@@ -1,4 +1,4 @@
-import { createClient, getCurrentConfig, setCurrentConfigKV } from "../../api.ts";
+import { createClient, getCurrentConfig, setCurrentConfigKV } from "../../config_sync.ts";
 import { green, red, yellow } from "../../deps.ts";
 import { TUUID } from "../../GuardenDefinition.ts";
 import { load as loadEnv } from "@std/dotenv";

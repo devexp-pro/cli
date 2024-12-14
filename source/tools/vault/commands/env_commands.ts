@@ -4,7 +4,7 @@
 import { Command } from "@cliffy/command";
 import envHandlers from "../handlers/env/env_handlers.ts";
 import { Select } from "@cliffy/prompt/select";
-import { syncProjects } from "../api.ts";
+import { syncProjects } from "../config_sync.ts";
 import { displayCurrentProjectInfo } from "./project_commands.ts";
 
 const envMenu = async () => {

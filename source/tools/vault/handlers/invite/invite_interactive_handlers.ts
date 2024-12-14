@@ -1,5 +1,5 @@
 import { Select, Input } from "@cliffy/prompt";
-import { getFullConfigKV } from "../../api.ts";
+import { getFullConfigKV } from "../../config_sync.ts";
 import { inviteUserToProject } from "./invite_low_level_handlers.ts";
 import { TUUID } from "../../GuardenDefinition.ts";
 

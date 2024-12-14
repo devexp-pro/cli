@@ -1,6 +1,6 @@
 import { Command } from "@cliffy/command";
 import { interactiveInviteUser } from "../handlers/invite/invite_interactive_handlers.ts";
-import { getFullConfigKV } from "../api.ts";
+import { getFullConfigKV } from "../config_sync.ts";
 import { inviteUserToProject } from "../handlers/invite/invite_low_level_handlers.ts";
 import { TUUID } from "../GuardenDefinition.ts";
 

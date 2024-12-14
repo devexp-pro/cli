@@ -1,4 +1,4 @@
-import { getCurrentConfig, getFullConfigKV } from "../../api.ts";
+import { getCurrentConfig, getFullConfigKV } from "../../config_sync.ts";
 import { deleteEnvironmentByUUID, loadEnvironmentVariablesByUUID, renameEnvironmentByUUID, selectEnvironmentByUUID } from "./env_low_level_handlers.ts";
 
 export async function deleteEnvironmentByName(envName: string) {

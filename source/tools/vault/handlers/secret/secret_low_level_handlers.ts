@@ -1,4 +1,4 @@
-import { createClient, getCurrentConfig, getFullConfigKV } from "../../api.ts";
+import { createClient, getCurrentConfig, getFullConfigKV } from "../../config_sync.ts";
 import { green, red } from "../../deps.ts";
 import { TUUID } from "../../GuardenDefinition.ts";
 

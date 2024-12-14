@@ -1,4 +1,4 @@
-import { getFullConfigKV } from "../../api.ts";
+import { getFullConfigKV } from "../../config_sync.ts";
 import { renameProjectByUUID, deleteProjectByUUID, selectProjectByUUID } from "./project_low_level_handlers.ts";
 
 

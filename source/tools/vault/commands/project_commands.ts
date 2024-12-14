@@ -5,7 +5,7 @@ import { Command } from "@cliffy/command";
 import { Select } from "@cliffy/prompt/select";
 
 import projectHandlers from "../handlers/project/project_handlers.ts";
-import { getCurrentConfig, syncProjects } from "../api.ts";
+import { getCurrentConfig, syncProjects } from "../config_sync.ts";
 import { red, green } from "../deps.ts";
 
 

@@ -1,4 +1,4 @@
-import { createClient, getCurrentConfig } from "../../api.ts";
+import { createClient, getCurrentConfig } from "../../config_sync.ts";
 import { green, red } from "../../deps.ts";
 
 export async function executeCommandWithSecrets(cmd: string[]) {
