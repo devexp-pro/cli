@@ -4,7 +4,7 @@
 import { Command } from "@cliffy/command";
 import { Select } from "@cliffy/prompt/select";
 
-import projectHandlers from "./handlers/project_handlers.ts";
+import projectHandlers from "./handlers/project/project_handlers.ts";
 import { getCurrentConfig, syncProjects } from "../api.ts";
 import { red, green } from "../deps.ts";
 
@@ -42,19 +42,19 @@ const projectMenu = async () => {
   switch (action) {
 
     case "view":
-      await projectHandlers.viewCurrentProject();
+      await projectHandlers.view.current();
       Deno.exit()
     case "create":
-      await projectHandlers.interactiveCreateProject();
+      await projectHandlers.create.interactive();
       Deno.exit()
     case "rename":
-      await projectHandlers.interactiveRenameProject();
+      await projectHandlers.rename.interactive();
        Deno.exit();
     case "delete":
-      await projectHandlers.interactiveDeleteProject();
+      await projectHandlers.delete.interactive();
        Deno.exit();
     case "select":
-      await projectHandlers.interactiveSelectProject();
+      await projectHandlers.select.interactive();
        Deno.exit();
     default:
       console.error("Invalid action. Please try again.");
@@ -87,36 +87,36 @@ const projectCommand = new Command()
 
         switch (options.action) {
           case "view":
-            await projectHandlers.viewCurrentProject();
-            break;
+            await projectHandlers.view.current();
+            Deno.exit();
           case "create":
             if (options.name) {
-              await projectHandlers.createProject(options.name);
+              await projectHandlers.create.byName(options.name);
             } else {
-              await projectHandlers.interactiveCreateProject();
+              await projectHandlers.create.interactive();
             }
-            break;
+            Deno.exit();
           case "rename":
             if (options.name && options.newName) {
-              await projectHandlers.renameProjectByName(options.name, options.newName);
+              await projectHandlers.rename.byName(options.name, options.newName);
             } else {
-              await projectHandlers.interactiveRenameProject();
+              await projectHandlers.rename.interactive();
             }
-            break;
+            Deno.exit();
           case "delete":
             if (options.name) {
-              await projectHandlers.deleteProjectByName(options.name);
+              await projectHandlers.delete.byName(options.name);
             } else {
-              await projectHandlers.interactiveDeleteProject();
+              await projectHandlers.delete.interactive();
             }
-            break;
+            Deno.exit();
           case "select":
             if (options.name) {
-              await projectHandlers.selectProjectByName(options.name);
+              await projectHandlers.select.byName(options.name);
             } else {
-              await projectHandlers.interactiveSelectProject();
+              await projectHandlers.select.interactive();
             }
-            break;
+            Deno.exit();
           default:
             console.error("Invalid action. Use --help to see available options.");
         }
@@ -125,42 +125,6 @@ const projectCommand = new Command()
       console.error((error as Error).message);
     }
   });
-
-  // try {
-  //   console.log("\n--- Testing API chain ---");
-
-  //   // Step 1: Create a new project
-  //   console.log("\n[1] Creating a project...");
-  //   const projectName = "TestProject";
-  //   await syncProjects();
-  //   await projectHandlers.createProject(projectName);
-
-  //   // Step 2: View the current project
-  //   console.log("\n[2] Viewing the current project...");
-  //   await syncProjects();
-  //   await projectHandlers.viewCurrentProject();
-
-  //   // Step 3: Rename the project
-  //   console.log("\n[3] Renaming the project...");
-  //   const newProjectName = "RenamedProject";
-  //   await syncProjects();
-  //   await projectHandlers.renameProjectByName(projectName, newProjectName);
-
-  //   // Step 4: Select the renamed project
-  //   console.log("\n[4] Selecting the renamed project...");
-  //   await syncProjects();
-  //   await projectHandlers.selectProjectByName(newProjectName);
-
-  //   // Step 5: Delete the renamed project
-  //   console.log("\n[5] Deleting the renamed project...");
-  //   await syncProjects();
-  //   await projectHandlers.deleteProjectByName(newProjectName);
-
-  //   console.log("\n--- API chain test completed successfully ---");
-  // } catch (testError) {
-  //   console.error("\n--- Error during API chain test ---");
-  //   console.error((testError as Error).message);
-  // }
 
 
 export default projectCommand;
