@@ -1,10 +1,28 @@
-import { BASE_REPO_PATH, IS_DEVELOP, IS_REMOTE } from "$/constants";
+import { BASE_REPO_PATH, MODE, MODE_TYPE } from "$/providers/version.ts";
 import { BaseCfgType } from "$config/base.tuner.ts";
 import { kv } from "$/repositories/kv.ts";
 import Tuner from "@artpani/tuner";
 
 export const loadConfig = async () => {
-  if (IS_REMOTE) {
+  if (MODE == MODE_TYPE.LOCAL_DEV) {
+    return await Tuner.use.loadConfig<BaseCfgType>({
+      absolutePathPrefix: undefined,
+      configDirPath: "./config",
+      configName: "dev",
+    });
+  } else if (MODE == MODE_TYPE.LOCAL_PROD) {
+    return await Tuner.use.loadConfig<BaseCfgType>({
+      absolutePathPrefix: undefined,
+      configDirPath: "./config",
+      configName: "prod",
+    });
+  } else if (MODE == MODE_TYPE.REMOTE_PROD) {
+    return await Tuner.use.loadConfig<BaseCfgType>({
+      absolutePathPrefix: BASE_REPO_PATH,
+      configDirPath: "./config",
+      configName: "prod",
+    });
+  } else if (MODE == MODE_TYPE.REMOTE_DEV) {
     const kvTunerConfig = (await kv.get(["tuner", "config"]))
       .value as BaseCfgType;
     if (kvTunerConfig) {
@@ -13,17 +31,14 @@ export const loadConfig = async () => {
       const config = await Tuner.use.loadConfig<BaseCfgType>({
         absolutePathPrefix: BASE_REPO_PATH,
         configDirPath: "./config",
-        configName: IS_DEVELOP ? "dev" : "prod",
+        configName: "dev",
       });
       await kv.set(["tuner", "config"], config);
       return config;
     }
   } else {
-    return await Tuner.use.loadConfig<BaseCfgType>({
-      absolutePathPrefix: undefined,
-      configDirPath: "./config",
-      configName: IS_DEVELOP ? "dev" : "prod",
-    });
+    console.log(`Cannot get config for mode ${MODE}`);
+    Deno.exit(-1);
   }
 };
 

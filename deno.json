@@ -3,8 +3,8 @@
   "version": "0.2.6-alpha",
   "license": "",
   "tasks": {
-    "dev": "DEV=true deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts",
-    "prod": "DEV_PROD=true deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts",
+    "dev": "LOCAL_DEV=true deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts",
+    "prod": "LOCAL_DEV=false deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts",
     "compile": "deno compile --output devexp --no-check -A --unstable-kv --unstable-broadcast-channel ./source/main.ts",
     "zj": "zellij --layout .zellij/layout.kdl"
   },
