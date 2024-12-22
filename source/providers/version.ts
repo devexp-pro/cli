@@ -1,4 +1,5 @@
 import { shelly } from "@vseplet/shelly";
+import { kv } from "$/repositories/kv.ts";
 
 export const getLatestCommitHashByBranch = async (branchName: string) => {
   const data: { commit: { sha: string } } = await (await fetch(
@@ -35,13 +36,10 @@ export enum MODE_TYPE {
 }
 
 export const IMU = import.meta.url;
-console.log(IMU);
 export const IS_REMOTE = IMU.includes("raw.githubusercontent.com");
 export const IS_REMOTE_COMMIT = "";
 export const IS_REMOTE_BRANCH = IS_REMOTE && IMU.includes("heads");
 export const IS_REMOTE_TAG = IS_REMOTE && IMU.includes("tags");
-
-// console.log(IMU);
 
 export const IS_LOCAL = !IS_REMOTE;
 export const IS_LOCAL_DEV = IS_LOCAL &&
@@ -51,19 +49,8 @@ export const IS_LOCAL_PROD = IS_LOCAL &&
   (Deno.env.get("LOCAL_DEV") !== undefined &&
     Deno.env.get("LOCAL_DEV") == "false");
 
-export const MODE = IS_LOCAL_DEV
-  ? MODE_TYPE.LOCAL_DEV
-  : IS_LOCAL_PROD
-  ? MODE_TYPE.LOCAL_PROD
-  : IS_REMOTE_BRANCH
-  ? MODE_TYPE.REMOTE_BRANCH
-  : IS_REMOTE_TAG
-  ? MODE_TYPE.REMOTE_TAG
-  : "unknown"; // Если ни одно из условий не выполнено
-
-export const GIT_BRANCH = IS_REMOTE_BRANCH
-  ? IMU.match(/\/refs\/heads\/([a-zA-Z0-9\-_]+)/)?.[1]
-  : null;
+export const GIT_BRANCH = (await kv.get<{ branch: string }>(["version"])).value
+  ?.branch || null;
 
 export const GIT_LATEST_COMMIT_HASH = GIT_BRANCH
   ? await getLatestCommitHashByBranch(
@@ -71,13 +58,17 @@ export const GIT_LATEST_COMMIT_HASH = GIT_BRANCH
   )
   : null;
 
-export const GIT_COMMIT_HASH = GIT_LATEST_COMMIT_HASH
-  ? getCommitHash(GIT_LATEST_COMMIT_HASH)
-  : null;
+export const GIT_COMMIT_HASH = IMU.match(/(?<=\/)[a-f0-9]{40}(?=\/)/)?.[0] ||
+  null;
 
-export const GIT_TAG = IS_REMOTE_TAG
-  ? IMU.match(/\/refs\/tags\/([a-zA-Z0-9\.\-\+_]+)/)?.[1]
-  : null;
+export const GIT_TAG = (await kv.get<{ tag: string }>(["version"])).value
+  ?.tag || null;
+
+export const MODE = IS_LOCAL_DEV
+  ? MODE_TYPE.LOCAL_DEV
+  : IS_LOCAL_PROD
+  ? MODE_TYPE.LOCAL_PROD
+  : (await kv.get<{ mode: MODE_TYPE }>(["version"])).value?.mode;
 
 export const BASE_REPO_PATH = IS_REMOTE_BRANCH
   ? `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/${GIT_BRANCH}`
@@ -88,8 +79,6 @@ export const IMPORT_MAP_URL = `${BASE_REPO_PATH}/import-map.json`;
 
 export const BASE_RESOURCE_PATH = IS_REMOTE_BRANCH
   ? `https://raw.githubusercontent.com/devexp-pro/cli/${GIT_COMMIT_HASH}`
-  : IS_REMOTE_TAG
-  ? `https://raw.githubusercontent.com/devexp-pro/cli/refs/tags/${GIT_TAG}`
   : IS_LOCAL
   ? Deno.cwd()
   : null;
