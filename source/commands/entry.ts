@@ -1,13 +1,6 @@
 import { Command } from "@cliffy/command";
 
-import {
-  GIT_REMOTE_BRANCH,
-  GIT_REMOTE_TAG,
-  IS_DEVELOP,
-  IS_REMOTE,
-  LOCAL_VERSION,
-  REMOTE_VERSION,
-} from "$/constants";
+// import { IS_DEVELOP, LOCAL_VERSION, REMOTE_VERSION } from "$/constants";
 
 import { colors } from "@std/colors";
 
@@ -23,6 +16,13 @@ import { intro } from "./intro.ts";
 import { setup } from "./setup/mod.ts";
 import { upgrade } from "./setup/upgrade.ts";
 import { cfg } from "./cfg.ts";
+import {
+  GIT_BRANCH,
+  GIT_COMMIT_HASH,
+  GIT_LATEST_COMMIT_HASH,
+  GIT_TAG,
+  MODE,
+} from "$/providers/version.ts";
 
 export const logo = `
   ${colors.rgb24("██████╗ ███████╗██╗   ██╗", 0xFFA500)}${
@@ -46,15 +46,16 @@ export const logo = `
 
   https://devexp.pro`;
 
-export const introText = `${
-  GIT_REMOTE_BRANCH ? `  Branch ${GIT_REMOTE_BRANCH}\n` : ""
-}${GIT_REMOTE_TAG ? `  Tag ${GIT_REMOTE_TAG}\n` : ""}${
-  !IS_REMOTE ? `  IS LOCAL VARSION\n` : ""
-}
-  Version ${colors.green(LOCAL_VERSION)}
+export const introText = `
+  VERSION MODE: ${MODE}
+  GIT_BRANCH: ${GIT_BRANCH}
+  GIT_LATEST_COMMIT_HASH: ${GIT_LATEST_COMMIT_HASH}
+  GIT_COMMIT_HASH: ${GIT_COMMIT_HASH}
+  GIT_TAG: ${GIT_TAG}
+
   Crafted with ${colors.red("<3")} by DevExp
   Use "dx -h" to get help on commands.
-  ${IS_DEVELOP ? colors.bgRed("\n  This is develop version!!!") : ""}`;
+`;
 
 export const entry = new Command()
   .name("dx")
@@ -66,10 +67,10 @@ export const entry = new Command()
     console.log(logo);
     console.log(introText);
 
-    if (REMOTE_VERSION !== LOCAL_VERSION && !IS_DEVELOP) {
-      upgrade.showHelp();
-      Deno.exit();
-    }
+    // if (REMOTE_VERSION !== LOCAL_VERSION && !IS_DEVELOP) {
+    //   upgrade.showHelp();
+    //   Deno.exit();
+    // }
 
     entry.showHelp();
     Deno.exit();

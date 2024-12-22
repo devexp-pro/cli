@@ -1,6 +1,5 @@
 import { Command } from "@cliffy/command";
 import { getSession } from "$/providers/session.ts";
-import { LOCAL_VERSION } from "$/constants";
 import { colors } from "@std/colors";
 
 const img = `
@@ -86,7 +85,7 @@ const img3 = `
 `;
 
 const systemLines = [
-  colors.brightMagenta(`DevExp CLI v${LOCAL_VERSION}`),
+  // colors.brightMagenta(`DevExp CLI v${LOCAL_VERSION}`),
   ``,
   `${colors.brightYellow("uptime:")} ${
     Deno.osUptime() / 60 / 60 / 24 | 0
