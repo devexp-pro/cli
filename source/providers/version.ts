@@ -71,6 +71,14 @@ export const BASE_REPO_PATH = IS_REMOTE_BRANCH
 export const ENTRYPOINT_SOURCE_URL = `${BASE_REPO_PATH}/source/main.ts`;
 export const IMPORT_MAP_URL = `${BASE_REPO_PATH}/import-map.json`;
 
+export const BASE_RESOURCE_PATH = IS_REMOTE_BRANCH
+  ? `https://raw.githubusercontent.com/devexp-pro/cli/${GIT_COMMIT_HASH}`
+  : IS_REMOTE_TAG
+  ? `https://raw.githubusercontent.com/devexp-pro/cli/refs/tags/${GIT_TAG}`
+  : IS_LOCAL
+  ? Deno.cwd()
+  : null;
+
 export const getAsset = async <T>(): Promise<T> => {
   throw new Error("not implemented");
 };
@@ -78,6 +86,8 @@ export const getAsset = async <T>(): Promise<T> => {
 export const getTextFile = async () => {};
 
 export const getTypeScriptModule = async () => {};
+
+export const checkForUpdates = () => {};
 
 export const upgradeVersion = async () => {
   if (MODE == MODE_TYPE.REMOTE_DEV) {
@@ -92,28 +102,28 @@ export const upgradeVersion = async () => {
     }
 
     localStorage.setItem("commitHash", GIT_LATEST_COMMIT_HASH);
-
-    const res = await shelly([
-      "deno",
-      "install",
-      "-r",
-      "-f",
-      "-g",
-      "--allow-net",
-      "--allow-run",
-      "--allow-env",
-      "--allow-read",
-      "--allow-write",
-      "--unstable-kv",
-      "--unstable-broadcast-channel",
-      "--allow-sys",
-      "--import-map=" + IMPORT_MAP_URL,
-      "-n",
-      "dx",
-      ENTRYPOINT_SOURCE_URL,
-    ]);
-
-    console.log(res.stderr || res.stderr);
-    Deno.exit(res.code);
   }
+
+  const res = await shelly([
+    "deno",
+    "install",
+    "-r",
+    "-f",
+    "-g",
+    "--allow-net",
+    "--allow-run",
+    "--allow-env",
+    "--allow-read",
+    "--allow-write",
+    "--unstable-kv",
+    "--unstable-broadcast-channel",
+    "--allow-sys",
+    "--import-map=" + IMPORT_MAP_URL,
+    "-n",
+    "dx",
+    ENTRYPOINT_SOURCE_URL,
+  ]);
+
+  console.log(res.stderr || res.stderr);
+  Deno.exit(res.code);
 };

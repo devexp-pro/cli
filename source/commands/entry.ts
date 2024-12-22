@@ -17,6 +17,7 @@ import { setup } from "./setup/mod.ts";
 import { upgrade } from "./setup/upgrade.ts";
 import { cfg } from "./cfg.ts";
 import {
+  BASE_RESOURCE_PATH,
   GIT_BRANCH,
   GIT_COMMIT_HASH,
   GIT_LATEST_COMMIT_HASH,
@@ -52,6 +53,7 @@ export const introText = `
   GIT_LATEST_COMMIT_HASH: ${GIT_LATEST_COMMIT_HASH}
   GIT_COMMIT_HASH: ${GIT_COMMIT_HASH}
   GIT_TAG: ${GIT_TAG}
+  BASE_RESOURCE_PATH: ${BASE_RESOURCE_PATH}
 
   Crafted with ${colors.red("<3")} by DevExp
   Use "dx -h" to get help on commands.
