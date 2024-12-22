@@ -18,9 +18,9 @@ import { upgrade } from "./setup/upgrade.ts";
 import { cfg } from "./cfg.ts";
 import {
   BASE_RESOURCE_PATH,
+  getLatestCommitHash,
   GIT_BRANCH,
   GIT_COMMIT_HASH,
-  GIT_LATEST_COMMIT_HASH,
   GIT_TAG,
   MODE,
 } from "$/providers/version.ts";
@@ -50,7 +50,7 @@ export const logo = `
 export const introText = `
   VERSION MODE: ${MODE}
   GIT_BRANCH: ${GIT_BRANCH}
-  GIT_LATEST_COMMIT_HASH: ${GIT_LATEST_COMMIT_HASH}
+  GIT_LATEST_COMMIT_HASH: ${await getLatestCommitHash()}
   GIT_COMMIT_HASH: ${GIT_COMMIT_HASH}
   GIT_TAG: ${GIT_TAG}
   BASE_RESOURCE_PATH: ${BASE_RESOURCE_PATH}
