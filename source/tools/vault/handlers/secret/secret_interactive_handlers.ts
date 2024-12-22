@@ -11,7 +11,9 @@ async function getCurrentEnvironmentName(): Promise<string> {
   const { currentConfig } = await getCurrentConfig();
 
   if (!currentConfig?.currentProjectUUID || !currentConfig.currentEnvName) {
-    throw new Error("No current environment selected. Please select an environment first.");
+    throw new Error(
+      "No current environment selected. Please select an environment first.",
+    );
   }
 
   return currentConfig.currentEnvName;
@@ -25,7 +27,9 @@ async function getSecretsForEnvironment(envName: string): Promise<string[]> {
     throw new Error("No projects or environments available.");
   }
 
-  const project = fullConfig.find((p) => p.uuid === currentConfig.currentProjectUUID);
+  const project = fullConfig.find((p) =>
+    p.uuid === currentConfig.currentProjectUUID
+  );
   const environment = project?.environments.find((env) => env.name === envName);
 
   if (!environment || !environment.secrets) {

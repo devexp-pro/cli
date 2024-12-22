@@ -25,9 +25,11 @@ export async function interactiveDeleteEnvironment() {
     throw new Error("The current project is not selected.");
   }
 
-  const currentProject = projects.find((p) => p.uuid === currentConfig.currentProjectUUID);
+  const currentProject = projects.find((p) =>
+    p.uuid === currentConfig.currentProjectUUID
+  );
 
-  if (currentProject === undefined){
+  if (currentProject === undefined) {
     throw new Error("The current project is not found.");
   }
 
@@ -52,8 +54,10 @@ export async function interactiveRenameEnvironment() {
     throw new Error("The current project is not selected.");
   }
 
-  const currentProject = projects.find((p) => p.uuid === currentConfig.currentProjectUUID);
-  if (currentProject === undefined){
+  const currentProject = projects.find((p) =>
+    p.uuid === currentConfig.currentProjectUUID
+  );
+  if (currentProject === undefined) {
     throw new Error("The current project is not found.");
   }
   const envUUID = await Select.prompt({
@@ -65,66 +69,73 @@ export async function interactiveRenameEnvironment() {
   });
 
   const newName = await Input.prompt("Enter the new name for the environment:");
-  await renameEnvironmentByUUID(envUUID  as TUUID, newName);
+  await renameEnvironmentByUUID(envUUID as TUUID, newName);
 }
 
 export async function interactiveSelectEnvironment() {
-    const projects = await getFullConfigKV();
-  
-    if (!projects) {
-      throw new Error("No projects available.");
-    }
-  
-    const { currentConfig } = await getCurrentConfig();
-  
-    if (!currentConfig?.currentProjectUUID) {
-      throw new Error("The current project is not selected.");
-    }
-  
-    const currentProject = projects.find((p) => p.uuid === currentConfig.currentProjectUUID);
-    if (!currentProject) {
-      throw new Error("The current project is not found.");
-    }
-  
-    const selectedEnvUUID = await Select.prompt({
-      message: "Select the environment to use:",
-      options: currentProject.environments.map((env) => ({
-        name: env.name,
-        value: env.uuid,
-      })),
-    });
-  
-    const selectedEnv = currentProject.environments.find((env) => env.uuid === selectedEnvUUID);
-    if (!selectedEnv) {
-      throw new Error("Selected environment not found.");
-    }
-  
-    await selectEnvironmentByUUID(selectedEnvUUID as TUUID, selectedEnv.name);
+  const projects = await getFullConfigKV();
+
+  if (!projects) {
+    throw new Error("No projects available.");
   }
-  
-  export async function interactiveLoadEnvFile() {
-    const projects = await getFullConfigKV();
-    if (!projects) {
-      throw new Error("No projects available.");
-    }
-    const { currentConfig } = await getCurrentConfig();
-  
-    if (!currentConfig?.currentProjectUUID) {
-      throw new Error("The current project is not selected.");
-    }
-  
-    const currentProject = projects.find((p) => p.uuid === currentConfig.currentProjectUUID);
-    if (!currentProject) {
-      throw new Error("The current project is not found.");
-    }
-  
-    const selectedEnvName = await Select.prompt({
-      message: "Select the environment to load variables into:",
-      options: currentProject.environments.map((env) => env.name),
-    });
-  
-    const envFilePath = await Input.prompt("Enter the path to the environment variables file (default is .env):") || ".env";
-  
-    await loadEnvironmentVariablesByName(selectedEnvName, envFilePath);
+
+  const { currentConfig } = await getCurrentConfig();
+
+  if (!currentConfig?.currentProjectUUID) {
+    throw new Error("The current project is not selected.");
   }
-  
+
+  const currentProject = projects.find((p) =>
+    p.uuid === currentConfig.currentProjectUUID
+  );
+  if (!currentProject) {
+    throw new Error("The current project is not found.");
+  }
+
+  const selectedEnvUUID = await Select.prompt({
+    message: "Select the environment to use:",
+    options: currentProject.environments.map((env) => ({
+      name: env.name,
+      value: env.uuid,
+    })),
+  });
+
+  const selectedEnv = currentProject.environments.find((env) =>
+    env.uuid === selectedEnvUUID
+  );
+  if (!selectedEnv) {
+    throw new Error("Selected environment not found.");
+  }
+
+  await selectEnvironmentByUUID(selectedEnvUUID as TUUID, selectedEnv.name);
+}
+
+export async function interactiveLoadEnvFile() {
+  const projects = await getFullConfigKV();
+  if (!projects) {
+    throw new Error("No projects available.");
+  }
+  const { currentConfig } = await getCurrentConfig();
+
+  if (!currentConfig?.currentProjectUUID) {
+    throw new Error("The current project is not selected.");
+  }
+
+  const currentProject = projects.find((p) =>
+    p.uuid === currentConfig.currentProjectUUID
+  );
+  if (!currentProject) {
+    throw new Error("The current project is not found.");
+  }
+
+  const selectedEnvName = await Select.prompt({
+    message: "Select the environment to load variables into:",
+    options: currentProject.environments.map((env) => env.name),
+  });
+
+  const envFilePath = await Input.prompt(
+    "Enter the path to the environment variables file (default is .env):",
+  ) || ".env";
+
+  await loadEnvironmentVariablesByName(selectedEnvName, envFilePath);
+}

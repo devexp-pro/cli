@@ -7,7 +7,7 @@ const runCommand = new Command()
   .action(async (_options: any, cmd: string) => {
     const cmdArray = cmd.split(" ");
     await executeCommandWithSecrets(cmdArray);
-    Deno.exit()
+    Deno.exit();
   });
 
 export default runCommand;

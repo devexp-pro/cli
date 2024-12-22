@@ -2,8 +2,6 @@
 
 import { Command } from "@cliffy/command";
 
-
-
 import runCommand from "./commands/run_commands.ts";
 import { addMAN } from "$/helpers";
 import projectCommand from "./commands/project_commands.ts";

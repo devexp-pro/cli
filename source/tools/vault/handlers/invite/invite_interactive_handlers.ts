@@ -1,4 +1,4 @@
-import { Select, Input } from "@cliffy/prompt";
+import { Input, Select } from "@cliffy/prompt";
 import { getFullConfigKV } from "../../config_sync.ts";
 import { inviteUserToProject } from "./invite_low_level_handlers.ts";
 import { TUUID } from "../../GuardenDefinition.ts";
@@ -17,6 +17,8 @@ export async function interactiveInviteUser() {
     })),
   });
 
-  const userEmail = await Input.prompt("Enter the email of the user to invite:");
+  const userEmail = await Input.prompt(
+    "Enter the email of the user to invite:",
+  );
   await inviteUserToProject(projectUUID as TUUID, userEmail);
 }

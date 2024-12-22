@@ -6,8 +6,9 @@ import type {
 } from "./GuardenDefinition.ts";
 import { kv } from "$/repositories/kv.ts";
 import { getSession } from "$/providers/session.ts";
-import { IS_DEVELOP, SERVICE_URL } from "$/constants";
+import { SERVICE_URL } from "$/constants";
 import { green, red, yellow } from "./deps.ts";
+import { IS_LOCAL } from "$/providers/version.ts";
 
 export async function createClient(): Promise<ApiflyClient<GuardenDefinition>> {
   const session = await getSession();
@@ -149,7 +150,7 @@ export async function syncProjects() {
         console.log(
           yellow(
             `New project added: ${newProject.name}${
-              IS_DEVELOP ? ` (UUID: ${newProject.uuid})` : ""
+              IS_LOCAL ? ` (UUID: ${newProject.uuid})` : ""
             }`,
           ),
         );
@@ -159,7 +160,7 @@ export async function syncProjects() {
           console.log(
             yellow(
               `Project renamed: ${currentProject.name} -> ${newProject.name}${
-                IS_DEVELOP ? ` (UUID: ${newProject.uuid})` : ""
+                IS_LOCAL ? ` (UUID: ${newProject.uuid})` : ""
               }`,
             ),
           );
@@ -175,7 +176,7 @@ export async function syncProjects() {
             console.log(
               yellow(
                 `New environment added: ${newEnv.name}${
-                  IS_DEVELOP ? ` (UUID: ${newEnv.uuid})` : ""
+                  IS_LOCAL ? ` (UUID: ${newEnv.uuid})` : ""
                 } to project ${newProject.name}`,
               ),
             );
@@ -185,7 +186,7 @@ export async function syncProjects() {
               console.log(
                 yellow(
                   `Environment renamed: ${currentEnv.name} -> ${newEnv.name}${
-                    IS_DEVELOP ? ` (UUID: ${newEnv.uuid})` : ""
+                    IS_LOCAL ? ` (UUID: ${newEnv.uuid})` : ""
                   } in project ${newProject.name}`,
                 ),
               );
@@ -201,7 +202,7 @@ export async function syncProjects() {
                 console.log(
                   yellow(
                     `New secret added: ${newSecret.key}${
-                      IS_DEVELOP ? ` (UUID: ${newSecret.uuid})` : ""
+                      IS_LOCAL ? ` (UUID: ${newSecret.uuid})` : ""
                     } in environment ${newEnv.name} of project ${newProject.name}`,
                   ),
                 );
@@ -224,7 +225,7 @@ export async function syncProjects() {
                 console.log(
                   yellow(
                     `Secret removed: ${currentSecret.key}${
-                      IS_DEVELOP ? ` (UUID: ${currentSecret.uuid})` : ""
+                      IS_LOCAL ? ` (UUID: ${currentSecret.uuid})` : ""
                     } from environment ${currentEnv.name} of project ${currentProject.name}`,
                   ),
                 );
@@ -242,7 +243,7 @@ export async function syncProjects() {
             console.log(
               yellow(
                 `Environment removed: ${currentEnv.name}${
-                  IS_DEVELOP ? ` (UUID: ${currentEnv.uuid})` : ""
+                  IS_LOCAL ? ` (UUID: ${currentEnv.uuid})` : ""
                 } from project ${currentProject.name}`,
               ),
             );
@@ -260,7 +261,7 @@ export async function syncProjects() {
         console.log(
           yellow(
             `Project removed: ${currentProject.name}${
-              IS_DEVELOP ? ` (UUID: ${currentProject.uuid})` : ""
+              IS_LOCAL ? ` (UUID: ${currentProject.uuid})` : ""
             }`,
           ),
         );

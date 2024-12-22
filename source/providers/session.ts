@@ -19,10 +19,10 @@ export async function getSessionID(): Promise<string | null> {
       return sessionData.value.sessionId;
     }
 
-    console.log("Активная сессия не найдена.");
+    console.log("No active session found.");
     return null;
   } catch (error) {
-    console.error("Ошибка при попытке получить sessionId:", error);
+    console.error("Error while attempting to retrieve sessionId:", error);
     return null;
   }
 }
@@ -35,10 +35,10 @@ export async function getSession(): Promise<SessionData | null> {
       return sessionData.value;
     }
 
-    console.log("Активная сессия не найдена.");
+    console.log("No active session found.");
     return null;
   } catch (error) {
-    console.error("Ошибка при попытке получить sessionId:", error);
+    console.error("Error while attempting to retrieve session data:", error);
     return null;
   }
 }
@@ -51,6 +51,6 @@ export async function setSessionWithExpiration(
 
     await kv.set(["auth", "session"], data, { expireIn: sessionTTL });
   } catch (error) {
-    console.error("Ошибка при сохранении сессии:", error);
+    console.error("Error while saving session data:", error);
   }
 }

@@ -1,9 +1,10 @@
-
-
-import { createClient, getCurrentConfig, setCurrentConfigKV } from "../../config_sync.ts";
+import {
+  createClient,
+  getCurrentConfig,
+  setCurrentConfigKV,
+} from "../../config_sync.ts";
 import { green, red } from "../../deps.ts";
 import { TUUID } from "../../GuardenDefinition.ts";
-
 
 export async function viewCurrentProject() {
   const { currentConfig } = await getCurrentConfig();
@@ -20,7 +21,6 @@ export async function viewCurrentProject() {
     console.log(red("No environment is selected."));
   }
 }
-
 
 export async function renameProjectByUUID(uuid: TUUID, newName: string) {
   const client = await createClient();
@@ -42,7 +42,6 @@ export async function renameProjectByUUID(uuid: TUUID, newName: string) {
   console.log(green(`Project renamed to '${newName}'.`));
 }
 
-
 export async function createProject(name: string) {
   const client = await createClient();
   const response = await client.call("createProject", [name]);
@@ -60,7 +59,6 @@ export async function createProject(name: string) {
 
   console.log(green(`Project '${name}' successfully created.`));
 }
-
 
 export async function deleteProjectByUUID(uuid: TUUID) {
   const client = await createClient();
@@ -83,13 +81,12 @@ export async function deleteProjectByUUID(uuid: TUUID) {
   console.log(green("Project successfully deleted."));
 }
 
-
 export async function selectProjectByUUID(uuid: TUUID, projectName: string) {
   const { currentConfig } = await getCurrentConfig();
   await setCurrentConfigKV({
     ...currentConfig,
     currentProjectUUID: uuid,
-    currentProjectName: projectName
+    currentProjectName: projectName,
   });
 
   console.log(green(`Project with UUID '${uuid}' selected.`));

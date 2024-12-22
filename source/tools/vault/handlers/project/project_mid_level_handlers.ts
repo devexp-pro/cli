@@ -1,8 +1,9 @@
 import { getFullConfigKV } from "../../config_sync.ts";
-import { renameProjectByUUID, deleteProjectByUUID, selectProjectByUUID } from "./project_low_level_handlers.ts";
-
-
-
+import {
+  deleteProjectByUUID,
+  renameProjectByUUID,
+  selectProjectByUUID,
+} from "./project_low_level_handlers.ts";
 
 export async function renameProjectByName(oldName: string, newName: string) {
   const projects = await getFullConfigKV();
@@ -18,7 +19,6 @@ export async function renameProjectByName(oldName: string, newName: string) {
   await renameProjectByUUID(project.uuid, newName);
 }
 
-
 export async function deleteProjectByName(name: string) {
   const projects = await getFullConfigKV();
   if (!projects) {
@@ -32,7 +32,6 @@ export async function deleteProjectByName(name: string) {
 
   await deleteProjectByUUID(project.uuid);
 }
-
 
 export async function selectProjectByName(name: string) {
   const projects = await getFullConfigKV();

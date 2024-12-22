@@ -8,7 +8,9 @@ export async function executeCommandWithSecrets(cmd: string[]) {
   }
 
   const client = await createClient();
-  const response = await client.call("getSecrets", [currentConfig.currentEnvUUID]);
+  const response = await client.call("getSecrets", [
+    currentConfig.currentEnvUUID,
+  ]);
 
   if (!response.success) {
     throw new Error(`Failed to fetch secrets: ${response.message}`);

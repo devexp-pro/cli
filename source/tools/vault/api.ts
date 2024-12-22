@@ -38,5 +38,4 @@ const vaultHandlers = {
   },
 };
 
-
 export default vaultHandlers;

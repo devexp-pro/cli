@@ -1,4 +1,8 @@
-import { createClient, getCurrentConfig, setCurrentConfigKV } from "../../config_sync.ts";
+import {
+  createClient,
+  getCurrentConfig,
+  setCurrentConfigKV,
+} from "../../config_sync.ts";
 import { green, red, yellow } from "../../deps.ts";
 import { TUUID } from "../../GuardenDefinition.ts";
 import { load as loadEnv } from "@std/dotenv";
@@ -98,34 +102,40 @@ export async function selectEnvironmentByUUID(envUUID: TUUID, envName: string) {
   console.log(green(`Environment with UUID '${envUUID}' selected.`));
 }
 
-export async function loadEnvironmentVariablesByUUID(envUUID: TUUID, filePath: string) {
-    try {
-      const envVars = await loadEnv({ envPath: filePath, export: false });
-      console.log(green(`Variables from the file ${filePath} loaded successfully.`));
-  
-      const client = await createClient();
-      const addSecretPromises = Object.entries(envVars).map(([key, value]) =>
-        client.call("addSecret", [envUUID, key, value])
-      );
-  
-      const results = await Promise.allSettled(addSecretPromises);
-      results.forEach((result, idx) => {
-        const key = Object.keys(envVars)[idx];
-        if (result.status === "fulfilled" && result.value.success) {
-          console.log(green(`Secret '${key}' added successfully.`));
-        } else {
-          console.error(
-            red(
-              `Error adding secret '${key}': ${
-                //@ts-ignore
-                result.reason?.message || "unknown error"
-              }`
-            )
-          );
-        }
-      });
-    } catch (error) {
-      console.error(red(`Error loading file ${filePath}: ${(error as Error).message}`));
-      throw error;
-    }
+export async function loadEnvironmentVariablesByUUID(
+  envUUID: TUUID,
+  filePath: string,
+) {
+  try {
+    const envVars = await loadEnv({ envPath: filePath, export: false });
+    console.log(
+      green(`Variables from the file ${filePath} loaded successfully.`),
+    );
+
+    const client = await createClient();
+    const addSecretPromises = Object.entries(envVars).map(([key, value]) =>
+      client.call("addSecret", [envUUID, key, value])
+    );
+
+    const results = await Promise.allSettled(addSecretPromises);
+    results.forEach((result, idx) => {
+      const key = Object.keys(envVars)[idx];
+      if (result.status === "fulfilled" && result.value.success) {
+        console.log(green(`Secret '${key}' added successfully.`));
+      } else {
+        console.error(
+          red(
+            `Error adding secret '${key}': ${
+              //@ts-ignore
+              result.reason?.message || "unknown error"}`,
+          ),
+        );
+      }
+    });
+  } catch (error) {
+    console.error(
+      red(`Error loading file ${filePath}: ${(error as Error).message}`),
+    );
+    throw error;
   }
+}

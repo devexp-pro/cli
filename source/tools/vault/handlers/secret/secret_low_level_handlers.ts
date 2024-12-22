@@ -1,4 +1,8 @@
-import { createClient, getCurrentConfig, getFullConfigKV } from "../../config_sync.ts";
+import {
+  createClient,
+  getCurrentConfig,
+  getFullConfigKV,
+} from "../../config_sync.ts";
 import { green, red } from "../../deps.ts";
 import { TUUID } from "../../GuardenDefinition.ts";
 
@@ -25,77 +29,86 @@ export async function updateSecret(envUUID: TUUID, key: string, value: string) {
 }
 
 export async function deleteSecret(envUUID: TUUID, key: string) {
-    const fullConfig = await getFullConfigKV();
-    const { currentConfig } = await getCurrentConfig();
-  
-    if (!fullConfig) {
-      throw new Error("Full configuration is not available.");
-    }
-  
-    if (!currentConfig?.currentProjectUUID) {
-      throw new Error("The current project is not selected.");
-    }
-  
-    const currentProject = fullConfig.find((project) => project.uuid === currentConfig.currentProjectUUID);
-  
-    if (!currentProject) {
-      throw new Error("The current project is not found.");
-    }
-  
-    const environment = currentProject.environments.find((env) => env.uuid === envUUID);
-  
-    if (!environment) {
-      throw new Error("The specified environment is not found.");
-    }
-  
-    const secret = environment.secrets?.find((secret) => secret.key === key);
-    if (!secret) {
-      console.error(red(`Secret with key '${key}' does not exist in the environment.`));
-      return;
-    }
-  
+  const fullConfig = await getFullConfigKV();
+  const { currentConfig } = await getCurrentConfig();
 
-    const client = await createClient();
-    const response = await client.call("deleteSecret", [envUUID, key]);
-  
-    if (!response.success) {
-      throw new Error(`Failed to delete secret: ${response.message}`);
-    }
-  
-    console.log(green(`Secret '${key}' deleted successfully.`));
+  if (!fullConfig) {
+    throw new Error("Full configuration is not available.");
   }
+
+  if (!currentConfig?.currentProjectUUID) {
+    throw new Error("The current project is not selected.");
+  }
+
+  const currentProject = fullConfig.find((project) =>
+    project.uuid === currentConfig.currentProjectUUID
+  );
+
+  if (!currentProject) {
+    throw new Error("The current project is not found.");
+  }
+
+  const environment = currentProject.environments.find((env) =>
+    env.uuid === envUUID
+  );
+
+  if (!environment) {
+    throw new Error("The specified environment is not found.");
+  }
+
+  const secret = environment.secrets?.find((secret) => secret.key === key);
+  if (!secret) {
+    console.error(
+      red(`Secret with key '${key}' does not exist in the environment.`),
+    );
+    return;
+  }
+
+  const client = await createClient();
+  const response = await client.call("deleteSecret", [envUUID, key]);
+
+  if (!response.success) {
+    throw new Error(`Failed to delete secret: ${response.message}`);
+  }
+
+  console.log(green(`Secret '${key}' deleted successfully.`));
+}
 
 export async function fetchSecrets(envUUID: TUUID) {
-    const fullConfig = await getFullConfigKV();
-    const { currentConfig } = await getCurrentConfig();
-  
-    if (!fullConfig) {
-      throw new Error("Full configuration is not available.");
-    }
-  
-    if (!currentConfig?.currentProjectUUID) {
-      throw new Error("The current project is not selected.");
-    }
-  
-    const currentProject = fullConfig.find((project) => project.uuid === currentConfig.currentProjectUUID);
-  
-    if (!currentProject) {
-      throw new Error("The current project is not found.");
-    }
-  
-    const environment = currentProject.environments.find((env) => env.uuid === envUUID);
-  
-    if (!environment) {
-      throw new Error("The specified environment is not found.");
-    }
-  
-    if (!environment.secrets || environment.secrets.length === 0) {
-      console.log(red("No secrets found in the current environment."));
-      return;
-    }
-  
-    console.log(green("Secrets for the current environment:"));
-    environment.secrets.forEach((secret) => {
-      console.log(`${green(secret.key)}: ${secret.value}`);
-    });
+  const fullConfig = await getFullConfigKV();
+  const { currentConfig } = await getCurrentConfig();
+
+  if (!fullConfig) {
+    throw new Error("Full configuration is not available.");
   }
+
+  if (!currentConfig?.currentProjectUUID) {
+    throw new Error("The current project is not selected.");
+  }
+
+  const currentProject = fullConfig.find((project) =>
+    project.uuid === currentConfig.currentProjectUUID
+  );
+
+  if (!currentProject) {
+    throw new Error("The current project is not found.");
+  }
+
+  const environment = currentProject.environments.find((env) =>
+    env.uuid === envUUID
+  );
+
+  if (!environment) {
+    throw new Error("The specified environment is not found.");
+  }
+
+  if (!environment.secrets || environment.secrets.length === 0) {
+    console.log(red("No secrets found in the current environment."));
+    return;
+  }
+
+  console.log(green("Secrets for the current environment:"));
+  environment.secrets.forEach((secret) => {
+    console.log(`${green(secret.key)}: ${secret.value}`);
+  });
+}

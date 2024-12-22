@@ -25,7 +25,7 @@ const inviteCommand = new Command()
     } else {
       await interactiveInviteUser();
     }
-    Deno.exit()
+    Deno.exit();
   });
 
 export default inviteCommand;

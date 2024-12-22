@@ -1,7 +1,16 @@
 import { getCurrentConfig, getFullConfigKV } from "../../config_sync.ts";
-import { addSecret, deleteSecret, fetchSecrets, updateSecret } from "./secret_low_level_handlers.ts";
+import {
+  addSecret,
+  deleteSecret,
+  fetchSecrets,
+  updateSecret,
+} from "./secret_low_level_handlers.ts";
 
-export async function addSecretByName(envName: string, key: string, value: string) {
+export async function addSecretByName(
+  envName: string,
+  key: string,
+  value: string,
+) {
   const projects = await getFullConfigKV();
   const { currentConfig } = await getCurrentConfig();
 
@@ -9,7 +18,9 @@ export async function addSecretByName(envName: string, key: string, value: strin
     throw new Error("Current project or environment is not selected.");
   }
 
-  const project = projects.find((p) => p.uuid === currentConfig.currentProjectUUID);
+  const project = projects.find((p) =>
+    p.uuid === currentConfig.currentProjectUUID
+  );
   const environment = project?.environments.find((env) => env.name === envName);
 
   if (!environment) {
@@ -19,7 +30,11 @@ export async function addSecretByName(envName: string, key: string, value: strin
   await addSecret(environment.uuid, key, value);
 }
 
-export async function updateSecretByName(envName: string, key: string, value: string) {
+export async function updateSecretByName(
+  envName: string,
+  key: string,
+  value: string,
+) {
   const projects = await getFullConfigKV();
   const { currentConfig } = await getCurrentConfig();
 
@@ -27,7 +42,9 @@ export async function updateSecretByName(envName: string, key: string, value: st
     throw new Error("Current project or environment is not selected.");
   }
 
-  const project = projects.find((p) => p.uuid === currentConfig.currentProjectUUID);
+  const project = projects.find((p) =>
+    p.uuid === currentConfig.currentProjectUUID
+  );
   const environment = project?.environments.find((env) => env.name === envName);
 
   if (!environment) {
@@ -38,22 +55,24 @@ export async function updateSecretByName(envName: string, key: string, value: st
 }
 
 export async function deleteSecretByName(envName: string, key: string) {
-    const projects = await getFullConfigKV();
-    const { currentConfig } = await getCurrentConfig();
-  
-    if (!currentConfig?.currentProjectUUID || !projects) {
-      throw new Error("Current project or environment is not selected.");
-    }
-  
-    const project = projects.find((p) => p.uuid === currentConfig.currentProjectUUID);
-    const environment = project?.environments.find((env) => env.name === envName);
-  
-    if (!environment) {
-      throw new Error(`Environment '${envName}' not found.`);
-    }
-  
-    await deleteSecret(environment.uuid, key);
+  const projects = await getFullConfigKV();
+  const { currentConfig } = await getCurrentConfig();
+
+  if (!currentConfig?.currentProjectUUID || !projects) {
+    throw new Error("Current project or environment is not selected.");
   }
+
+  const project = projects.find((p) =>
+    p.uuid === currentConfig.currentProjectUUID
+  );
+  const environment = project?.environments.find((env) => env.name === envName);
+
+  if (!environment) {
+    throw new Error(`Environment '${envName}' not found.`);
+  }
+
+  await deleteSecret(environment.uuid, key);
+}
 
 export async function fetchSecretsByName(envName: string) {
   const projects = await getFullConfigKV();
@@ -63,7 +82,9 @@ export async function fetchSecretsByName(envName: string) {
     throw new Error("Current project or environment is not selected.");
   }
 
-  const project = projects.find((p) => p.uuid === currentConfig.currentProjectUUID);
+  const project = projects.find((p) =>
+    p.uuid === currentConfig.currentProjectUUID
+  );
   const environment = project?.environments.find((env) => env.name === envName);
 
   if (!environment) {

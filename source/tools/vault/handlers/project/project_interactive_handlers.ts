@@ -1,17 +1,14 @@
-
 import { Select } from "@cliffy/prompt/select";
 import { Input } from "@cliffy/prompt/input";
 
 import {
-  renameProjectByUUID,
   createProject,
   deleteProjectByUUID,
+  renameProjectByUUID,
   selectProjectByUUID,
 } from "./project_low_level_handlers.ts";
 import { getFullConfigKV } from "../../config_sync.ts";
 import { TUUID } from "../../GuardenDefinition.ts";
-
-
 
 export async function interactiveRenameProject() {
   const projects = await getFullConfigKV();
@@ -31,12 +28,10 @@ export async function interactiveRenameProject() {
   await renameProjectByUUID(selectedProjectUUID as TUUID, newName);
 }
 
-
 export async function interactiveCreateProject() {
   const name = await Input.prompt("Enter the new project name:");
   await createProject(name);
 }
-
 
 export async function interactiveDeleteProject() {
   const projects = await getFullConfigKV();
@@ -54,7 +49,6 @@ export async function interactiveDeleteProject() {
 
   await deleteProjectByUUID(selectedProjectUUID as TUUID);
 }
-
 
 export async function interactiveSelectProject() {
   const projects = await getFullConfigKV();
@@ -77,4 +71,3 @@ export async function interactiveSelectProject() {
 
   await selectProjectByUUID(selectedProject as TUUID, projectName);
 }
-
