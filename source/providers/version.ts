@@ -3,7 +3,6 @@ export const getLatestCommitHashByBranch = async (branchName: string) => {
     `https://api.github.com/repos/devexp-pro/cli/branches/${branchName}`,
   )).json();
 
-  console.log(data);
   return data.commit.sha;
 };
 
