@@ -1,5 +1,6 @@
 import { shelly } from "@vseplet/shelly";
 import { kv } from "$/repositories/kv.ts";
+import { join } from "@std/path/join";
 
 export enum MODE_TYPE {
   LOCAL_DEV = "LOCAL_DEV", // установлено и запущено из исходников с dev конфигом
@@ -44,7 +45,10 @@ export const getAsset = async <T>(): Promise<T> => {
   throw new Error("not implemented");
 };
 
-export const getTextFile = async () => {};
+export const getTextFile = async (path: string) => {
+  if (BASE_RESOURCE_PATH == null) Deno.exit(-1);
+  return await Deno.readTextFile(join(BASE_RESOURCE_PATH, path));
+};
 
 export const getTypeScriptModule = async () => {};
 
