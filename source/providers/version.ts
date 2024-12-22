@@ -70,9 +70,8 @@ export const MODE = IS_LOCAL_DEV
   ? MODE_TYPE.LOCAL_PROD
   : (await kv.get<{ mode: MODE_TYPE }>(["version"])).value?.mode;
 
-export const BASE_REPO_PATH = IS_REMOTE_BRANCH
-  ? `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/${GIT_BRANCH}`
-  : `https://raw.githubusercontent.com/devexp-pro/cli/refs/tags/${GIT_TAG}`;
+export const BASE_REPO_PATH =
+  `https://raw.githubusercontent.com/devexp-pro/cli/${GIT_COMMIT_HASH}`;
 
 export const ENTRYPOINT_SOURCE_URL = `${BASE_REPO_PATH}/source/main.ts`;
 export const IMPORT_MAP_URL = `${BASE_REPO_PATH}/import-map.json`;
