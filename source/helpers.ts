@@ -18,10 +18,11 @@ export const addMAN = (command: Command, type: "tools" = "tools") => {
       if (!nameOfParentCommand) Deno.exit(-1);
       try {
         console.log(renderMarkdown(
-          await getTextFile(`./source/${type}/${nameOfParentCommand}/MAN.md`),
+          await getTextFile(`/source/${type}/${nameOfParentCommand}/MAN.md`),
         ));
         Deno.exit(0);
       } catch (e) {
+        console.log(e);
         console.log(` user manual for '${nameOfParentCommand}' not found =(`);
         Deno.exit(-1);
       }

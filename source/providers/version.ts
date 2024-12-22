@@ -1,6 +1,8 @@
 import { shelly } from "@vseplet/shelly";
 import { kv } from "$/repositories/kv.ts";
 import { join } from "@std/path/join";
+import { APP_DIR } from "$/constants";
+import { ensureDir, exists } from "@std/fs";
 
 export enum MODE_TYPE {
   LOCAL_DEV = "LOCAL_DEV", // установлено и запущено из исходников с dev конфигом
@@ -46,8 +48,41 @@ export const getAsset = async <T>(): Promise<T> => {
 };
 
 export const getTextFile = async (path: string) => {
-  if (BASE_RESOURCE_PATH == null) Deno.exit(-1);
-  return await Deno.readTextFile(join(BASE_RESOURCE_PATH, path));
+  if (!BASE_RESOURCE_PATH) {
+    console.error("BASE_RESOURCE_PATH is not set.");
+    Deno.exit(-1);
+  }
+
+  const CACHE_DIR = `${APP_DIR}/cache`;
+  const isLocalMode = MODE === MODE_TYPE.LOCAL_DEV ||
+    MODE === MODE_TYPE.LOCAL_PROD;
+
+  if (!isLocalMode) {
+    const cachePath = join(CACHE_DIR, GIT_COMMIT_HASH || "default", path);
+
+    // Проверяем, есть ли файл в кэше
+    if (await exists(cachePath)) {
+      return await Deno.readTextFile(cachePath);
+    }
+
+    // Если файла нет в кэше, выполняем fetch
+    const response = await fetch(BASE_RESOURCE_PATH + path);
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch resource: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    const content = await response.text();
+
+    // Сохраняем в кэш
+    await ensureDir(join(CACHE_DIR, GIT_COMMIT_HASH || "default"));
+    await Deno.writeTextFile(cachePath, content);
+
+    return content;
+  } else {
+    return await Deno.readTextFile(join(BASE_RESOURCE_PATH, path));
+  }
 };
 
 export const getTypeScriptModule = async () => {};

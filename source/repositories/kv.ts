@@ -1,18 +1,22 @@
 import { join } from "@std/path";
 
 export const openKv = async () => {
-  const dbDir = Deno.build.os === "windows"
-    ? Deno.env.get("APPDATA") || Deno.env.get("USERPROFILE")
-    : Deno.env.get("HOME");
+  const APP_DIR = join(
+    Deno.build.os === "windows"
+      ? Deno.env.get("APPDATA") as string ||
+        Deno.env.get("USERPROFILE") as string
+      : Deno.env.get("HOME") as string,
+    ".dx",
+  );
 
-  if (!dbDir) {
-    throw new Error("Failed to determine the home directory.");
+  if (!APP_DIR) {
+    console.error("Failed to determine the home directory.");
   }
 
-  const dbPath = join(dbDir, ".dx", "kv");
+  const dbPath = join(APP_DIR, ".dx", "kv");
 
   try {
-    await Deno.mkdir(join(dbDir, ".dx"), { recursive: true });
+    await Deno.mkdir(join(APP_DIR, ".dx"), { recursive: true });
   } catch (err) {
     if (err instanceof Deno.errors.AlreadyExists) {
       console.log(`The .dx directory already exists at: ${dbPath}`);
