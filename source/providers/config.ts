@@ -34,6 +34,7 @@ export const loadConfig = async () => {
   return await Tuner.use.loadConfig<BaseCfgType>({
     ...config,
     configDirPath: "./config",
+    add_salt_to_path: false,
   });
 };
 

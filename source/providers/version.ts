@@ -2,10 +2,10 @@ import { shelly } from "@vseplet/shelly";
 import { kv } from "$/repositories/kv.ts";
 
 export enum MODE_TYPE {
-  LOCAL_DEV = "LOCAL_DEV", // запущено локально из исходников с dev конфигом
-  LOCAL_PROD = "LOCAL_PROD", // запущено локально из исходников с prod конфигом
-  REMOTE_BRANCH = "REMOTE_BRANCH",
-  REMOTE_TAG = "REMOTE_TAG",
+  LOCAL_DEV = "LOCAL_DEV", // установлено и запущено из исходников с dev конфигом
+  LOCAL_PROD = "LOCAL_PROD", // установлено и запущено из исходников с prod конфигом
+  REMOTE_BRANCH = "REMOTE_BRANCH", // установлено и запущено из ветки репозитория
+  REMOTE_TAG = "REMOTE_TAG", // установлено и запущено из тэга репозитория
 }
 
 export const IMU = import.meta.url;
@@ -71,7 +71,9 @@ export const getLatestCommitHash = async () => {
     ? await getLatestCommitHashByBranch(
       GIT_BRANCH as string,
     )
-    : (await getLatestTag()).commit.sha;
+    : MODE_TYPE.REMOTE_TAG
+    ? (await getLatestTag()).commit.sha
+    : null;
 };
 
 export const upgradeVersion = async () => {
