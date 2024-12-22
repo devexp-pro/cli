@@ -35,6 +35,7 @@ export enum MODE_TYPE {
 }
 
 export const IMU = import.meta.url;
+console.log(IMU);
 export const IS_REMOTE = IMU.includes("raw.githubusercontent.com");
 export const IS_REMOTE_COMMIT = "";
 export const IS_REMOTE_BRANCH = IS_REMOTE && IMU.includes("heads");
@@ -74,8 +75,6 @@ export const GIT_COMMIT_HASH = GIT_LATEST_COMMIT_HASH
   ? getCommitHash(GIT_LATEST_COMMIT_HASH)
   : null;
 
-console.log(await getLatestTag());
-
 export const GIT_TAG = IS_REMOTE_TAG
   ? IMU.match(/\/refs\/tags\/([a-zA-Z0-9\.\-\+_]+)/)?.[1]
   : null;
@@ -109,12 +108,11 @@ export const upgradeVersion = async () => {
   if (MODE == MODE_TYPE.REMOTE_BRANCH) {
     if (!GIT_LATEST_COMMIT_HASH || !GIT_COMMIT_HASH) {
       console.log(`not found commit's hashes`);
-      "unknown";
+      return;
     }
 
     if (GIT_LATEST_COMMIT_HASH == GIT_COMMIT_HASH) {
       console.log(`latest version already installed!`);
-      Deno.exit();
     }
 
     localStorage.setItem("commitHash", GIT_LATEST_COMMIT_HASH);
@@ -141,5 +139,5 @@ export const upgradeVersion = async () => {
   ]);
 
   console.log(res.stderr || res.stderr);
-  Deno.exit(res.code);
+  return res.code;
 };
