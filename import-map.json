@@ -30,6 +30,7 @@
     "@std/colors": "https://deno.land/x/cliffy@v0.25.7/ansi/colors.ts",
     "@std/ulid": "jsr:@std/ulid",
     "@std/path": "jsr:@std/path@0.224.0",
+    "@std/path/join": "jsr:@std/path@0.224.0/join",
     "@std/dotenv": "jsr:@std/dotenv",
     "@std/encoding/base64": "jsr:@std/encoding/base64",
     "@std/fs": "https://deno.land/std@0.224.0/fs/mod.ts",
