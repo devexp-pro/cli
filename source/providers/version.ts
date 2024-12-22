@@ -18,17 +18,29 @@ export const getCommitHash = (latestCommitHash: string) => {
   }
 };
 
+export const getLatestTag = async () => {
+  const data: Array<{ name: string }> =
+    await (await fetch(`https://api.github.com/repos/devexp-pro/cli/tags`))
+      .json();
+
+  return data[0]?.name;
+};
+
 export enum MODE_TYPE {
   LOCAL_DEV = "LOCAL_DEV", // запущено локально из исходников с dev конфигом
   LOCAL_PROD = "LOCAL_PROD", // запущено локально из исходников с prod конфигом
-  REMOTE_DEV = "REMOTE_DEV", // установлено из любой ветки репозитория
-  REMOTE_PROD = "REMOTE_PROD", // установлено из любого тега репозитория
+  REMOTE_COMMIT = "REMOTE_COMMIT",
+  REMOTE_BRANCH = "REMOTE_BRANCH",
+  REMOTE_TAG = "REMOTE_TAG",
 }
 
 export const IMU = import.meta.url;
 export const IS_REMOTE = IMU.includes("raw.githubusercontent.com");
+export const IS_REMOTE_COMMIT = "";
 export const IS_REMOTE_BRANCH = IS_REMOTE && IMU.includes("heads");
 export const IS_REMOTE_TAG = IS_REMOTE && IMU.includes("tags");
+
+// console.log(IMU);
 
 export const IS_LOCAL = !IS_REMOTE;
 export const IS_LOCAL_DEV = IS_LOCAL &&
@@ -43,10 +55,10 @@ export const MODE = IS_LOCAL_DEV
   : IS_LOCAL_PROD
   ? MODE_TYPE.LOCAL_PROD
   : IS_REMOTE_BRANCH
-  ? MODE_TYPE.REMOTE_DEV
+  ? MODE_TYPE.REMOTE_BRANCH
   : IS_REMOTE_TAG
-  ? MODE_TYPE.REMOTE_PROD
-  : Deno.exit(-1); // Если ни одно из условий не выполнено
+  ? MODE_TYPE.REMOTE_TAG
+  : "unknown"; // Если ни одно из условий не выполнено
 
 export const GIT_BRANCH = IS_REMOTE_BRANCH
   ? IMU.match(/\/refs\/heads\/([a-zA-Z0-9\-_]+)/)?.[1]
@@ -57,9 +69,13 @@ export const GIT_LATEST_COMMIT_HASH = GIT_BRANCH
     GIT_BRANCH as string,
   )
   : null;
+
 export const GIT_COMMIT_HASH = GIT_LATEST_COMMIT_HASH
   ? getCommitHash(GIT_LATEST_COMMIT_HASH)
   : null;
+
+console.log(await getLatestTag());
+
 export const GIT_TAG = IS_REMOTE_TAG
   ? IMU.match(/\/refs\/tags\/([a-zA-Z0-9\.\-\+_]+)/)?.[1]
   : null;
@@ -90,10 +106,10 @@ export const getTypeScriptModule = async () => {};
 export const checkForUpdates = () => {};
 
 export const upgradeVersion = async () => {
-  if (MODE == MODE_TYPE.REMOTE_DEV) {
+  if (MODE == MODE_TYPE.REMOTE_BRANCH) {
     if (!GIT_LATEST_COMMIT_HASH || !GIT_COMMIT_HASH) {
       console.log(`not found commit's hashes`);
-      Deno.exit(-1);
+      "unknown";
     }
 
     if (GIT_LATEST_COMMIT_HASH == GIT_COMMIT_HASH) {

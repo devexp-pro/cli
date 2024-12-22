@@ -1,32 +1,4 @@
-import localDenoJson from "$deno-json" with { type: "json" };
-import { fetchJSON } from "$/helpers";
 import { IS_LOCAL_DEV, IS_REMOTE } from "$/providers/version.ts";
-
-// export const IMU = import.meta.url;
-// export const IS_REMOTE = IMU.includes("raw.githubusercontent.com");
-// export const IS_DEVELOP = IS_REMOTE
-//   ? false
-//   : (Deno.env.get("LOCAL_DEV") !== undefined &&
-//     Deno.env.get("LOCAL_DEV") !== "false");
-// export const IS_REMOTE_BRANCH = IS_REMOTE && IMU.includes("heads");
-// export const GIT_REMOTE_BRANCH = IS_REMOTE_BRANCH
-//   ? IMU.match(/\/refs\/heads\/([a-zA-Z0-9\-_]+)/)?.[1]
-//   : null;
-// export const GIT_REMOTE_TAG = IS_REMOTE
-//   ? IMU.match(/\/refs\/tags\/([a-zA-Z0-9\.\-\+_]+)/)?.[1]
-//   : null;
-// export const BASE_REPO_PATH = IS_REMOTE_BRANCH
-//   ? `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/${GIT_REMOTE_BRANCH}`
-//   : `https://raw.githubusercontent.com/devexp-pro/cli/refs/tags/${GIT_REMOTE_TAG}`;
-// export const ENTRYPOINT_SOURCE_URL = `${BASE_REPO_PATH}/source/main.ts`;
-// const REMOTE_DENO_JSON = (IS_REMOTE_BRANCH
-//   ? await fetchJSON(
-//     `${BASE_REPO_PATH}/deno.json`,
-//   )
-//   : { "VERSION": null }) as unknown as typeof localDenoJson;
-// export const LOCAL_VERSION = localDenoJson["version"];
-// export const REMOTE_VERSION = REMOTE_DENO_JSON["version"] || LOCAL_VERSION;
-// export const IMPORT_MAP_URL = `${BASE_REPO_PATH}/import-map.json`;
 
 export const SERVICE_DOMAIN = IS_REMOTE
   ? "devexp.cloud"

@@ -16,13 +16,13 @@ export const loadConfig = async () => {
       configDirPath: "./config",
       configName: "prod",
     });
-  } else if (MODE == MODE_TYPE.REMOTE_PROD) {
+  } else if (MODE == MODE_TYPE.REMOTE_TAG) {
     return await Tuner.use.loadConfig<BaseCfgType>({
       absolutePathPrefix: BASE_REPO_PATH,
       configDirPath: "./config",
       configName: "prod",
     });
-  } else if (MODE == MODE_TYPE.REMOTE_DEV) {
+  } else if (MODE == MODE_TYPE.REMOTE_BRANCH) {
     const kvTunerConfig = (await kv.get(["tuner", "config"]))
       .value as BaseCfgType;
     if (kvTunerConfig) {
