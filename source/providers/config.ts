@@ -37,8 +37,12 @@ export const loadConfig = async () => {
       return config;
     }
   } else {
-    console.log(`Cannot get config for mode ${MODE}`);
-    Deno.exit(-1);
+    console.log(`Cannot get config for mode ${MODE}, using dev`);
+    return await Tuner.use.loadConfig<BaseCfgType>({
+      absolutePathPrefix: undefined,
+      configDirPath: "./config",
+      configName: "dev",
+    });
   }
 };
 
