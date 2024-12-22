@@ -97,9 +97,6 @@ export const upgradeVersion = async () => {
   const NEW_IMPORT_MAP_URL =
     `https://raw.githubusercontent.com/devexp-pro/cli/${GIT_LATEST_COMMIT_HASH}/import-map.json`;
 
-  console.log(GIT_COMMIT_HASH);
-  console.log(NEW_ENTRYPOINT_SOURCE_URL);
-
   const res = await shelly([
     "deno",
     "install",
@@ -116,7 +113,7 @@ export const upgradeVersion = async () => {
     "--allow-sys",
     "--import-map=" + NEW_IMPORT_MAP_URL,
     "-n",
-    "dx",
+    (await kv.get<{ alias: string }>(["version"])).value?.alias || "dx",
     NEW_ENTRYPOINT_SOURCE_URL,
   ]);
 
