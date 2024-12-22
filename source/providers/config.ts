@@ -11,7 +11,10 @@ export const loadConfig = async () => {
     keyof typeof MODE_TYPE,
     { absolutePathPrefix?: string; configName: string }
   > = {
-    [MODE_TYPE.LOCAL_DEV]: { absolutePathPrefix: undefined, configName: "dev" },
+    [MODE_TYPE.LOCAL_DEV]: {
+      absolutePathPrefix: undefined,
+      configName: "dev",
+    },
     [MODE_TYPE.LOCAL_PROD]: {
       absolutePathPrefix: undefined,
       configName: "prod",

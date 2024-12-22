@@ -6,19 +6,18 @@ export const openKv = async () => {
     : Deno.env.get("HOME");
 
   if (!dbDir) {
-    throw new Error("Не удалось определить домашнюю директорию.");
+    throw new Error("Failed to determine the home directory.");
   }
 
   const dbPath = join(dbDir, ".dx", "kv");
 
   try {
     await Deno.mkdir(join(dbDir, ".dx"), { recursive: true });
-    console.log(`Директория .dx успешно создана по пути: ${dbPath}`);
   } catch (err) {
     if (err instanceof Deno.errors.AlreadyExists) {
-      console.log(`Директория .dx уже существует по пути: ${dbPath}`);
+      console.log(`The .dx directory already exists at: ${dbPath}`);
     } else {
-      console.error("Ошибка при создании директории:", err);
+      console.error("Error creating directory:", err);
     }
   }
 
