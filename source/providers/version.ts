@@ -80,7 +80,6 @@ export const upgradeVersion = async () => {
   }
 
   const GIT_LATEST_COMMIT_HASH = await getLatestCommitHash();
-
   if (!GIT_LATEST_COMMIT_HASH || !GIT_COMMIT_HASH) {
     console.log(`not found commit's hashes`);
     return;
@@ -96,12 +95,16 @@ export const upgradeVersion = async () => {
   const NEW_IMPORT_MAP_URL =
     `https://raw.githubusercontent.com/devexp-pro/cli/${GIT_LATEST_COMMIT_HASH}/import-map.json`;
 
+  console.log(GIT_COMMIT_HASH);
+  console.log(NEW_ENTRYPOINT_SOURCE_URL);
+
   const res = await shelly([
     "deno",
     "install",
     "-r",
     "-f",
     "-g",
+    "-f",
     "--allow-net",
     "--allow-run",
     "--allow-env",

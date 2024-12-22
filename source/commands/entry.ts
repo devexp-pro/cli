@@ -14,7 +14,6 @@ import toolClip from "$/tools/clip";
 import { dash } from "./dash/mod.ts";
 import { intro } from "./intro.ts";
 import { setup } from "./setup/mod.ts";
-import { upgrade } from "./setup/upgrade.ts";
 import { cfg } from "./cfg.ts";
 import {
   BASE_RESOURCE_PATH,
