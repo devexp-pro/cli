@@ -30,17 +30,12 @@ export const getLatestTag = async () => {
 export enum MODE_TYPE {
   LOCAL_DEV = "LOCAL_DEV", // запущено локально из исходников с dev конфигом
   LOCAL_PROD = "LOCAL_PROD", // запущено локально из исходников с prod конфигом
-  REMOTE_COMMIT = "REMOTE_COMMIT",
   REMOTE_BRANCH = "REMOTE_BRANCH",
   REMOTE_TAG = "REMOTE_TAG",
 }
 
 export const IMU = import.meta.url;
 export const IS_REMOTE = IMU.includes("raw.githubusercontent.com");
-export const IS_REMOTE_COMMIT = "";
-export const IS_REMOTE_BRANCH = IS_REMOTE && IMU.includes("heads");
-export const IS_REMOTE_TAG = IS_REMOTE && IMU.includes("tags");
-
 export const IS_LOCAL = !IS_REMOTE;
 export const IS_LOCAL_DEV = IS_LOCAL &&
   (Deno.env.get("LOCAL_DEV") !== undefined &&
@@ -51,16 +46,13 @@ export const IS_LOCAL_PROD = IS_LOCAL &&
 
 export const GIT_BRANCH = (await kv.get<{ branch: string }>(["version"])).value
   ?.branch || null;
-
 export const GIT_LATEST_COMMIT_HASH = GIT_BRANCH
   ? await getLatestCommitHashByBranch(
     GIT_BRANCH as string,
   )
   : null;
-
 export const GIT_COMMIT_HASH = IMU.match(/(?<=\/)[a-f0-9]{40}(?=\/)/)?.[0] ||
   null;
-
 export const GIT_TAG = (await kv.get<{ tag: string }>(["version"])).value
   ?.tag || null;
 
@@ -72,11 +64,9 @@ export const MODE = IS_LOCAL_DEV
 
 export const BASE_REPO_PATH =
   `https://raw.githubusercontent.com/devexp-pro/cli/${GIT_COMMIT_HASH}`;
-
 export const ENTRYPOINT_SOURCE_URL = `${BASE_REPO_PATH}/source/main.ts`;
 export const IMPORT_MAP_URL = `${BASE_REPO_PATH}/import-map.json`;
-
-export const BASE_RESOURCE_PATH = IS_REMOTE_BRANCH
+export const BASE_RESOURCE_PATH = IS_REMOTE
   ? `https://raw.githubusercontent.com/devexp-pro/cli/${GIT_COMMIT_HASH}`
   : IS_LOCAL
   ? Deno.cwd()
