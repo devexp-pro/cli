@@ -5,8 +5,8 @@ export const IMU = import.meta.url;
 export const IS_REMOTE = IMU.includes("raw.githubusercontent.com");
 export const IS_DEVELOP = IS_REMOTE
   ? false
-  : (Deno.env.get("DEV") !== undefined &&
-    Deno.env.get("DEV") !== "false");
+  : (Deno.env.get("LOCAL_DEV") !== undefined &&
+    Deno.env.get("LOCAL_DEV") !== "false");
 export const IS_REMOTE_BRANCH = IS_REMOTE && IMU.includes("heads");
 export const GIT_REMOTE_BRANCH = IS_REMOTE_BRANCH
   ? IMU.match(/\/refs\/heads\/([a-zA-Z0-9\-_]+)/)?.[1]
@@ -30,7 +30,7 @@ export const IMPORT_MAP_URL = `${BASE_REPO_PATH}/import-map.json`;
 export const SERVICE_DOMAIN = IS_REMOTE
   ? "devexp.cloud"
   : IS_DEVELOP
-  ? "127.0.0.1:4000"
+  ? "localhost:4000"
   : "devexp.cloud";
 
 export const SERVICE_URL = IS_REMOTE
@@ -39,8 +39,8 @@ export const SERVICE_URL = IS_REMOTE
     SERVICE_DOMAIN;
 
 export const WEBSOCKET_URL = IS_REMOTE
-  ? `wss://wss.${SERVICE_DOMAIN}/wss`
-  : `${IS_DEVELOP ? "ws" : "wss"}://wss.${SERVICE_DOMAIN}/wss`;
+  ? `wss://wss.${SERVICE_DOMAIN}`
+  : `${IS_DEVELOP ? "ws" : "wss"}://wss.${SERVICE_DOMAIN}`;
 
 export const OS_NAME = Deno.build.os;
 export const SYSTEM_SHELL = Deno.env.get("SHELL") || Deno.env.get("ComSpec");

@@ -11,6 +11,7 @@ export const connect = async (
   const tunnelName = data.name;
   const port = data.port;
   console.log(`${url}/${tunnelName}`);
+
   const ws = new WebSocket(`${url}/${tunnelName}`);
 
   ws.onopen = function (e) {
