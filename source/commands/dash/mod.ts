@@ -1,6 +1,6 @@
 import { Command } from "@cliffy/command";
 import dashboard from "./gui.ts";
-import { config } from "$/constants";
+import { config } from "$/providers/config.ts";
 
 export const dash = new Command()
   .description("graphical dashboard for working with some utilities")

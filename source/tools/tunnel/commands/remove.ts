@@ -1,4 +1,4 @@
-import { kv } from "$/kv";
+import { kv } from "$/repositories/kv.ts";
 import { Command } from "@cliffy/command";
 import { Checkbox } from "@cliffy/prompt";
 

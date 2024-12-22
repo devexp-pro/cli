@@ -5,6 +5,7 @@ const action = async () => {
 
 const command = new Command()
   .name("fix")
+  .noGlobals()
   .description("create a new fix branch")
   .action(async (_options: any, ..._args: any) => {
     Deno.exit(0);

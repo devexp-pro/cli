@@ -1,5 +1,5 @@
 import { Command } from "@cliffy/command";
-import { kv } from "$/kv";
+import { kv } from "$/repositories/kv.ts";
 import { GitProfile } from "$/tools/git/types.ts";
 import { shelly } from "@vseplet/shelly";
 import { Select } from "@cliffy/prompt";
@@ -64,8 +64,22 @@ const inlineAction = async (slug: string, repoUrl: string) => {
     "config",
     "--file",
     repoConfigPath,
+    "core.sshCommand",
+    `ssh -i ${profile?.value?.keyPath}`,
+  ]);
+
+  if (res.code !== 0) {
+    console.log(`\n${res.stderr}\n`);
+    Deno.exit(-1);
+  }
+
+  res = await shelly([
+    "git",
+    "config",
+    "--file",
+    repoConfigPath,
     "user.name",
-    `"${profile.value.name}"`,
+    `${profile.value.name}`,
   ]);
 
   if (res.code !== 0) {
@@ -79,7 +93,7 @@ const inlineAction = async (slug: string, repoUrl: string) => {
     "--file",
     repoConfigPath,
     "user.email",
-    `"${profile.value.email}"`,
+    `${profile.value.email}`,
   ]);
 
   if (res.code !== 0) {

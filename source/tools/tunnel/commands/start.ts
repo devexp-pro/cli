@@ -1,6 +1,6 @@
 import { connect } from "../connect.ts";
 import { WEBSOCKET_URL } from "$/constants";
-import { kv } from "$/kv";
+import { kv } from "$/repositories/kv.ts";
 import { Command } from "@cliffy/command";
 import { Select } from "@cliffy/prompt/select";
 

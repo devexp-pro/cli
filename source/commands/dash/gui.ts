@@ -7,7 +7,7 @@ import {
   Reface,
   RESPONSE,
 } from "@vseplet/reface";
-import { kv } from "$/kv";
+import { kv } from "$/repositories/kv.ts";
 
 const Row = island<{
   index: number;

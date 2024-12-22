@@ -10,13 +10,13 @@ const baseCfg = Tuner.tune({
         },
       },
     },
-
+    providers: {},
+    repositories: {},
     commands: {
       dash: {
         hidden: false,
       },
     },
-
     tools: {
       tunnel: {
         hidden: false,

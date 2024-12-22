@@ -1,8 +1,10 @@
 import { Command } from "@cliffy/command";
-import { config, SERVICE_URL } from "$/constants";
+import { SERVICE_URL } from "$/constants";
 import fetchify from "@vseplet/fetchify";
-import { getSession } from "$/kv";
+import { getSession } from "$/providers/session.ts";
+import { config } from "$/providers/config.ts";
 import api from "./api.ts";
+import { addMAN } from "$/helpers";
 
 const createClient = async () => {
   const session = await getSession();
@@ -11,7 +13,7 @@ const createClient = async () => {
   return fetchify.create({
     limiter: {
       rps: 1,
-      rt: (response) => 1000,
+      rt: () => 1000,
     },
     baseURL: `${SERVICE_URL}/tool/clip`,
     headers: {
@@ -90,6 +92,8 @@ tool
   })
   .command("store", store)
   .command("load", load);
+
+addMAN(tool);
 
 export default {
   tool,

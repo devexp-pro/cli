@@ -1,4 +1,4 @@
-import { kv } from "$/kv";
+import { kv } from "$/repositories/kv.ts";
 import { Table } from "@cliffy/table";
 import { Command } from "@cliffy/command";
 import set from "./set.ts";

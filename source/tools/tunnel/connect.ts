@@ -1,6 +1,6 @@
 import * as base64 from "@std/encoding/base64";
 import { SERVICE_DOMAIN } from "$/constants";
-import { kv } from "$/kv";
+import { kv } from "$/repositories/kv.ts";
 
 export const connect = async (
   url: string,
@@ -11,7 +11,8 @@ export const connect = async (
   const tunnelName = data.name;
   const port = data.port;
   console.log(`${url}/${tunnelName}`);
-  const ws = new WebSocket(`${url}/${tunnelName}`);
+
+  const ws = new WebSocket(`${url}/wss/${tunnelName}`);
 
   ws.onopen = function (e) {
     console.log(

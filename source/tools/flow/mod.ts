@@ -3,7 +3,8 @@ import create from "./commands/create.ts";
 import run from "./commands/run.ts";
 import init from "./commands/init.ts";
 import { Select } from "@cliffy/prompt/select";
-import { config } from "$/constants";
+import { config } from "$/providers/config.ts";
+import { addMAN } from "$/helpers";
 
 const tool = new Command();
 if (config.data.tools.flow.hidden) tool.hidden();
@@ -46,6 +47,8 @@ tool
   .command("create", create.command)
   .command("run", run.command)
   .command("init", init.command);
+
+addMAN(tool);
 
 export default {
   tool,

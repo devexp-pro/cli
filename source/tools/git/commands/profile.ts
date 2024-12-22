@@ -2,7 +2,7 @@ import { Command } from "@cliffy/command";
 import { Checkbox, Input, prompt } from "@cliffy/prompt";
 import { shelly } from "@vseplet/shelly";
 import { HOME } from "$/constants";
-import { kv } from "$/kv";
+import { kv } from "$/repositories/kv.ts";
 import { GitProfile } from "$/tools/git/types.ts";
 import { Table } from "@cliffy/table";
 import clip from "$/tools/clip/api.ts";
@@ -61,9 +61,7 @@ const create = new Command()
 
     if (res.ok) {
       console.log(
-        `  Git profile created successfully, profile public key added to your clipboard:\n\n ${
-          publicKey
-        }`,
+        `  Git profile created successfully, profile public key added to your clipboard:\n\n ${publicKey}`,
       );
 
       await clip.clipboard.write(publicKey);
@@ -149,6 +147,7 @@ const action = async () => {
 
 const command = new Command()
   .name("profile")
+  .noGlobals()
   .description("update or create git profile")
   .action(async (_options: any, ..._args: any) => {
     command.showHelp();

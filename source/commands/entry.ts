@@ -1,26 +1,62 @@
 import { Command } from "@cliffy/command";
 
-import {
-  introText,
-  IS_DEVELOP,
-  logo,
-  REMOTE_VERSION,
-  VERSION,
-} from "$/constants";
+// import { IS_DEVELOP, LOCAL_VERSION, REMOTE_VERSION } from "$/constants";
+
+import { colors } from "@std/colors";
 
 import toolTunnel from "$/tools/tunnel";
 import toolConfig from "$/tools/config";
 import toolVault from "$/tools/vault";
 import toolGit from "$/tools/git";
 import toolFlow from "$/tools/flow";
-import toolCheat from "$/tools/cheat";
 import toolClip from "$/tools/clip";
 
 import { dash } from "./dash/mod.ts";
 import { intro } from "./intro.ts";
 import { setup } from "./setup/mod.ts";
-import { upgrade } from "./setup/upgrade.ts";
-import { cfg } from "./config.ts";
+import { cfg } from "./cfg.ts";
+import {
+  BASE_RESOURCE_PATH,
+  getLatestCommitHash,
+  GIT_BRANCH,
+  GIT_COMMIT_HASH,
+  GIT_TAG,
+  MODE,
+} from "$/providers/version.ts";
+
+export const logo = `
+  ${colors.rgb24("██████╗ ███████╗██╗   ██╗", 0xFFA500)}${
+  colors.magenta("███████╗██╗  ██╗██████╗")
+}
+  ${colors.rgb24("██╔══██╗██╔════╝██║   ██║", 0xFFA500)}${
+  colors.magenta("██╔════╝╚██╗██╔╝██╔══██╗")
+}
+  ${colors.rgb24("██║  ██║█████╗  ██║   ██║", 0xFFA500)}${
+  colors.magenta("█████╗   ╚███╔╝ ██████╔╝")
+}
+  ${colors.rgb24("██║  ██║██╔══╝  ╚██╗ ██╔╝", 0xFFA500)}${
+  colors.magenta("██╔══╝   ██╔██╗ ██╔═══╝")
+}
+  ${colors.rgb24("██████╔╝███████╗ ╚████╔╝ ", 0xFFA500)}${
+  colors.magenta("███████╗██╔╝ ██╗██║")
+}
+  ${colors.rgb24("╚═════╝ ╚══════╝  ╚═══╝  ", 0xFFA500)}${
+  colors.magenta("╚══════╝╚═╝  ╚═╝╚═╝")
+}
+
+  https://devexp.pro`;
+
+export const introText = `
+  VERSION MODE: ${MODE}
+  GIT_BRANCH: ${GIT_BRANCH}
+  GIT_LATEST_COMMIT_HASH: ${await getLatestCommitHash()}
+  GIT_COMMIT_HASH: ${GIT_COMMIT_HASH}
+  GIT_TAG: ${GIT_TAG}
+  BASE_RESOURCE_PATH: ${BASE_RESOURCE_PATH}
+
+  Crafted with ${colors.red("<3")} by DevExp
+  Use "dx -h" to get help on commands.
+`;
 
 export const entry = new Command()
   .name("dx")
@@ -32,10 +68,10 @@ export const entry = new Command()
     console.log(logo);
     console.log(introText);
 
-    if (REMOTE_VERSION !== VERSION && !IS_DEVELOP) {
-      upgrade.showHelp();
-      Deno.exit();
-    }
+    // if (REMOTE_VERSION !== LOCAL_VERSION && !IS_DEVELOP) {
+    //   upgrade.showHelp();
+    //   Deno.exit();
+    // }
 
     entry.showHelp();
     Deno.exit();
@@ -45,7 +81,6 @@ export const entry = new Command()
   .command("config", toolConfig)
   .command("vault", toolVault)
   .command("flow", toolFlow.tool)
-  .command("cheat", toolCheat)
   .command("git", toolGit.tool)
   .command("clip", toolClip.tool)
   // commands

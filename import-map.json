@@ -5,6 +5,8 @@
     "$/constants": "./source/constants.ts",
     "$/helpers": "./source/helpers.ts",
     "$/types": "./source/types.ts",
+    "$/providers/": "./source/providers/",
+    "$/repositories/": "./source/repositories/",
     "$/kv": "./source/kv.ts",
     "$config/": "./config/",
 
@@ -39,6 +41,7 @@
     "@cliffy/prompt/input": "jsr:@cliffy/prompt@1.0.0-rc.7/input",
     "@cliffy/prompt/prompt": "jsr:@cliffy/prompt@1.0.0-rc.7/prompt",
     "@hono/hono": "jsr:@hono/hono@4.5.6",
+    "@littletof/charmd": "jsr:@littletof/charmd@0.1.2",
 
     "@vseplet/shibui": "jsr:@vseplet/shibui@0.4.40",
     "@vseplet/shibui/core": "jsr:@vseplet/shibui@0.4.40/core",
@@ -49,6 +52,6 @@
     "@vseplet/luminous": "jsr:@vseplet/luminous@1.0.6",
     "@vseplet/reface": "jsr:@vseplet/reface@0.0.24",
     "@vseplet/fetchify": "jsr:@vseplet/fetchify@0.3.20",
-    "@artpani/tuner": "https://deno.land/x/tuner@v0.6.3/mod.ts?source"
+    "@artpani/tuner": "https://deno.land/x/tuner@v0.6.7/mod.ts?source"
   }
 }

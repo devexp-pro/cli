@@ -4,7 +4,8 @@ import remove from "./commands/remove.ts";
 import set from "./commands/set.ts";
 import start from "./commands/start.ts";
 import { Select } from "@cliffy/prompt";
-import { config } from "$/constants";
+import { config } from "$/providers/config.ts";
+import { addMAN } from "$/helpers";
 
 // https://www.asciiart.eu/text-to-ascii-art font Pagga
 const tool = new Command();
@@ -47,5 +48,7 @@ tool
   .command("start", start.command)
   .command("remove", remove.command)
   .command("list", list.command);
+
+addMAN(tool);
 
 export default tool;
