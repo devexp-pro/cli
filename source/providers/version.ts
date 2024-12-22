@@ -106,7 +106,6 @@ export const upgradeVersion = async () => {
     "-r",
     "-f",
     "-g",
-    "-f",
     "--allow-net",
     "--allow-run",
     "--allow-env",
