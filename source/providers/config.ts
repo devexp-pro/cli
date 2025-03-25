@@ -6,7 +6,6 @@ export const loadConfig = async () => {
   console.log(MODE);
   if (!MODE || !(MODE in MODE_TYPE)) {
     console.log(`Cannot get config for mode ${MODE ?? "undefined"}, using dev`);
-    Deno.exit(-1);
   }
 
   const configMap: Record<

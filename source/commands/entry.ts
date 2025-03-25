@@ -57,12 +57,6 @@ export const entry = new Command()
   .action((_options: any, ..._args: any) => {
     console.log(logo);
     console.log(introText);
-
-    // if (REMOTE_VERSION !== LOCAL_VERSION && !IS_DEVELOP) {
-    //   upgrade.showHelp();
-    //   Deno.exit();
-    // }
-
     entry.showHelp();
     Deno.exit();
   })
