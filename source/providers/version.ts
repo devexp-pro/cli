@@ -8,7 +8,6 @@ export enum MODE_TYPE {
 }
 
 export const IMU = import.meta.url;
-console.log(IMU);
 export const IS_REMOTE = IMU.includes("raw.githubusercontent.com");
 export const IS_LOCAL = !IS_REMOTE;
 
@@ -26,7 +25,7 @@ export const MODE = IS_LOCAL_DEV
   ? MODE_TYPE.LOCAL_DEV
   : IS_LOCAL_PROD
   ? MODE_TYPE.LOCAL_PROD
-  : (await kv.get<{ mode: MODE_TYPE }>(["version"])).value?.mode;
+  : MODE_TYPE.REMOTE_BRANCH;
 
 export const BASE_REPO_PATH =
   `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads${GIT_BRANCH}`;
@@ -37,4 +36,4 @@ export const BASE_RESOURCE_PATH = IS_REMOTE
   ? Deno.cwd()
   : null;
 
-// deno install -g -f -r --allow-env --unstable-kv --unstable-broadcast-channel https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/vseplet/reduce_update/source/main.ts --import-map=https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/vseplet/reduce_update/import-map.json -n dxt
+// deno install -g -f -r --allow-env --allow-net --allow-read --allow-write --allow-sys --allow-run --unstable-kv --unstable-broadcast-channel https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/vseplet/reduce_update/source/main.ts --import-map=https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/vseplet/reduce_update/import-map.json -n dxt
