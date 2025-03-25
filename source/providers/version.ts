@@ -19,7 +19,7 @@ export const IS_LOCAL_PROD = IS_LOCAL &&
   (Deno.env.get("LOCAL_DEV") !== undefined &&
     Deno.env.get("LOCAL_DEV") == "false");
 
-const match = IMU.match(/refs\/heads\/(?<GIT_BRANCH>[^/]+)/);
+const match = IMU.match(/refs\/heads\/(?<GIT_BRANCH>.+?)\/source/);
 export const GIT_BRANCH = match?.groups ? match.groups.GIT_BRANCH : "";
 
 export const MODE = IS_LOCAL_DEV
@@ -36,3 +36,5 @@ export const BASE_RESOURCE_PATH = IS_REMOTE
   : IS_LOCAL
   ? Deno.cwd()
   : null;
+
+// deno install -g -f -r --allow-env --unstable-kv --unstable-broadcast-channel https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/vseplet/reduce_update/source/main.ts --import-map=https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/vseplet/reduce_update/import-map.json -n dxt
