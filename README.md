@@ -11,7 +11,7 @@ deno -A -r --unstable-kv https://devexp.pro/branch.ts main dx
 Development version (For testing the latest changes, new features, and more):
 
 ```sh
-deno -A -r --unstable-kv https://devexp.pro/branch.ts develop dxd
+deno install -g -f -r --allow-env --allow-net --allow-read --allow-write --allow-sys --allow-run --unstable-kv --unstable-broadcast-channel https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/develop/source/main.ts --import-map=https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/develop/import-map.json -n dxt
 ```
 
 By tag (Great for containers with pre-installed Deno):
