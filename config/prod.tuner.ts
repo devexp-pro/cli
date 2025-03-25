@@ -19,10 +19,22 @@ const prodCfg = Tuner.tune({
       },
     },
     tools: {
+      tunnel: {
+        hidden: false,
+      },
+      vault: {
+        hidden: false,
+      },
+      flow: {
+        hidden: true,
+      },
       config: {
         hidden: true,
       },
       git: {
+        hidden: false,
+      },
+      clip: {
         hidden: false,
       },
       cheat: {
