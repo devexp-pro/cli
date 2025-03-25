@@ -1,7 +1,5 @@
 import { Command } from "@cliffy/command";
 
-// import { IS_DEVELOP, LOCAL_VERSION, REMOTE_VERSION } from "$/constants";
-
 import { colors } from "@std/colors";
 
 import toolTunnel from "$/tools/tunnel";
