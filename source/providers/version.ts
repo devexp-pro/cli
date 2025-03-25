@@ -62,7 +62,7 @@ export const getLatestTag = async () => {
   const data: Array<{ name: string; commit: { sha: string } }> =
     await (await fetch(`https://api.github.com/repos/devexp-pro/cli/tags`))
       .json();
-
+  console.log(data);
   return data[0];
 };
 

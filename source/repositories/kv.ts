@@ -5,11 +5,15 @@ export const openKv = async () => {
     ? Deno.env.get("APPDATA") || Deno.env.get("USERPROFILE")
     : Deno.env.get("HOME");
 
+  console.log(dbDir);
+
   if (!dbDir) {
     throw new Error("Failed to determine the home directory.");
   }
 
   const dbPath = join(dbDir, ".dx", "kv");
+
+  console.log(dbPath);
 
   try {
     await Deno.mkdir(join(dbDir, ".dx"), { recursive: true });
