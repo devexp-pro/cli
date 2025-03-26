@@ -33,8 +33,8 @@ export const write = async (text: string) => {
         "powershell",
         "-noprofile",
         "-command",
-        `Set-Clipboard -Value`,
-      ], // '${text.replace(/'/g, "''")}'
+        `$input | Set-Clipboard`,
+      ],
       "android": "",
       "freebsd": "",
       "netbsd": "",
