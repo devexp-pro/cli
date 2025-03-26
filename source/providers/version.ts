@@ -28,7 +28,7 @@ export const MODE = IS_LOCAL_DEV
   : MODE_TYPE.REMOTE_BRANCH;
 
 export const BASE_REPO_PATH =
-  `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads${GIT_BRANCH}/`;
+  `https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/${GIT_BRANCH}/`;
 
 export const BASE_RESOURCE_PATH = IS_REMOTE
   ? BASE_REPO_PATH
