@@ -3,7 +3,6 @@ import { BaseCfgType } from "$config/base.tuner.ts";
 import Tuner from "@artpani/tuner";
 
 export const loadConfig = async () => {
-  console.log(MODE);
   if (!MODE || !(MODE in MODE_TYPE)) {
     console.log(`Cannot get config for mode ${MODE ?? "undefined"}, using dev`);
   }

@@ -1,5 +1,3 @@
-import { kv } from "$/repositories/kv.ts";
-
 export enum MODE_TYPE {
   LOCAL_DEV = "LOCAL_DEV", // установлено и запущено из исходников с dev конфигом
   LOCAL_PROD = "LOCAL_PROD", // установлено и запущено из исходников с prod конфигом
