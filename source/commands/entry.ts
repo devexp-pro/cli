@@ -1,7 +1,5 @@
 import { Command } from "@cliffy/command";
 
-// import { IS_DEVELOP, LOCAL_VERSION, REMOTE_VERSION } from "$/constants";
-
 import { colors } from "@std/colors";
 
 import toolTunnel from "$/tools/tunnel";
@@ -15,14 +13,7 @@ import { dash } from "./dash/mod.ts";
 import { intro } from "./intro.ts";
 import { setup } from "./setup/mod.ts";
 import { cfg } from "./cfg.ts";
-import {
-  BASE_RESOURCE_PATH,
-  getLatestCommitHash,
-  GIT_BRANCH,
-  GIT_COMMIT_HASH,
-  GIT_TAG,
-  MODE,
-} from "$/providers/version.ts";
+import { BASE_RESOURCE_PATH, GIT_BRANCH, MODE } from "$/providers/version.ts";
 
 export const logo = `
   ${colors.rgb24("██████╗ ███████╗██╗   ██╗", 0xFFA500)}${
@@ -49,9 +40,6 @@ export const logo = `
 export const introText = `
   VERSION MODE: ${MODE}
   GIT_BRANCH: ${GIT_BRANCH}
-  GIT_LATEST_COMMIT_HASH: ${await getLatestCommitHash()}
-  GIT_COMMIT_HASH: ${GIT_COMMIT_HASH}
-  GIT_TAG: ${GIT_TAG}
   BASE_RESOURCE_PATH: ${BASE_RESOURCE_PATH}
 
   Crafted with ${colors.red("<3")} by DevExp
@@ -67,12 +55,6 @@ export const entry = new Command()
   .action((_options: any, ..._args: any) => {
     console.log(logo);
     console.log(introText);
-
-    // if (REMOTE_VERSION !== LOCAL_VERSION && !IS_DEVELOP) {
-    //   upgrade.showHelp();
-    //   Deno.exit();
-    // }
-
     entry.showHelp();
     Deno.exit();
   })

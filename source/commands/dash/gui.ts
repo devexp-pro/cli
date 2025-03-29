@@ -9,36 +9,113 @@ import {
 } from "@vseplet/reface";
 import { kv } from "$/repositories/kv.ts";
 
+const formatValue = (value: unknown): string => {
+  if (Array.isArray(value)) {
+    return JSON.stringify(value, null, 2);
+  } else if (typeof value === "object") {
+    try {
+      return JSON.stringify(value, null, 2);
+    } catch {
+      return String(value);
+    }
+  }
+  return String(value);
+};
+
+const expandedStates: Set<string> = new Set();
+
+const GroupedEntries = (
+  entries: { key: string[]; value: unknown; versionstamp: string }[],
+) => {
+  const grouped = entries.reduce(
+    (acc, entry) => {
+      const group = entry.key[0] || "Ungrouped";
+      if (!acc[group]) {
+        acc[group] = [];
+      }
+      acc[group].push(entry);
+      return acc;
+    },
+    {} as {
+      [group: string]: {
+        key: string[];
+        value: unknown;
+        versionstamp: string;
+      }[];
+    },
+  );
+
+  return Object.entries(grouped).map(([group, groupEntries]) => {
+    return html`
+      <tr>
+        <td colspan="4"><strong>${group}</strong></td>
+      </tr>
+      ${
+      groupEntries.map((entry, index) =>
+        Row({
+          index: index + 1,
+          key: entry.key,
+          value: entry.value,
+          versionstamp: entry.versionstamp,
+        })
+      )
+    }
+    `;
+  });
+};
+
 const Row = island<{
   index: number;
   key: string[];
   value: unknown;
   versionstamp: string;
 }, {
+  toggle: { key: string };
   remove: { key: string };
 }>({
   template: ({ props, rpc }) => {
+    const keyString = props.key.join("|");
+    const isExpanded = expandedStates.has(keyString);
+    const isLarge = JSON.stringify(props.value).length > 100;
+    const preview = isLarge && !isExpanded
+      ? JSON.stringify(props.value).substring(0, 100) + "..."
+      : formatValue(props.value);
     // deno-fmt-ignore
     return html`
       <tr class="align-middle">
         <th scope="row">${props.index}</th>
         <td>${props.key.join(" ")}</td>
-        <td>${JSON.stringify(props.value)}</td>
+        <td>
+          <div>
+            <pre>${preview}</pre>
+            ${isLarge ? html`<button class="btn btn-link" ${rpc.hx.toggle({ key: keyString })}>${isExpanded ? "Collapse" : "Expand"}</button>` : ""}
+          </div>
+        </td>
         <td>${props.versionstamp}</td>
         <td>
           <button
             class="btn btn-danger"
-            ${rpc.hx.remove({ key: props.key.join("|") })}
+            ${rpc.hx.remove({ key: keyString })}
             hx-target="#alerts">
             Delete
           </button>
         </td>
       </tr>
-    `
+    `;
   },
   rpc: {
+    toggle: async ({ args }) => {
+      const key = args.key;
+      if (expandedStates.has(key)) {
+        expandedStates.delete(key);
+      } else {
+        expandedStates.add(key);
+      }
+      return RESPONSE();
+    },
     remove: async ({ args }) => {
       const key = args.key.split("|");
+      expandedStates.delete(args.key);
       await kv.delete(key);
       return RESPONSE(
         Alert("warning", `Value by key: ${key.join(" ")} deleted`),
@@ -67,15 +144,10 @@ const ListOfEntries = island<{ interval: number }, { entries: null }>({
   rpc: {
     entries: async () =>
       RESPONSE(
-        (await Array.fromAsync(kv.list({ prefix: [] })))
-          .map((entry, index) =>
-            Row({
-              index: index + 1,
-              key: entry.key as string[],
-              value: entry.value,
-              versionstamp: entry.versionstamp,
-            })
-          ),
+        GroupedEntries(
+          //@ts-ignore
+          await Array.fromAsync(kv.list({ prefix: [] })),
+        ),
       ),
   },
 });
@@ -138,7 +210,7 @@ const SubmitValue = island<
 
 const EntryPage = component(() => {
   return html`
-    <div class="container p-5" style="max-width: 50rem;">
+    <div class="container p-5" style="max-width: 100rem;">
       <h1>Simple Deno KV viewer</h1>
       <div class="mt-5">
         ${SubmitValue({ alertsId: "alerts" })}
@@ -149,6 +221,7 @@ const EntryPage = component(() => {
       </div>
       <hr class="my-5" />
       <div id="alerts"></div>
+      <button class="btn btn-danger mt-3" hx-post="/clear-db" hx-target="#alerts">Clear Database</button>
     </div>
   `;
 });

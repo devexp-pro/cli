@@ -28,8 +28,13 @@ export const write = async (text: string) => {
   try {
     const cmd = {
       "darwin": ["pbcopy"],
-      "linux": "",
-      "windows": "",
+      "linux": ["xsel", "-b", "-i"],
+      "windows": [
+        "powershell",
+        "-noprofile",
+        "-command",
+        `$input | Set-Clipboard`,
+      ],
       "android": "",
       "freebsd": "",
       "netbsd": "",
