@@ -13,7 +13,6 @@ import { dash } from "./dash/mod.ts";
 import { intro } from "./intro.ts";
 import { setup } from "./setup/mod.ts";
 import { cfg } from "./cfg.ts";
-import { BASE_RESOURCE_PATH, GIT_BRANCH, IS_DEV, MODE } from "$/constants";
 
 export const logo = `
   ${colors.rgb24("██████╗ ███████╗██╗   ██╗", 0xFFA500)}${
@@ -35,8 +34,21 @@ export const logo = `
   colors.magenta("╚══════╝╚═╝  ╚═╝╚═╝")
 }`;
 
-export const introText = `
-  Crafted with ${colors.red("<3")} by DevExp (https://devexp.pro)
+const r = colors.red;
+const b = colors.blue;
+const y = colors.yellow;
+const d = colors.reset;
+export const logo2 = y(`
+        ,~~.
+   ,   (  - )${r(">")}    Crafted with ${r("<3")} ${b("https://devexp.pro")}
+   )\`~~'   (      Use "dx -h" to get help on commands.
+  (  .__)   )
+   \`-.____,'      ${colors.rgb24("Dev", 0xFFA500)}${colors.magenta("Exp")}
+`);
+
+export const introText = `  Crafted with ${colors.red("<3")} ${
+  colors.blue("https://devexp.pro")
+}
   Use "dx -h" to get help on commands.
 `;
 
@@ -44,11 +56,11 @@ export const entry = new Command()
   .name("dx")
   .usage("[command]")
   .description(
-    "This is a powerful entry point for all developers, significantly improving the developer experience",
+    "This is a powerful entry point for all developers, significantly\nimproving the developer experience",
   )
   .action((_options: any, ..._args: any) => {
-    console.log(logo);
-    console.log(introText);
+    console.log(logo2);
+    // console.log(introText);
     entry.showHelp();
     Deno.exit();
   })
