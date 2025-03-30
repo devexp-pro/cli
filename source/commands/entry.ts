@@ -35,14 +35,15 @@ export const logo = `
 }`;
 
 const r = colors.red;
+const b = colors.blue;
 const y = colors.yellow;
 const d = colors.reset;
 export const logo2 = y(`
         ,~~.
-   ,   (  - )${r(">")}
-   )\`~~'   (
+   ,   (  - )${r(">")}    Crafted with ${r("<3")} ${b("https://devexp.pro")}
+   )\`~~'   (      Use "dx -h" to get help on commands.
   (  .__)   )
-   \`-.____,'   ${colors.rgb24("Dev", 0xFFA500)}${colors.magenta("Exp")}
+   \`-.____,'      ${colors.rgb24("Dev", 0xFFA500)}${colors.magenta("Exp")}
 `);
 
 export const introText = `  Crafted with ${colors.red("<3")} ${
@@ -59,7 +60,7 @@ export const entry = new Command()
   )
   .action((_options: any, ..._args: any) => {
     console.log(logo2);
-    console.log(introText);
+    // console.log(introText);
     entry.showHelp();
     Deno.exit();
   })
