@@ -1,29 +1,45 @@
-![Альтернативный текст](./docs/dx.png)
+![DevExp Logo](./docs/dx.png)
+# About
 
-## How to install:
+Welcome to DevExp, your developer experience toolkit! 🚀
 
-Production version (Not available, still in development):
+----
+- [About](#about)
+- [📖 Documentation](#-documentation)
+  - [🚀 Installation](#-installation)
+    - [Production Version](#production-version)
+    - [Development Version](#development-version)
+  - [🛠 Tools Manuals](#-tools-manuals)
+- [License for DEVEXP CLI](#license-for-devexp-cli)
+---
+# 📖 Documentation
 
+## 🚀 Installation
+
+### Production Version
+Install the stable production version:
 ```sh
-deno -A -r --unstable-kv https://devexp.pro/branch.ts main dx
+curl -fsSL https://devexp.pro/install.sh | sh
 ```
 
-Development version (For testing the latest changes, new features, and more):
-
+### Development Version
+For testing the latest changes, new features, and improvements:
 ```sh
-deno install -g -f -r --allow-env --allow-net --allow-read --allow-write --allow-sys --allow-run --unstable-kv --unstable-broadcast-channel https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/develop/source/main.ts --import-map=https://raw.githubusercontent.com/devexp-pro/cli/refs/heads/develop/import-map.json -n dxt
+curl -fsSL https://devexp.pro/install-develop.sh | sh
 ```
 
-By tag (Great for containers with pre-installed Deno):
+---
 
-```sh
-deno -A -r --unstable-kv https://devexp.pro/tag.ts [tag] [alias_name]
-```
+## 🛠 Tools Manuals
 
-By branch (Suitable for development and testing from a specific branch):
+- **[Tunnel](./source/tools/tunnel/MAN.md)** — HTTP tunnels for development and public access.
+- **[Clip](./source/tools/clip/MAN.md)** — Store text in the cloud clipboard.
+- **[Git](./source/tools/git/MAN.md)** — Git helpers for profile management, repository cloning, and more.
+- **[Vault](./source/tools/vault/MAN.md)** — Centralized secrets management.
+- **[Flow](./source/tools/flow/MAN.md)** — Quickly create and run automation scripts.
 
-```sh
-deno -A -r --unstable-kv https://devexp.pro/branch.ts [branch_name] [alias_name]
-```
+---
 
-## [Documentation](./docs/main.md)
+📌 Stay productive with DevExp! 🚀
+
+# [License for DEVEXP CLI](./LICENSE)
