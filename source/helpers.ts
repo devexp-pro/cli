@@ -1,6 +1,6 @@
 import { renderMarkdown } from "@littletof/charmd";
 import { Command } from "@cliffy/command";
-import { BASE_REPO_PATH, IS_REMOTE } from "$/providers/version.ts";
+import { BASE_REPO_PATH, IS_REMOTE } from "$/constants";
 // import { BASE_REPO_PATH, IS_DEVELOP, IS_REMOTE } from "$/constants";
 
 export async function fetchJSON(url: URL | string): Promise<string> {

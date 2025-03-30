@@ -8,7 +8,7 @@ import { kv } from "$/repositories/kv.ts";
 import { getSession } from "$/providers/session.ts";
 import { SERVICE_URL } from "$/constants";
 import { green, red, yellow } from "./deps.ts";
-import { IS_LOCAL } from "$/providers/version.ts";
+import { IS_LOCAL } from "$/constants";
 
 export async function createClient(): Promise<ApiflyClient<GuardenDefinition>> {
   const session = await getSession();
