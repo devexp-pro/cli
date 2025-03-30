@@ -1,6 +1,18 @@
-# ![DevExp Logo](./docs/dx.png)
+![DevExp Logo](./docs/dx.png)
+# About
 
-# DevExp — Your Developer Experience Toolkit
+Welcome to DevExp, your developer experience toolkit! 🚀
+
+----
+- [About](#about)
+- [📖 Documentation](#-documentation)
+  - [🚀 Installation](#-installation)
+    - [Production Version](#production-version)
+    - [Development Version](#development-version)
+  - [🛠 Tools Manuals](#-tools-manuals)
+- [License for DEVEXP CLI](#license-for-devexp-cli)
+---
+# 📖 Documentation
 
 ## 🚀 Installation
 
@@ -17,8 +29,6 @@ curl -fsSL https://devexp.pro/install-develop.sh | sh
 ```
 
 ---
-
-# 📖 Documentation
 
 ## 🛠 Tools Manuals
 
