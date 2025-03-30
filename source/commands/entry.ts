@@ -55,7 +55,7 @@ export const entry = new Command()
   .name("dx")
   .usage("[command]")
   .description(
-    "This is a powerful entry point for all developers, significantly improving the developer experience",
+    "This is a powerful entry point for all developers, significantly\nimproving the developer experience",
   )
   .action((_options: any, ..._args: any) => {
     console.log(logo2);
