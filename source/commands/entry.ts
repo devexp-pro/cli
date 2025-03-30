@@ -35,12 +35,7 @@ export const logo = `
   colors.magenta("╚══════╝╚═╝  ╚═╝╚═╝")
 }`;
 
-export const introText = IS_DEV
-  ? `
-  VERSION MODE: ${MODE}
-  GIT_BRANCH: ${GIT_BRANCH}
-  BASE_RESOURCE_PATH: ${BASE_RESOURCE_PATH}`
-  : "" + `
+export const introText = `
   Crafted with ${colors.red("<3")} by DevExp (https://devexp.pro)
   Use "dx -h" to get help on commands.
 `;
