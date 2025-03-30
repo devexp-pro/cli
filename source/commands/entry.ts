@@ -13,7 +13,7 @@ import { dash } from "./dash/mod.ts";
 import { intro } from "./intro.ts";
 import { setup } from "./setup/mod.ts";
 import { cfg } from "./cfg.ts";
-import { BASE_RESOURCE_PATH, GIT_BRANCH, MODE } from "$/providers/version.ts";
+import { BASE_RESOURCE_PATH, GIT_BRANCH, IS_DEV, MODE } from "$/constants";
 
 export const logo = `
   ${colors.rgb24("██████╗ ███████╗██╗   ██╗", 0xFFA500)}${
@@ -33,16 +33,10 @@ export const logo = `
 }
   ${colors.rgb24("╚═════╝ ╚══════╝  ╚═══╝  ", 0xFFA500)}${
   colors.magenta("╚══════╝╚═╝  ╚═╝╚═╝")
-}
-
-  https://devexp.pro`;
+}`;
 
 export const introText = `
-  VERSION MODE: ${MODE}
-  GIT_BRANCH: ${GIT_BRANCH}
-  BASE_RESOURCE_PATH: ${BASE_RESOURCE_PATH}
-
-  Crafted with ${colors.red("<3")} by DevExp
+  Crafted with ${colors.red("<3")} by DevExp (https://devexp.pro)
   Use "dx -h" to get help on commands.
 `;
 

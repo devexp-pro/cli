@@ -1,7 +1,7 @@
 import { Command } from "@cliffy/command";
 import { config } from "$/providers/config.ts";
 import * as constants from "$/constants";
-import * as version from "$/providers/version.ts";
+import * as version from "$/constants";
 
 export const cfg = new Command()
   .name("cfg")
