@@ -45,9 +45,9 @@ export const logo2 = y(`
    \`-.____,'   ${colors.rgb24("Dev", 0xFFA500)}${colors.magenta("Exp")}
 `);
 
-export const introText = `  Crafted with ${
-  colors.red("<3")
-} by DevExp (https://devexp.pro)
+export const introText = `  Crafted with ${colors.red("<3")} ${
+  colors.blue("https://devexp.pro")
+}
   Use "dx -h" to get help on commands.
 `;
 
