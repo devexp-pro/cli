@@ -10,7 +10,7 @@ import secretCommand from "./commands/secret_commands.ts";
 import inviteCommand from "./commands/invite_commands.ts";
 
 const tool = new Command();
-if (config.data.tools.clip.hidden) tool.hidden();
+if (config.data.tools.vault.hidden) tool.hidden();
 
 tool
   .name("vault")

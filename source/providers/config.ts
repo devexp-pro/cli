@@ -1,6 +1,14 @@
-import { BASE_REPO_PATH, MODE, MODE_TYPE } from "$/providers/version.ts";
+import {
+  BASE_REPO_PATH,
+  GIT_BRANCH,
+  MODE,
+  MODE_TYPE,
+} from "$/providers/version.ts";
 import { BaseCfgType } from "$config/base.tuner.ts";
 import Tuner from "@artpani/tuner";
+import "$config/base.tuner.ts";
+import "$config/dev.tuner.ts";
+import "$config/prod.tuner.ts";
 
 export const loadConfig = async () => {
   if (!MODE || !(MODE in MODE_TYPE)) {
@@ -23,10 +31,15 @@ export const loadConfig = async () => {
       absolutePathPrefix: BASE_REPO_PATH,
       configName: "prod",
     },
-    [MODE_TYPE.REMOTE_BRANCH]: {
-      absolutePathPrefix: BASE_REPO_PATH,
-      configName: "dev",
-    },
+    [MODE_TYPE.REMOTE_BRANCH]: GIT_BRANCH.includes("main")
+      ? {
+        absolutePathPrefix: BASE_REPO_PATH,
+        configName: "prod",
+      }
+      : {
+        absolutePathPrefix: BASE_REPO_PATH,
+        configName: "dev",
+      },
   };
 
   const config = configMap[MODE as keyof typeof MODE_TYPE];
