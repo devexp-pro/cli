@@ -36,12 +36,15 @@ export const logo = `
 
 const r = colors.red;
 const b = colors.blue;
+const g = colors.green;
 const y = colors.yellow;
 const d = colors.reset;
 export const logo2 = y(`
         ,~~.
-   ,   (  - )${r(">")}    Crafted with ${r("<3")} ${b("https://devexp.pro")}
-   )\`~~'   (      Use "dx -h" to get help on commands.
+   ,   (  - )${r(">")}    ${g("Crafted with")} ${r("<3")} ${
+  b("https://devexp.pro")
+}
+   )\`~~'   (      ${g('Use "dx -h" to get help on commands.')}
   (  .__)   )
    \`-.____,'      ${colors.rgb24("Dev", 0xFFA500)}${colors.magenta("Exp")}
 `);
