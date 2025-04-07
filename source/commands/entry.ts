@@ -2,6 +2,7 @@ import { Command } from "@cliffy/command";
 
 import { colors } from "@std/colors";
 
+import toolIsolate from "$/tools/isolate";
 import toolTunnel from "$/tools/tunnel";
 import toolConfig from "$/tools/config";
 import toolVault from "$/tools/vault";
@@ -68,6 +69,7 @@ export const entry = new Command()
     Deno.exit();
   })
   // tools
+  .command("isolate", toolIsolate.tool)
   .command("tunnel", toolTunnel)
   .command("config", toolConfig)
   .command("vault", toolVault)

@@ -18,6 +18,9 @@ const baseCfg = Tuner.tune({
       },
     },
     tools: {
+      isolate: {
+        hidden: false,
+      },
       tunnel: {
         hidden: false,
       },
