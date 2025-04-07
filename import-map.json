@@ -1,5 +1,7 @@
 {
   "imports": {
+    "$submodules": "./submodules/",
+
     "$deno-json": "./deno.json",
     "$/shared": "./source/shared.ts",
     "$/constants": "./source/constants.ts",
