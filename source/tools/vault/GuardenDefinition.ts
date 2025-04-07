@@ -106,6 +106,15 @@ export type GuardenDefinition = ApiflyDefinition<
       args: [envUUID: TUUID, key: string];
       returns: { success: boolean; message?: string };
     };
+    createIntegration: {
+      args: [
+        accessToken: string,
+        denoDeployProjectId: string,
+        vaultEnvUUID: TUUID,
+        // auto_redeploy: boolean,
+      ];
+      returns: { success: boolean; integrationId?: TUUID; message?: string };
+    };
   },
   { userId: TUUID }
 >;
