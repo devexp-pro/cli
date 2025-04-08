@@ -1,11 +1,12 @@
 import { Command } from "@cliffy/command";
 import { config } from "$/providers/config.ts";
+import hev from "@devexp/hev";
 
 const add = new Command()
   .name("add")
   .usage("<text...>")
   .description("")
-  .arguments("[text...]")
+  .arguments("<path_to_script:string> <slug:string>")
   .option("-s, --show", "show stored data")
   .action(async (options: any, ...args: any) => {
     Deno.exit();
@@ -35,7 +36,7 @@ const serve = new Command()
   .description("")
   .option("-s, --show", "show loaded data")
   .action(async (options: any) => {
-    Deno.exit();
+    hev.init();
   });
 
 const tool = new Command();
