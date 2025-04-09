@@ -18,6 +18,9 @@ const baseCfg = Tuner.tune({
       },
     },
     tools: {
+      tservices: {
+        hidden: false,
+      },
       isolate: {
         hidden: false,
       },

@@ -1,14 +1,29 @@
-import { shelly } from "@vseplet/shelly";
-import { ok } from "node:assert";
+import proxy from "../../proxy/mod.ts";
+
+async function getFreePort(): Promise<number> {
+  const listener = Deno.listen({ port: 0 }); // порт 0 — значит "любой свободный"
+  const { port } = listener.addr as Deno.NetAddr;
+  listener.close(); // освобождаем порт
+  return port;
+}
 
 export class Lord {
-  constructor(private kv: Deno.Kv, private groupSlug: string = "default") {
+  private childs: Array<Deno.ChildProcess> = [];
+
+  constructor(private kv: Deno.Kv) {
+    Deno.addSignalListener("SIGINT", async () => {
+      this.childs.forEach((child) => {
+        child.kill();
+      });
+
+      Deno.exit();
+    });
   }
 
   async add(isolateParams: {
     slug: string;
     group: string;
-    pathToScript: string;
+    entrypoint: string;
     importMap?: string;
     env?: Record<string, string>;
   }): Promise<boolean> {
@@ -21,7 +36,38 @@ export class Lord {
   }
 
   async start(group: string, slug?: string) {
-    const isolatesToStart: any = this.get(group, slug);
+    const isolatesToStart: any = await this.get(group, slug);
+
+    for (const i in isolatesToStart) {
+      const isolate = isolatesToStart[i];
+      const port = await getFreePort();
+
+      const command = new Deno.Command(Deno.execPath(), {
+        args: [
+          "-A",
+          isolate.entrypoint,
+        ],
+        env: {
+          "DX_PORT": port.toString(),
+          "DX_ID": "1",
+        },
+        // stdin: "piped",
+        stderr: "piped",
+        stdout: "piped",
+      });
+
+      proxy.addRoute(isolate.slug, port);
+
+      const child = command.spawn();
+      this.childs.push(child);
+
+      console.log(
+        `start isolate on http://${isolate.slug}.localhost (pid: ${child.pid}, port: ${port})`,
+      );
+
+      // child.stdout.pipeTo(Deno.stdout.writable);
+      // child.stderr.pipeTo(Deno.stderr.writable);
+    }
 
     return isolatesToStart;
   }

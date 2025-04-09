@@ -1,7 +1,6 @@
 import { Command } from "@cliffy/command";
 import { config } from "$/providers/config.ts";
 import hev from "@devexp/hev";
-import { group } from "node:console";
 
 const add = new Command()
   .name("add")
@@ -11,13 +10,13 @@ const add = new Command()
   .arguments("<path_to_script:string> <slug:string> [group:string]")
   .option("-s, --show", "show stored data")
   .action(async (options: any, ...args: any) => {
-    const [pathToScript, slug, group] = args;
+    const [entrypoint, slug, group] = args;
     // "https://docs.deno.com/examples/scripts/hello_world.ts"
 
     const isolateParams = {
       slug,
       group: group || "default",
-      pathToScript,
+      entrypoint,
       importMap: "",
       env: {},
     };
@@ -26,11 +25,11 @@ const add = new Command()
 
     if (ok) {
       console.log(
-        ` added isolate "${isolateParams.slug}" with entrypoint: "${isolateParams.pathToScript}" to group "${isolateParams.group}"`,
+        ` added isolate "${isolateParams.slug}" with entrypoint: "${isolateParams.entrypoint}" to group "${isolateParams.group}"`,
       );
     } else {
       console.log(
-        ` failed to add isolate "${isolateParams.slug}" with entrypoint: "${isolateParams.pathToScript}" to group "${isolateParams.group}"`,
+        ` failed to add isolate "${isolateParams.slug}" with entrypoint: "${isolateParams.entrypoint}" to group "${isolateParams.group}"`,
       );
     }
 
@@ -78,13 +77,13 @@ const serve = new Command()
         console.log(
           `serve single isolate ${options.slug} from group ${options.group}`,
         );
-        const list = await hev.isolator.pm.start(options.group, options.slug);
       } else {
         console.log(`serve all isolates from group ${options.group}`);
-        const list = await hev.isolator.pm.start(options.group);
       }
-      Deno.exit();
-      // hev.init();
+      const list = await hev.isolator.pm.start(options.group, options.slug);
+      // console.log(list);
+      // Deno.exit();
+      hev.init();
     },
   );
 
