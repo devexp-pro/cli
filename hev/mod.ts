@@ -1,9 +1,9 @@
 import proxy from "./proxy/mod.ts";
 import isolator from "./isolator/mod.ts";
 
-const init = () => {
+const init = async () => {
   proxy.init(80);
-  console.log("hev init");
+  console.log("hev init on entry point: http://localhost");
   isolator.init();
 };
 

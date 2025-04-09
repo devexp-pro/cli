@@ -1,6 +1,7 @@
 import { Command } from "@cliffy/command";
 import { config } from "$/providers/config.ts";
 import hev from "@devexp/hev";
+import { group } from "node:console";
 
 const add = new Command()
   .name("add")
@@ -50,9 +51,11 @@ const list = new Command()
   .name("list")
   .alias("l")
   .usage("")
-  .description("")
-  .option("-s, --show", "show loaded data")
+  .description("show all isolates")
+  .option("-g, --group", "show all isolates by group")
   .action(async (options: any) => {
+    const list = await hev.isolator.pm.get("", "");
+    console.log(list);
     Deno.exit();
   });
 
@@ -60,11 +63,30 @@ const serve = new Command()
   .name("serve")
   .alias("s")
   .usage("")
-  .description("")
-  .option("-s, --show", "show loaded data")
-  .action(async (options: any) => {
-    hev.init();
-  });
+  .description("start isolate server")
+  .option("-s, --slug <slug:string>", "serve single isolate (can buy -g)", {
+    default: null,
+  })
+  .option("-g, --group <group:string>", "serve group of isolates", {
+    default: "default",
+  })
+  .action(
+    async (
+      options: { slug: string | undefined; group: string },
+    ) => {
+      if (options.slug) {
+        console.log(
+          `serve single isolate ${options.slug} from group ${options.group}`,
+        );
+        const list = await hev.isolator.pm.start(options.group, options.slug);
+      } else {
+        console.log(`serve all isolates from group ${options.group}`);
+        const list = await hev.isolator.pm.start(options.group);
+      }
+      Deno.exit();
+      // hev.init();
+    },
+  );
 
 const tool = new Command();
 if (config.data.tools.isolate.hidden) tool.hidden();
@@ -72,7 +94,7 @@ tool
   .name("isolate")
   .alias("i")
   .usage("")
-  .description("")
+  .description("Isolate manager and local server")
   .action(() => {
     tool.showHelp();
     Deno.exit();

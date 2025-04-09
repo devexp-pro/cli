@@ -20,9 +20,39 @@ export class Lord {
     return res.ok;
   }
 
-  async start(slug: string) {}
-  async restart(slug: string) {}
-  async stop(slug: string) {}
-  async get(slug: string) {}
-  async list() {}
+  async start(group: string, slug?: string) {
+    const isolatesToStart: any = this.get(group, slug);
+
+    return isolatesToStart;
+  }
+
+  async restart(group: string, slug?: string) {
+    const isolatesToRestart: any = this.get(group, slug);
+
+    return isolatesToRestart;
+  }
+  async stop(group: string, slug?: string) {
+    const isolatesToStop: any = this.get(group, slug);
+
+    return isolatesToStop;
+  }
+
+  async get(group: string, slug?: string) {
+    const isolates: any = [];
+
+    if (slug) {
+      const isolate = await this.kv.get(
+        ["isolate", group, slug],
+      );
+
+      isolates.push(isolate.value);
+    } else {
+      const list = this.kv.list({ prefix: ["isolate", group] });
+      for await (const entry of list) {
+        isolates.push(entry.value);
+      }
+    }
+
+    return isolates;
+  }
 }
