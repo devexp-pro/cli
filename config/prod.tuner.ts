@@ -23,7 +23,7 @@ const prodCfg = Tuner.tune({
         hidden: false,
       },
       isolate: {
-        hidden: false,
+        hidden: true,
       },
       tunnel: {
         hidden: false,
