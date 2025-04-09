@@ -25,6 +25,15 @@ export interface SecretData {
   environment_id: TUUID;
 }
 
+export interface IntegrationData {
+  id: TUUID;
+  name: string;
+  envUUID: TUUID;
+  projectUUID: TUUID;
+  denoDeployProjectId: string;
+  auto_redeploy?: boolean;
+}
+
 export type GuardenDefinition = ApiflyDefinition<
   {
     user: { uuid: TUUID; email: string };
@@ -104,6 +113,41 @@ export type GuardenDefinition = ApiflyDefinition<
     };
     deleteSecret: {
       args: [envUUID: TUUID, key: string];
+      returns: { success: boolean; message?: string };
+    };
+    createIntegration: {
+      args: [
+        accessToken: string,
+        denoDeployProjectId: string,
+        vaultEnvUUID: TUUID,
+        autoRedeploy: boolean,
+      ];
+      returns: { success: boolean; integrationId?: TUUID; message?: string };
+    };
+    updateIntegration: {
+      args: [
+        integrationId: TUUID,
+        accessToken: string,
+        denoDeployProjectId: string,
+        vaultEnvUUID: TUUID,
+        autoRedeploy: boolean,
+      ];
+      returns: { success: boolean; integrationId?: TUUID; message?: string };
+    };
+    deleteIntegration: {
+      args: [integrationId: TUUID];
+      returns: { success: boolean; message?: string };
+    };
+    getIntegrations: {
+      args: [];
+      returns: {
+        success: boolean;
+        integrations?: IntegrationData[];
+        message?: string;
+      };
+    };
+    forceRedeployIntegration: {
+      args: [integrationId: TUUID];
       returns: { success: boolean; message?: string };
     };
   },
