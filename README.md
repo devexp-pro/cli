@@ -4,32 +4,42 @@
 
 # About
 
-**What is DevExp (or simply “dx”)?**
-DevExp is a powerful cloud-native platform with a command-line interface (CLI) that brings together a suite of tools designed to make developers faster, more focused, and radically more productive.
+**What is DevExp (or simply “dx”)?** DevExp is a powerful cloud-native platform
+with a command-line interface (CLI) that brings together a suite of tools
+designed to make developers faster, more focused, and radically more productive.
 
-Born from years of hands-on experience in software engineering, `dx` merges best practices, everyday workflows, and automation into a single, unified developer experience. Think of it as your all-in-one command center for prototyping, testing, showcasing, and deploying your projects — faster than ever.
+Born from years of hands-on experience in software engineering, `dx` merges best
+practices, everyday workflows, and automation into a single, unified developer
+experience. Think of it as your all-in-one command center for prototyping,
+testing, showcasing, and deploying your projects — faster than ever.
 
 ---
 
-***✅ Already included in early prototypes:***
+_**✅ Already included in early prototypes:**_
 
 - 🌐 HTTP tunnel management
 - 🧑‍💻 Git profile switching and management
 - 🔐 Environment variable & secret storage
 - ⚙️ Process & workflow automation
 
-Our mission is to bring together the essential tools developers use daily, into a single connected ecosystem — replacing dozens of fragmented apps, cloud services, and a trillion subscriptions (yes, we’re looking at you, subscription hell).
+Our mission is to bring together the essential tools developers use daily, into
+a single connected ecosystem — replacing dozens of fragmented apps, cloud
+services, and a trillion subscriptions (yes, we’re looking at you, subscription
+hell).
 
 ---
 
-***📢 Stay updated and join our community***
+_**📢 Stay updated and join our community**_
 
-We’re actively developing `dx` in the open, and we’d love your feedback, support, and ideas.
+We’re actively developing `dx` in the open, and we’d love your feedback,
+support, and ideas.
 
 - 💬 **Join us on Telegram**: [t.me/devexppro](https://t.me/devexppro)
-- 💸 **Support the project**: Send USDT (TRC20) to `TNor9ovj5HDkLJqpyUkze6MMNsM8xDfBTR`
+- 💸 **Support the project**: Send USDT (TRC20) to
+  `TNor9ovj5HDkLJqpyUkze6MMNsM8xDfBTR`
 
-Every contribution — code, ideas, or funding — helps us build a better developer experience for everyone.
+Every contribution — code, ideas, or funding — helps us build a better developer
+experience for everyone.
 
 ---
 
