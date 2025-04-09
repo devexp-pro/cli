@@ -22,7 +22,7 @@ const services: {
     },
   },
 
-  "rate": { // https://wttr.in/
+  "rate": {
     description: "Exploring (crypto)currencies exchange rates (http://rate.sx)",
     hidden: false,
     handler: async (request: string) => {
@@ -49,12 +49,26 @@ const services: {
       );
     },
   },
+
+  "ifc": { // curl ifconfig.io/all
+    description: "What is my ip address? (https://ifconfig.io)",
+    hidden: false,
+    handler: async (request: string = "all") => {
+      console.log(
+        await (await fetch(`https://ifconfig.io/${request}`, {
+          headers: {
+            "User-Agent": "curl/7.81.0",
+          },
+        })).text(),
+      );
+    },
+  },
 };
 
 const tool = new Command();
-if (config.data.tools.tservices.hidden) tool.hidden();
+if (config.data.tools.tserv.hidden) tool.hidden();
 tool
-  .name("tservices")
+  .name("tserv")
   .alias("t")
   .usage("(or 't') [service_name] [request?]")
   .arguments("[service_name:string] [request:string]")

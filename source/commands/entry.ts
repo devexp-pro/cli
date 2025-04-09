@@ -2,7 +2,7 @@ import { Command } from "@cliffy/command";
 
 import { colors } from "@std/colors";
 
-import tservices from "$/tools/tservices/mod.ts";
+import tserv from "$/tools/tserv/mod.ts";
 import toolIsolate from "$/tools/isolate";
 import toolTunnel from "$/tools/tunnel";
 import toolConfig from "$/tools/config";
@@ -77,7 +77,7 @@ export const entry = new Command()
   .command("flow", toolFlow.tool)
   .command("git", toolGit.tool)
   .command("clip", toolClip.tool)
-  .command("tservices", tservices.tool)
+  .command("tserv", tserv.tool)
   // commands
   .command("dash", dash)
   .command("intro", intro)
