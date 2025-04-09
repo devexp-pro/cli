@@ -6,7 +6,9 @@
     "dev": "LOCAL_DEV=true deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts",
     "prod": "LOCAL_DEV=false deno -A --unstable-kv --unstable-broadcast-channel ./source/main.ts",
     "compile": "deno compile --output devexp --no-check -A --unstable-kv --unstable-broadcast-channel ./source/main.ts",
-    "zj": "zellij --layout .zellij/layout.kdl"
+    "zj": "zellij --layout .zellij/layout.kdl",
+
+    "hev": "deno -A --unstable-kv ./hev/main.ts"
   },
   "importMap": "./import-map.json"
 }
