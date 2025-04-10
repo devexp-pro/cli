@@ -20,7 +20,7 @@ const prodCfg = Tuner.tune({
     },
     tools: {
       tserv: {
-        hidden: false,
+        hidden: true,
       },
       isolate: {
         hidden: true,
