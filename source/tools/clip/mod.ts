@@ -1,3 +1,4 @@
+import tui from "$/providers/tui.ts";
 import { Command } from "@cliffy/command";
 import { SERVICE_URL } from "$/constants";
 import fetchify from "@vseplet/fetchify";
@@ -8,7 +9,10 @@ import { addMAN } from "$/helpers";
 
 const createClient = async () => {
   const session = await getSession();
-  if (session === null) throw new Error("Has no session, please login");
+  if (session === null) {
+    tui.err("Has no session, please login");
+    Deno.exit(-1);
+  }
 
   return fetchify.create({
     limiter: {
@@ -41,13 +45,13 @@ const store = new Command()
     if (res.status == 200) {
       if (options?.show) {
         console.log();
-        console.log(text);
+        tui.log(text);
         console.log();
       }
 
-      console.log("Text successfully stored.");
+      tui.log("Text successfully stored.");
     } else {
-      console.error(`Failed to store text. Reason: ${res.statusText}`);
+      tui.errAndExit(`Failed to store text. Reason: ${res.statusText}`);
     }
 
     Deno.exit();
@@ -68,13 +72,13 @@ const load = new Command()
 
       if (options?.show) {
         console.log();
-        console.log(text);
+        tui.log(text);
         console.log();
       }
 
-      console.log("Text successfully loaded.");
+      tui.def("Text successfully loaded.");
     } else {
-      console.error(`Failed to load text. Reason: ${res.statusText}`);
+      tui.errAndExit(`Failed to load text. Reason: ${res.statusText}`);
     }
 
     Deno.exit();
