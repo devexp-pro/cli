@@ -19,6 +19,9 @@ const prodCfg = Tuner.tune({
       },
     },
     tools: {
+      alias: {
+        hidden: true,
+      },
       db: {
         hidden: true,
       },

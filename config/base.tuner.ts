@@ -18,6 +18,9 @@ const baseCfg = Tuner.tune({
       },
     },
     tools: {
+      alias: {
+        hidden: false,
+      },
       db: {
         hidden: false,
       },

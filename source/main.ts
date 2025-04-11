@@ -3,6 +3,7 @@ import { Command } from "@cliffy/command";
 import { colors } from "@std/colors";
 
 // Tools
+import toolAlias from "$/tools/alias/mod.ts";
 import toolIsolate from "$/tools/isolate";
 import toolDB from "$/tools/db/mod.ts";
 import toolTunnel from "$/tools/tunnel";
@@ -72,6 +73,7 @@ const entry = new Command()
     Deno.exit();
   })
   // tools
+  .command(toolAlias.tool.getName(), toolAlias.tool)
   .command(toolTunnel.tool.getName(), toolTunnel.tool)
   .command(toolVault.tool.getName(), toolVault.tool)
   .command(toolIsolate.tool.getName(), toolIsolate.tool)
