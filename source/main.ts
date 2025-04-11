@@ -1,16 +1,13 @@
 import { Command } from "@cliffy/command";
-
-import { colors } from "@std/colors";
-
 // Tools
 import toolAlias from "$/tools/alias/mod.ts";
-import toolIsolate from "$/tools/isolate";
+import toolIsolate from "$/tools/isolate/mod.ts";
 import toolDB from "$/tools/db/mod.ts";
-import toolTunnel from "$/tools/tunnel";
-import toolVault from "$/tools/vault";
-import toolGit from "$/tools/git";
-import toolFlow from "$/tools/flow";
-import toolClip from "$/tools/clip";
+import toolTunnel from "$/tools/tunnel/mod.ts";
+import toolVault from "$/tools/vault/mod.ts";
+import toolGit from "$/tools/git/mod.ts";
+import toolFlow from "$/tools/flow/mod.ts";
+import toolClip from "$/tools/clip/mod.ts";
 import toolTerm from "$/tools/term/mod.ts";
 // Integrations
 import integrations from "$/integrations/mod.ts";
@@ -19,47 +16,7 @@ import { dash } from "$/commands/dash/mod.ts";
 import { intro } from "$/commands/intro.ts";
 import { setup } from "$/commands/setup/mod.ts";
 import { cfg } from "$/commands/cfg.ts";
-
-export const logo = `
-  ${colors.rgb24("██████╗ ███████╗██╗   ██╗", 0xFFA500)}${
-  colors.magenta("███████╗██╗  ██╗██████╗")
-}
-  ${colors.rgb24("██╔══██╗██╔════╝██║   ██║", 0xFFA500)}${
-  colors.magenta("██╔════╝╚██╗██╔╝██╔══██╗")
-}
-  ${colors.rgb24("██║  ██║█████╗  ██║   ██║", 0xFFA500)}${
-  colors.magenta("█████╗   ╚███╔╝ ██████╔╝")
-}
-  ${colors.rgb24("██║  ██║██╔══╝  ╚██╗ ██╔╝", 0xFFA500)}${
-  colors.magenta("██╔══╝   ██╔██╗ ██╔═══╝")
-}
-  ${colors.rgb24("██████╔╝███████╗ ╚████╔╝ ", 0xFFA500)}${
-  colors.magenta("███████╗██╔╝ ██╗██║")
-}
-  ${colors.rgb24("╚═════╝ ╚══════╝  ╚═══╝  ", 0xFFA500)}${
-  colors.magenta("╚══════╝╚═╝  ╚═╝╚═╝")
-}`;
-
-const r = colors.red;
-const b = colors.blue;
-const g = colors.green;
-const y = colors.yellow;
-const d = colors.reset;
-export const logo2 = y(`
-        ,~~.
-   ,   (  - )${r(">")}    ${g("Crafted with")} ${r("<3")} ${
-  b("https://devexp.pro")
-}
-   )\`~~'   (      ${g('Use "dx -h" to get help on commands.')}
-  (  .__)   )
-   \`-.____,'      ${colors.rgb24("Dev", 0xFFA500)}${colors.magenta("Exp")}
-`);
-
-export const introText = `  Crafted with ${colors.red("<3")} ${
-  colors.blue("https://devexp.pro")
-}
-  Use "dx -h" to get help on commands.
-`;
+import { logo2 } from "$/strings";
 
 const entry = new Command()
   .name("dx")

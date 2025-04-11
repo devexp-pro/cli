@@ -1,31 +1,17 @@
 {
   "imports": {
-    "$deno-json": "./deno.json",
+    "$config/": "./config/",
     "$/": "./source/",
-    "$/shared": "./source/shared.ts",
+    "$/strings": "./source/strings.ts",
     "$/constants": "./source/constants.ts",
     "$/helpers": "./source/helpers.ts",
     "$/types": "./source/types.ts",
+
     "$/providers/": "./source/providers/",
     "$/repositories/": "./source/repositories/",
-    "$/kv": "./source/kv.ts",
-    "$config/": "./config/",
-
     "$/tools/": "./source/tools/",
-    "$/tools/isolate": "./source/tools/isolate/mod.ts",
-    "$/tools/isolate/": "./source/tools/isolate/",
-    "$/tools/git": "./source/tools/git/mod.ts",
-    "$/tools/git/": "./source/tools/git/",
-    "$/tools/tunnel": "./source/tools/tunnel/mod.ts",
-    "$/tools/config": "./source/tools/config/mod.ts",
-    "$/tools/vault": "./source/tools/vault/mod.ts",
-    "$/tools/flow": "./source/tools/flow/mod.ts",
-    "$/tools/clip": "./source/tools/clip/mod.ts",
-    "$/tools/clip/": "./source/tools/clip/",
-
     "$/integrations": "./source/integrations/mod.ts",
-
-    "$/dashboard": "./source/dashboard/mod.ts",
+    "$/shared-modules/": "./source/shared-modules/",
 
     "@std/colors": "https://deno.land/x/cliffy@v0.25.7/ansi/colors.ts",
     "@std/ulid": "jsr:@std/ulid",
@@ -42,8 +28,6 @@
     "@cliffy/prompt/prompt": "jsr:@cliffy/prompt@1.0.0-rc.7/prompt",
     "@hono/hono": "jsr:@hono/hono@4.5.6",
     "@littletof/charmd": "jsr:@littletof/charmd@0.1.2",
-
-    "@devexp/hev": "./source/shared-modules/hev/mod.ts",
 
     "@vseplet/shibui": "jsr:@vseplet/shibui@0.4.40",
     "@vseplet/shibui/core": "jsr:@vseplet/shibui@0.4.40/core",
