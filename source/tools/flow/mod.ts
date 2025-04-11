@@ -42,7 +42,7 @@ const action = async () => {
 tool
   .name("flow")
   .usage("")
-  .description("quickly create and run automation scripts")
+  .description("Quickly create and run automation scripts")
   .action(action)
   .command("create", create.command)
   .command("run", run.command)

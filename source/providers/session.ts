@@ -49,7 +49,7 @@ export async function setSessionWithExpiration(
   try {
     const sessionTTL = config.data.features.auth.times.sessionTTL;
 
-    await kv.set(["auth", "session"], data, { expireIn: sessionTTL });
+    await kv.set(["auth", "session"], data /*{ expireIn: sessionTTL }*/);
   } catch (error) {
     console.error("Error while saving session data:", error);
   }

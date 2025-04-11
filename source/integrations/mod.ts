@@ -65,17 +65,17 @@ const services: {
   },
 };
 
-const tool = new Command();
-if (config.data.tools.tserv.hidden) tool.hidden();
-tool
-  .name("tserv")
-  .alias("t")
+const cmd = new Command();
+if (config.data.integrations.hidden) cmd.hidden();
+cmd
+  .name("integrations")
+  .alias("is")
   .usage("(or 't') [service_name] [request?]")
   .arguments("[service_name:string] [request:string]")
   .description("Interface for accessing web services running in the terminal")
   .action(async (options: any, ...args: any) => {
     if (args.length == 0 && Object.keys(options).length == 0) {
-      tool.showHelp();
+      cmd.showHelp();
       console.log("Terminal services:");
       for (const [name, service] of Object.entries(services)) {
         console.log(`  ${name} - ${service.description}`);
@@ -96,6 +96,4 @@ tool
     Deno.exit();
   });
 
-export default {
-  tool,
-};
+export default cmd;
