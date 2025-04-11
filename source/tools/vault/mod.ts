@@ -29,4 +29,6 @@ tool
 
 addMAN(tool);
 
-export default tool;
+export default {
+  tool,
+};
