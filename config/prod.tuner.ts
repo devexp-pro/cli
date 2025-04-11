@@ -32,7 +32,7 @@ const prodCfg = Tuner.tune({
         hidden: false,
       },
       vault: {
-        hidden: true,
+        hidden: false,
       },
       flow: {
         hidden: true,
