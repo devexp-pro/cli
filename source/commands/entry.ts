@@ -2,15 +2,18 @@ import { Command } from "@cliffy/command";
 
 import { colors } from "@std/colors";
 
-import tserv from "$/tools/tserv/mod.ts";
+// Tools
 import toolIsolate from "$/tools/isolate";
+import toolDB from "$/tools/db/mod.ts";
 import toolTunnel from "$/tools/tunnel";
-import toolConfig from "$/tools/config";
 import toolVault from "$/tools/vault";
 import toolGit from "$/tools/git";
 import toolFlow from "$/tools/flow";
 import toolClip from "$/tools/clip";
-
+import toolTerm from "$/tools/term/mod.ts";
+// Integrations
+import integrations from "$/integrations/mod.ts";
+// Just a commands
 import { dash } from "./dash/mod.ts";
 import { intro } from "./intro.ts";
 import { setup } from "./setup/mod.ts";
@@ -65,19 +68,20 @@ export const entry = new Command()
   )
   .action((_options: any, ..._args: any) => {
     console.log(logo2);
-    // console.log(introText);
     entry.showHelp();
     Deno.exit();
   })
   // tools
-  .command("isolate", toolIsolate.tool)
-  .command("tunnel", toolTunnel)
-  .command("config", toolConfig)
-  .command("vault", toolVault)
-  .command("flow", toolFlow.tool)
-  .command("git", toolGit.tool)
-  .command("clip", toolClip.tool)
-  .command("tserv", tserv.tool)
+  .command(toolTunnel.getName(), toolTunnel)
+  .command(toolIsolate.tool.getName(), toolIsolate.tool)
+  .command(toolDB.tool.getName(), toolDB.tool)
+  .command(toolVault.getName(), toolVault)
+  .command(toolFlow.tool.getName(), toolFlow.tool)
+  .command(toolGit.tool.getName(), toolGit.tool)
+  .command(toolClip.tool.getName(), toolClip.tool)
+  .command(toolTerm.tool.getName(), toolTerm.tool)
+  // integrations
+  .command(integrations.getName(), integrations)
   // commands
   .command("dash", dash)
   .command("intro", intro)

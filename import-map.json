@@ -1,6 +1,7 @@
 {
   "imports": {
     "$deno-json": "./deno.json",
+    "$/": "./source/",
     "$/shared": "./source/shared.ts",
     "$/constants": "./source/constants.ts",
     "$/helpers": "./source/helpers.ts",
@@ -21,6 +22,8 @@
     "$/tools/flow": "./source/tools/flow/mod.ts",
     "$/tools/clip": "./source/tools/clip/mod.ts",
     "$/tools/clip/": "./source/tools/clip/",
+
+    "$/integrations": "./source/integrations/mod.ts",
 
     "$/dashboard": "./source/dashboard/mod.ts",
 
