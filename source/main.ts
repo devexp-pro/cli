@@ -18,7 +18,7 @@ import { setup } from "$/commands/setup/mod.ts";
 import { cfg } from "$/commands/cfg.ts";
 import { logo2 } from "$/strings";
 
-const entry = new Command()
+const dx = new Command()
   .name("dx")
   .usage("[command]")
   .description(
@@ -26,16 +26,16 @@ const entry = new Command()
   )
   .action((_options: any, ..._args: any) => {
     console.log(logo2);
-    entry.showHelp();
+    dx.showHelp();
     Deno.exit();
   })
   // tools
-  .command(toolAlias.tool.getName(), toolAlias.tool)
   .command(toolTunnel.tool.getName(), toolTunnel.tool)
   .command(toolVault.tool.getName(), toolVault.tool)
   .command(toolIsolate.tool.getName(), toolIsolate.tool)
   .command(toolDB.tool.getName(), toolDB.tool)
   .command(toolFlow.tool.getName(), toolFlow.tool)
+  .command(toolAlias.tool.getName(), toolAlias.tool)
   .command(toolGit.tool.getName(), toolGit.tool)
   .command(toolClip.tool.getName(), toolClip.tool)
   .command(toolTerm.tool.getName(), toolTerm.tool)
@@ -47,4 +47,4 @@ const entry = new Command()
   .command("cfg", cfg)
   .command("setup", setup);
 
-await entry.parse(Deno.args);
+await dx.parse(Deno.args);
