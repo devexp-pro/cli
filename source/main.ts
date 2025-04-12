@@ -9,6 +9,7 @@ import toolGit from "$/tools/git/mod.ts";
 import toolFlow from "$/tools/flow/mod.ts";
 import toolClip from "$/tools/clip/mod.ts";
 import toolTerm from "$/tools/term/mod.ts";
+import toolLLM from "$/tools/llm/mod.ts";
 // Integrations
 import integrations from "$/integrations/mod.ts";
 // Just a commands
@@ -39,6 +40,7 @@ const dx = new Command()
   .command(toolGit.tool.getName(), toolGit.tool)
   .command(toolClip.tool.getName(), toolClip.tool)
   .command(toolTerm.tool.getName(), toolTerm.tool)
+  .command(toolLLM.tool.getName(), toolLLM.tool)
   // integrations
   .command(integrations.getName(), integrations)
   // commands
