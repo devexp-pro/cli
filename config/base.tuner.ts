@@ -27,7 +27,7 @@ const baseCfg = Tuner.tune({
       term: {
         hidden: false,
       },
-      isolate: {
+      hyper: {
         hidden: false,
       },
       tunnel: {

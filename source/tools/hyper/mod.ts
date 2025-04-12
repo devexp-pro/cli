@@ -88,10 +88,10 @@ const serve = new Command()
   );
 
 const tool = new Command();
-if (config.data.tools.isolate.hidden) tool.hidden();
+if (config.data.tools.hyper.hidden) tool.hidden();
 tool
-  .name("isolate")
-  .alias("i")
+  .name("hyper")
+  .alias("h")
   .usage("")
   .description("Isolate manager and local server")
   .action(() => {
