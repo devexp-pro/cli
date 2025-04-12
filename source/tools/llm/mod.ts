@@ -3,11 +3,13 @@ import { config } from "$/providers/config.ts";
 import zod from "npm:zod@3.24.1"; // вот это костыль
 import { LMStudioClient } from "npm/@lmstudio/sdk";
 
-const client = new LMStudioClient();
-
-const model = await client.llm.model();
-
-const encoder = new TextEncoder();
+const setup = new Command()
+  .name("setup")
+  .usage("")
+  .description("")
+  .action(async (options: any) => {
+    Deno.exit();
+  });
 
 const tool = new Command();
 if (config.data.tools.lm.hidden) tool.hidden();
@@ -24,14 +26,25 @@ tool
       Deno.exit();
     }
 
+    const client = new LMStudioClient();
+    const model = await client.llm.model();
+    const encoder = new TextEncoder();
+
+    let lineWidth = 0;
     for await (
       const fragment of model.respond(args.join(" "))
     ) {
+      lineWidth += fragment.content.length;
+      if (lineWidth > 80) {
+        Deno.stdout.writeSync(encoder.encode("\n"));
+        lineWidth = 0;
+      }
       Deno.stdout.writeSync(encoder.encode(fragment.content));
     }
 
     Deno.exit();
-  });
+  })
+  .command("setup", setup);
 
 export default {
   tool,
