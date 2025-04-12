@@ -4,12 +4,18 @@ import zod from "npm:zod@3.24.1"; // вот это костыль
 import { LMStudioClient } from "npm/@lmstudio/sdk";
 import { colors } from "@std/colors";
 import tui from "$/providers/tui.ts";
+import { kv } from "$/repositories/kv.ts";
 
 const setup = new Command()
   .name("setup")
-  .usage("")
-  .description("")
+  .example("setup base url:", "-u ws://192.168.100.34:1234")
+  // .description("")
+  .option("-u, --url <url:string>", "LMStudio URL. ", { required: true })
   .action(async (options: any) => {
+    await kv.set(["tool", "llm", "lmstudio"], {
+      baseUrl: options.url,
+    });
+
     Deno.exit();
   });
 
@@ -28,10 +34,15 @@ tool
       Deno.exit();
     }
 
-    const client = new LMStudioClient();
+    const lmstudioOptions =
+      (await kv.get<{ baseUrl: string }>(["tool", "llm", "lmstudio"])).value ||
+      {
+        baseUrl: "ws://127.0.0.1:1234",
+      };
+
+    const client = new LMStudioClient(lmstudioOptions);
     const model = await client.llm.model();
     const modelInfo = await model.getModelInfo();
-    const encoder = new TextEncoder();
     const [question, max_tokens] = args;
     const name = `  ${modelInfo.displayName}: `;
     let lineWidth = name.length;
