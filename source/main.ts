@@ -1,7 +1,7 @@
 import { Command } from "@cliffy/command";
 // Tools
 import toolAlias from "$/tools/alias/mod.ts";
-import toolIsolate from "$/tools/isolate/mod.ts";
+import toolHyper from "$/tools/hyper/mod.ts";
 import toolDB from "$/tools/db/mod.ts";
 import toolTunnel from "$/tools/tunnel/mod.ts";
 import toolVault from "$/tools/vault/mod.ts";
@@ -33,7 +33,7 @@ const dx = new Command()
   // tools
   .command(toolTunnel.tool.getName(), toolTunnel.tool)
   .command(toolVault.tool.getName(), toolVault.tool)
-  .command(toolIsolate.tool.getName(), toolIsolate.tool)
+  .command(toolHyper.tool.getName(), toolHyper.tool)
   .command(toolDB.tool.getName(), toolDB.tool)
   .command(toolFlow.tool.getName(), toolFlow.tool)
   .command(toolAlias.tool.getName(), toolAlias.tool)
