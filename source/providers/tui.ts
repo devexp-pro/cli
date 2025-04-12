@@ -20,10 +20,18 @@ const errAndExit = (...data: any[]): null => {
 };
 
 const def = (...data: any[]) => {
-  console.log("  ", ...data);
+  const str = data.map((item) => String(item)).join(" ");
+  console.log("  " + str);
+};
+
+const print = (...data: any[]) => {
+  const encoder = new TextEncoder();
+  const str = data.map((item) => String(item)).join(" ");
+  Deno.stdout.writeSync(encoder.encode(str));
 };
 
 export default {
+  print,
   def,
   log,
   err,
