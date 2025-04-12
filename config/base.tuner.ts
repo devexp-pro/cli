@@ -18,7 +18,13 @@ const baseCfg = Tuner.tune({
       },
     },
     tools: {
-      tserv: {
+      alias: {
+        hidden: false,
+      },
+      db: {
+        hidden: false,
+      },
+      term: {
         hidden: false,
       },
       isolate: {
@@ -42,9 +48,13 @@ const baseCfg = Tuner.tune({
       flow: {
         hidden: false,
       },
-      cheat: {
+      lm: {
         hidden: false,
       },
+    },
+
+    integrations: {
+      hidden: false,
     },
   },
 });

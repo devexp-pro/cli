@@ -1,6 +1,6 @@
 import { Command } from "@cliffy/command";
 import { config } from "$/providers/config.ts";
-import hev from "@devexp/hev";
+import hev from "$/shared-modules/hev/mod.ts";
 
 const add = new Command()
   .name("add")

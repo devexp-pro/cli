@@ -19,7 +19,13 @@ const prodCfg = Tuner.tune({
       },
     },
     tools: {
-      tserv: {
+      alias: {
+        hidden: true,
+      },
+      db: {
+        hidden: true,
+      },
+      term: {
         hidden: true,
       },
       isolate: {
@@ -43,9 +49,13 @@ const prodCfg = Tuner.tune({
       clip: {
         hidden: false,
       },
-      cheat: {
+      lm: {
         hidden: true,
       },
+    },
+
+    integrations: {
+      hidden: false,
     },
   },
 });
