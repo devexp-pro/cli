@@ -49,7 +49,7 @@ const prodCfg = Tuner.tune({
       clip: {
         hidden: false,
       },
-      cheat: {
+      lm: {
         hidden: true,
       },
     },

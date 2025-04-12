@@ -48,7 +48,7 @@ const baseCfg = Tuner.tune({
       flow: {
         hidden: false,
       },
-      cheat: {
+      lm: {
         hidden: false,
       },
     },
