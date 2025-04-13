@@ -49,8 +49,6 @@ support, and ideas.
 Every contribution — code, ideas, or funding — helps us build a better developer
 experience for everyone.
 
----
-
 🛠 Built with ❤️ by developers, for developers.
 
 ---
