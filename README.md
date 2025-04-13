@@ -81,14 +81,11 @@ curl -fsSL https://devexp.pro/install-develop.sh | sh
 
 ## 🛠 Tools Manuals
 
-- **[Tunnel](./source/tools/tunnel/MAN.md)** — HTTP tunnels for development and
-  public access.
-- **[Clip](./source/tools/clip/MAN.md)** — Store text in the cloud clipboard.
-- **[Git](./source/tools/git/MAN.md)** — Git helpers for profile management,
-  repository cloning, and more.
+- **[Tunnel](./source/tools/tunnel/MAN.md)** — HTTP tunnels for development and public access.
 - **[Vault](./source/tools/vault/MAN.md)** — Centralized secrets management.
-- **[Flow](./source/tools/flow/MAN.md)** — Quickly create and run automation
-  scripts.
+- **[Flow](./source/tools/flow/MAN.md)** — Quickly create and run automation scripts.
+- **[Clip](./source/tools/clip/MAN.md)** — Store text in the cloud clipboard.
+- **[Git](./source/tools/git/MAN.md)** — Git helpers for profile management, repository cloning, and more.
 
 ---
 
