@@ -42,6 +42,7 @@ _**📢 Stay updated and join our community**_
 We’re actively developing `dx` in the open, and we’d love your feedback,
 support, and ideas.
 
+- 📧 **Add your email to wishlist**: [devexp.pro](devexp.pro)
 - 💬 **Join us on Telegram**: [t.me/devexppro](https://t.me/devexppro)
 - 💸 **Support the project**: Send USDT (TRC20) to
   `TNor9ovj5HDkLJqpyUkze6MMNsM8xDfBTR`
@@ -59,7 +60,8 @@ experience for everyone.
     - [Production Version](#production-version)
     - [Development Version](#development-version)
   - [🛠 Tools Manuals](#-tools-manuals)
-- [License for DEVEXP CLI](#license-for-devexp-cli)
+  - [Core Team:](#core-team)
+  - [License for DEVEXP CLI](#license-for-devexp-cli)
 
 ---
 # 📖 Documentation
@@ -89,6 +91,29 @@ curl -fsSL https://devexp.pro/install-develop.sh | sh
 
 ---
 
+## Core Team:
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/150618497" width="100px;" alt=""/><br />
+      <sub><b>Vsevolod Pletnev (vseplet)</b></sub><br />
+      <a href="https://github.com/vseplet">🐙 GitHub</a> |
+      <a href="https://t.me/vseplet">💬 Telegram</a> |
+      <a href="https://x.com/vseplet">🐦 Twitter</a>
+    </td>
+    <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/59228036" width="100px;" alt=""/><br />
+      <sub><b>Artem Panov (artpani)</b></sub><br />
+      <a href="https://github.com/artpani4">🐙 GitHub</a> |
+      <a href="https://t.me/artpani4">💬 Telegram</a> |
+      <a href="https://x.com/artpani4">🐦 Twitter</a>
+    </td>
+  </tr>
+</table>
+
+---
+
 📌 Stay productive with DevExp! 🚀
 
-# [License for DEVEXP CLI](./LICENSE)
+## [License for DEVEXP CLI](./LICENSE)
