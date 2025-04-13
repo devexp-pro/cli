@@ -26,7 +26,7 @@ tool
   .alias("l")
   .arguments("[question:string] [max_tokens:number]")
   .description(
-    "An interface for interacting with LLMs such as ChatGPT, Claude, LMStudio, and so on.",
+    "An interface for interacting with LLMs",
   )
   .action(async (options: any, ...args: any) => {
     if (!args.length) {

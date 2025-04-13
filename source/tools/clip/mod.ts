@@ -30,7 +30,7 @@ const createClient = async () => {
 const store = new Command()
   .name("store")
   .usage("<text...>")
-  .description("stores the provided text to the cloud clipboard")
+  .description("Stores the provided text to the cloud clipboard")
   .arguments("[text...]")
   .option("-s, --show", "show stored data")
   .action(async (options: any, ...args: any) => {
