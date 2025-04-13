@@ -2,6 +2,16 @@
 
 ![DevExp Logo](./docs/dx.png)
 
+- [About](#about)
+- [📖 Documentation](#-documentation)
+  - [🚀 Installation](#-installation)
+    - [Production Version](#production-version)
+    - [Development Version](#development-version)
+  - [🛠 Tools Manuals](#-tools-manuals)
+  - [Core Team:](#core-team)
+  - [License](#license)
+
+
 # About
 
 **DevExp (or simply dx)** is a cloud-native command-line platform that consolidates essential developer tools — tunneling, secrets, git, databases, LLMs, automation — into a cohesive CLI-first experience. Born from years of hands-on software engineering, dx eliminates tool fragmentation and context switching, helping developers focus, build, and ship faster.
@@ -53,17 +63,6 @@ experience for everyone.
 🛠 Built with ❤️ by developers, for developers.
 
 ---
-
-- [About](#about)
-- [📖 Documentation](#-documentation)
-  - [🚀 Installation](#-installation)
-    - [Production Version](#production-version)
-    - [Development Version](#development-version)
-  - [🛠 Tools Manuals](#-tools-manuals)
-  - [Core Team:](#core-team)
-  - [License for DEVEXP CLI](#license-for-devexp-cli)
-
----
 # 📖 Documentation
 
 ## 🚀 Installation
@@ -92,7 +91,7 @@ curl -fsSL https://devexp.pro/install-develop.sh | sh
 ---
 
 ## Core Team:
-
+<br>
 <table>
   <tr>
     <td align="center">
@@ -111,9 +110,10 @@ curl -fsSL https://devexp.pro/install-develop.sh | sh
     </td>
   </tr>
 </table>
+<br>
+<div style="text-align: center; margin-top: 1rem;">
+  📌 Stay productive with DevExp! 🚀
+</div>
 
----
 
-📌 Stay productive with DevExp! 🚀
-
-## [License for DEVEXP CLI](./LICENSE)
+## [License](./LICENSE)
