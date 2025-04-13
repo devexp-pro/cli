@@ -4,23 +4,31 @@
 
 # About
 
-**What is DevExp (or simply “dx”)?** DevExp is a powerful cloud-native platform
-with a command-line interface (CLI) that brings together a suite of tools
-designed to make developers faster, more focused, and radically more productive.
+**DevExp (or simply dx)** is a cloud-native command-line platform that consolidates essential developer tools — tunneling, secrets, git, databases, LLMs, automation — into a cohesive CLI-first experience. Born from years of hands-on software engineering, dx eliminates tool fragmentation and context switching, helping developers focus, build, and ship faster.
 
-Born from years of hands-on experience in software engineering, `dx` merges best
-practices, everyday workflows, and automation into a single, unified developer
-experience. Think of it as your all-in-one command center for prototyping,
-testing, showcasing, and deploying your projects — faster than ever.
+**The Problem**
+Modern developers waste countless hours switching between tools, managing secrets, rewriting workflows, and dealing with repetitive setup.
+Each new tool adds friction — dx turns that friction into flow.
+
+**The Solution**
+A modular, scriptable CLI ecosystem where everything just works — tunneling, deployments, workflows, secrets, LLMs — with one consistent interface, across local and cloud.
+
+Inspired by the elegance of Unix philosophy, the modularity of Terraform, and the power of DevEx thinking.
 
 ---
 
 _**✅ Already included in early prototypes:**_
+- 🌐 Tunnel: HTTP tunnel management
+- 🧑‍💻 Git: Git profile switching and management
+- 🔐 Vault: Environment variable & secret storage
+- ⚙️ Flow: Process & workflow automation
 
-- 🌐 HTTP tunnel management
-- 🧑‍💻 Git profile switching and management
-- 🔐 Environment variable & secret storage
-- ⚙️ Process & workflow automation
+_**✅ Coming Soon:**_
+- Hyper: Deno process/isolates manager
+- DB: CLI DB manager via turso.tech
+- LLM: Unified interface to local/cloud LLMs
+- ALS: Cloud alias store for reusable commands
+- Term: Web-based CLI termina
 
 Our mission is to bring together the essential tools developers use daily, into
 a single connected ecosystem — replacing dozens of fragmented apps, cloud
