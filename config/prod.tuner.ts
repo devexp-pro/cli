@@ -52,6 +52,9 @@ const prodCfg = Tuner.tune({
       llm: {
         hidden: true,
       },
+      shortcuts: {
+        hidden: true,
+      },
     },
 
     integrations: {
