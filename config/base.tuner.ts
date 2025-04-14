@@ -22,10 +22,10 @@ const baseCfg = Tuner.tune({
         hidden: false,
       },
       db: {
-        hidden: false,
+        hidden: true,
       },
       term: {
-        hidden: false,
+        hidden: true,
       },
       hyper: {
         hidden: false,
@@ -34,7 +34,7 @@ const baseCfg = Tuner.tune({
         hidden: false,
       },
       config: {
-        hidden: false,
+        hidden: true,
       },
       vault: {
         hidden: false,
@@ -48,7 +48,7 @@ const baseCfg = Tuner.tune({
       flow: {
         hidden: false,
       },
-      lm: {
+      llm: {
         hidden: false,
       },
     },
