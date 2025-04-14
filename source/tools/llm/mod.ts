@@ -20,7 +20,7 @@ const setup = new Command()
   });
 
 const tool = new Command();
-if (config.data.tools.lm.hidden) tool.hidden();
+if (config.data.tools.llm.hidden) tool.hidden();
 tool
   .name("llm")
   .alias("l")
