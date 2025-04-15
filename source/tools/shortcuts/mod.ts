@@ -2,6 +2,8 @@ import { Command } from "@cliffy/command";
 import { config } from "$/providers/config.ts";
 import { autocompleteInput } from "$/tools/shortcuts/input-select.ts";
 import { shelly } from "@vseplet/shelly";
+import { DxTool } from "$/types";
+import { Input } from "@cliffy/prompt/input";
 
 const spotify = {
   "play/pause": async () => {
@@ -55,13 +57,21 @@ const vscode = {
 };
 
 const chatgpt = {
-  "ask": async (text: string) => {
+  "ask": async (text: string | undefined) => {
+    let prompt = text;
+    if (!text) {
+      prompt = await Input.prompt(`Type your prompt:`);
+    }
+
     const script = `
-      set the clipboard to "${text}"
+      set userPrompt to "${prompt}"
       tell application "ChatGPT" to activate
-      delay 0.9
+      delay 1.5
+
       tell application "System Events"
-        keystroke "v" using {command down}
+        set frontmost of process "ChatGPT" to true
+        delay 0.5
+        keystroke userPrompt
         delay 0.5
         key code 36
       end tell
@@ -112,6 +122,24 @@ const apps = {
   arc,
 };
 
+const spotlight: any = [
+  // { tag: "srt", name: "", description: "Shortcuts" },
+];
+
+for (const app in apps) {
+  // @ts-ignore
+  for (const command in apps[app]) {
+    spotlight.push({
+      tag: "sht",
+      name: `${app} ${command}`,
+      stringForSearch: `${app} ${command}`,
+      description: `Run ${command} for ${app}`,
+      // @ts-ignore
+      handler: apps[app][command],
+    });
+  }
+}
+
 const tool = new Command();
 if (config.data.tools.shortcuts.hidden) tool.hidden();
 tool
@@ -157,6 +185,18 @@ tool
     }
   });
 
+spotlight.push({
+  tag: "cmd",
+  name: "shortcuts help",
+  stringForSearch: "shortcuts help",
+  description: "Show help for shortcuts tool",
+  handler: async () => {
+    tool.showHelp();
+    Deno.exit();
+  },
+});
+
 export default {
   tool,
-};
+  spotlight,
+} as DxTool;
