@@ -1,4 +1,4 @@
-import tui from "$/providers/tui.ts";
+import tui from "$/providers/tui/mod.ts";
 import { Command } from "@cliffy/command";
 import { SERVICE_URL } from "$/constants";
 import fetchify from "@vseplet/fetchify";
