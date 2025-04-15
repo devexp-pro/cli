@@ -220,7 +220,7 @@ export function autocompleteInput(
               updateResults();
             }
             break;
-          case "\t": // Tab - автодополнение
+          case "\t": { // Tab - автодополнение
             const suggestion = getAutocompleteSuggestion(query);
             if (suggestion) {
               query += suggestion;
@@ -233,7 +233,8 @@ export function autocompleteInput(
               updateResults();
             }
             break;
-          case "\r": // Enter
+          }
+          case "\r": { // Enter
             if (selectedIndex >= 0 && selectedIndex < results.length) {
               query = results[selectedIndex];
             } else if (results.length === 1) {
@@ -241,8 +242,12 @@ export function autocompleteInput(
             }
             Deno.stdin.setRaw(false);
             Deno.stdout.writeSync(encoder.encode("\r\x1b[K"));
+            Deno.stdout.writeSync(
+              encoder.encode("\x1b[u\x1b[0m\x1b[J"),
+            );
             resolve(query);
             return false;
+          }
           default:
             // Добавляем все остальные символы к запросу (включая Unicode)
             if (char >= " " || char.charCodeAt(0) > 127) {
@@ -299,6 +304,15 @@ const russianFruits = [
 ];
 
 async function main() {
+  console.log(
+    "Вы выбрали:",
+    await autocompleteInput(russianFruits, {
+      searchPrompt: "Выберите фрукт:",
+    }),
+  );
+
+  console.log("WooooooW");
+
   console.log(
     "Вы выбрали:",
     await autocompleteInput(russianFruits, {
