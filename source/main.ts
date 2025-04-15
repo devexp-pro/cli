@@ -1,4 +1,8 @@
+// Types
+import type { DxTool } from "$/types";
+// Modules
 import { Command } from "@cliffy/command";
+import spotlight from "$/spotlight/mod.ts";
 // Tools
 import toolAlias from "$/tools/alias/mod.ts";
 import toolHyper from "$/tools/hyper/mod.ts";
@@ -10,43 +14,70 @@ import toolFlow from "$/tools/flow/mod.ts";
 import toolClip from "$/tools/clip/mod.ts";
 import toolTerm from "$/tools/term/mod.ts";
 import toolLLM from "$/tools/llm/mod.ts";
+import toolShortcuts from "$/tools/shortcuts/mod.ts";
 // Integrations
 import integrations from "$/integrations/mod.ts";
-// Just a commands
+// Main commands
 import { dash } from "$/commands/dash/mod.ts";
 import { intro } from "$/commands/intro.ts";
 import { setup } from "$/commands/setup/mod.ts";
 import { cfg } from "$/commands/cfg.ts";
+// Constants
 import { logo2 } from "$/strings";
+
+const tools: Array<DxTool> = [
+  toolTunnel,
+  toolVault,
+  toolHyper,
+  toolDB,
+  toolFlow,
+  toolAlias,
+  toolGit,
+  toolClip,
+  toolTerm,
+  toolLLM,
+  toolShortcuts,
+];
+
+const mainCommands: Array<Command<any>> = [
+  dash,
+  intro,
+  setup,
+  cfg,
+];
 
 const dx = new Command()
   .name("dx")
   .usage("[command]")
+  .option("-s, --spotlight", "Run 'dx' in spotlight mode", {
+    default: false,
+  })
   .description(
     "This is a powerful entry point for all developers, significantly\nimproving the developer experience",
   )
-  .action((_options: any, ..._args: any) => {
-    console.log(logo2);
-    dx.showHelp();
-    Deno.exit();
-  })
-  // tools
-  .command(toolTunnel.tool.getName(), toolTunnel.tool)
-  .command(toolVault.tool.getName(), toolVault.tool)
-  .command(toolHyper.tool.getName(), toolHyper.tool)
-  .command(toolDB.tool.getName(), toolDB.tool)
-  .command(toolFlow.tool.getName(), toolFlow.tool)
-  .command(toolAlias.tool.getName(), toolAlias.tool)
-  .command(toolGit.tool.getName(), toolGit.tool)
-  .command(toolClip.tool.getName(), toolClip.tool)
-  .command(toolTerm.tool.getName(), toolTerm.tool)
-  .command(toolLLM.tool.getName(), toolLLM.tool)
-  // integrations
-  .command(integrations.getName(), integrations)
-  // commands
-  .command("dash", dash)
-  .command("intro", intro)
-  .command("cfg", cfg)
-  .command("setup", setup);
+  .action(async (options, ..._args) => {
+    if (options.spotlight) {
+      const spotlightRunner = spotlight.init(tools);
+      await spotlightRunner();
+      Deno.exit();
+    } else {
+      console.log(logo2);
+      dx.showHelp();
+      Deno.exit();
+    }
+  });
+
+// tools
+tools.forEach((tool) => {
+  dx.command(tool.tool.getName(), tool.tool);
+});
+
+// integrations
+dx.command(integrations.getName(), integrations);
+
+// main commands
+mainCommands.forEach((command) => {
+  dx.command(command.getName(), command);
+});
 
 await dx.parse(Deno.args);

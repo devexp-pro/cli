@@ -1,6 +1,6 @@
 import { Command } from "@cliffy/command";
 import { config } from "$/providers/config.ts";
-import { Input } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
+import { Input } from "@cliffy/prompt/input";
 
 import { useFileFlag } from "./utils.ts";
 import { loadFromFile, recordUsageLocal, saveToFile } from "./file.ts";

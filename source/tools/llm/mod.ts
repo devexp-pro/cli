@@ -3,7 +3,7 @@ import { config } from "$/providers/config.ts";
 import zod from "npm:zod@3.24.1"; // вот это костыль
 import { LMStudioClient } from "npm/@lmstudio/sdk";
 import { colors } from "@std/colors";
-import tui from "$/providers/tui.ts";
+import tui from "$/providers/tui/mod.ts";
 import { kv } from "$/repositories/kv.ts";
 
 const setup = new Command()
@@ -20,7 +20,7 @@ const setup = new Command()
   });
 
 const tool = new Command();
-if (config.data.tools.lm.hidden) tool.hidden();
+if (config.data.tools.llm.hidden) tool.hidden();
 tool
   .name("llm")
   .alias("l")

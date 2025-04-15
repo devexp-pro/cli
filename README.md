@@ -11,29 +11,36 @@
   - [Core Team:](#core-team)
   - [License](#license)
 
-
 # About
 
-**DevExp (or simply dx)** is a cloud-native command-line platform that consolidates essential developer tools — tunneling, secrets, git, databases, LLMs, automation — into a cohesive CLI-first experience. Born from years of hands-on software engineering, dx eliminates tool fragmentation and context switching, helping developers focus, build, and ship faster.
+**DevExp (or simply dx)** is a cloud-native command-line platform that
+consolidates essential developer tools — tunneling, secrets, git, databases,
+LLMs, automation — into a cohesive CLI-first experience. Born from years of
+hands-on software engineering, dx eliminates tool fragmentation and context
+switching, helping developers focus, build, and ship faster.
 
-**The Problem**
-Modern developers waste countless hours switching between tools, managing secrets, rewriting workflows, and dealing with repetitive setup.
-Each new tool adds friction — dx turns that friction into flow.
+**The Problem** Modern developers waste countless hours switching between tools,
+managing secrets, rewriting workflows, and dealing with repetitive setup. Each
+new tool adds friction — dx turns that friction into flow.
 
-**The Solution**
-A modular, scriptable CLI ecosystem where everything just works — tunneling, deployments, workflows, secrets, LLMs — with one consistent interface, across local and cloud.
+**The Solution** A modular, scriptable CLI ecosystem where everything just works
+— tunneling, deployments, workflows, secrets, LLMs — with one consistent
+interface, across local and cloud.
 
-Inspired by the elegance of Unix philosophy, the modularity of Terraform, and the power of DevEx thinking.
+Inspired by the elegance of Unix philosophy, the modularity of Terraform, and
+the power of DevEx thinking.
 
 ---
 
 _**✅ Already included in early prototypes:**_
+
 - 🌐 Tunnel: HTTP tunnel management
 - 🧑‍💻 Git: Git profile switching and management
 - 🔐 Vault: Environment variable & secret storage
 - ⚙️ Flow: Process & workflow automation
 
 _**✅ Coming Soon:**_
+
 - Hyper: Deno process/isolates manager
 - DB: CLI DB manager via turso.tech
 - LLM: Unified interface to local/cloud LLMs
@@ -82,15 +89,19 @@ curl -fsSL https://devexp.pro/install-develop.sh | sh
 
 ## 🛠 Tools Manuals
 
-- **[Tunnel](./source/tools/tunnel/MAN.md)** — HTTP tunnels for development and public access.
+- **[Tunnel](./source/tools/tunnel/MAN.md)** — HTTP tunnels for development and
+  public access.
 - **[Vault](./source/tools/vault/MAN.md)** — Centralized secrets management.
-- **[Flow](./source/tools/flow/MAN.md)** — Quickly create and run automation scripts.
+- **[Flow](./source/tools/flow/MAN.md)** — Quickly create and run automation
+  scripts.
 - **[Clip](./source/tools/clip/MAN.md)** — Store text in the cloud clipboard.
-- **[Git](./source/tools/git/MAN.md)** — Git helpers for profile management, repository cloning, and more.
+- **[Git](./source/tools/git/MAN.md)** — Git helpers for profile management,
+  repository cloning, and more.
 
 ---
 
 ## Core Team:
+
 <br>
 <table>
   <tr>
@@ -114,6 +125,5 @@ curl -fsSL https://devexp.pro/install-develop.sh | sh
 <div style="text-align: center; margin-top: 1rem;">
   📌 Stay productive with DevExp! 🚀
 </div>
-
 
 ## [License](./LICENSE)
