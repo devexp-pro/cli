@@ -1,7 +1,28 @@
+type AutocompleteInputItem = {
+  name: string; // имя элемента
+  stringForSearch?: string; // строка для поиска (выводится в списке, если есть вместо name)
+  description?: string; // описание элемента (выводится под списком если элемент выбран)
+  value?: any; // значение элемента (возвращается при выборе, если есть или возвращается name)
+  prefix?: string; // префикс элемента (выводится в списке перед stringForSearch)
+  suffix?: string; // суффикс элемента (выводится в списке после stringForSearch)
+};
+
+type AutocompleteInputList = Array<AutocompleteInputItem>;
+
+type AutocompleteInputOptions = {
+  searchPrompt?: string; // строка, которая отображается перед вводом
+  pageSize?: number; // количество элементов на странице, которое отображается в списке
+};
+
+type AutocompleteInputResult =
+  | { isItem: true; value: any; index: number; exit: false } // выбран элемент
+  | { isItem: false; value: string; index: -1; exit: false } // введенное значение (не соответствует какому-либо элементу)
+  | { isItem: false; value: null; index: -1; exit: true }; // ввод пустой строки/выход
+
 export function autocompleteInput(
-  items: string[],
-  options: { searchPrompt?: string } = {},
-): Promise<string> {
+  items: string[], // -> AutocompleteInputList
+  options: { searchPrompt?: string } = {}, // // -> AutocompleteInputOptions
+): Promise<string> { // -> AutocompleteInputResult
   return new Promise((resolve) => {
     let query = "";
     let selectedIndex = -1;
@@ -105,8 +126,11 @@ export function autocompleteInput(
           const isSelected = inSelectionMode &&
             selectedIndex === absoluteIndex;
 
-          const prefix = isSelected ? " ❯ " : "   ";
-          const line = highlightMatch(pageResults[i], isSelected);
+          const prefix = isSelected ? "❯ " : "  ";
+          const line = highlightMatch(
+            `${pageResults[i]}`,
+            isSelected,
+          );
           Deno.stdout.writeSync(encoder.encode(`${prefix}${line}\n`));
         }
 
