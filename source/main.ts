@@ -2,6 +2,7 @@
 import type { DxTool } from "$/types";
 // Modules
 import { Command } from "@cliffy/command";
+import spotlight from "$/spotlight/mod.ts";
 // Tools
 import toolAlias from "$/tools/alias/mod.ts";
 import toolHyper from "$/tools/hyper/mod.ts";
@@ -38,7 +39,7 @@ const tools: Array<DxTool> = [
   toolShortcuts,
 ];
 
-const mainCommands = [
+const mainCommands: Array<Command<any>> = [
   dash,
   intro,
   setup,
@@ -48,13 +49,22 @@ const mainCommands = [
 const dx = new Command()
   .name("dx")
   .usage("[command]")
+  .option("-s, --spotlight", "Run 'dx' in spotlight mode", {
+    default: false,
+  })
   .description(
     "This is a powerful entry point for all developers, significantly\nimproving the developer experience",
   )
-  .action((_options: any, ..._args: any) => {
-    console.log(logo2);
-    dx.showHelp();
-    Deno.exit();
+  .action(async (options, ..._args) => {
+    if (options.spotlight) {
+      const spotlightRunner = spotlight.init(tools);
+      await spotlightRunner();
+      Deno.exit();
+    } else {
+      console.log(logo2);
+      dx.showHelp();
+      Deno.exit();
+    }
   });
 
 // tools

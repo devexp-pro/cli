@@ -7,6 +7,15 @@ export type SessionData = {
   username: string;
 };
 
+export type SpotlightItem = {
+  tag: string;
+  name: string;
+  stringForSearch?: string;
+  description: string;
+  handler?: () => Promise<any>;
+};
+
 export type DxTool = {
   tool: Command;
+  spotlight?: Array<SpotlightItem>;
 };
