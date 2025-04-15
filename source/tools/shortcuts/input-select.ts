@@ -264,18 +264,15 @@ export function autocompleteInput(
       return true;
     }
 
-    // Асинхронный цикл чтения ввода
-    (async () => {
-      try {
-        while (await readInput()) {
-          // Продолжаем чтение, пока функция возвращает true
-        }
-      } catch (err) {
-        console.error("Error:", err);
-        Deno.stdin.setRaw(false);
-        resolve("");
+    try {
+      while (readInput()) {
+        // Продолжаем чтение, пока функция возвращает true
       }
-    })();
+    } catch (err) {
+      console.error("Error:", err);
+      Deno.stdin.setRaw(false);
+      resolve("");
+    }
   });
 }
 

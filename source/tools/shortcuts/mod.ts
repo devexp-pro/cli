@@ -127,12 +127,12 @@ tool
       // Deno.exit();
 
       const app = await autocompleteInput(Object.keys(apps), {
-        searchPrompt: "Select app",
+        searchPrompt: "input",
       });
 
       // @ts-ignore
       const command = await autocompleteInput(Object.keys(apps[app]), {
-        searchPrompt: `          ${app}`,
+        searchPrompt: `input ${app}`,
       });
 
       // Deno.stdout.writeSync(new TextEncoder().encode("\x1b[0m\x1b[2J\x1b[H")); // Сброс и очистка
