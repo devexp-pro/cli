@@ -135,9 +135,6 @@ tool
         searchPrompt: `input ${app}`,
       });
 
-      // Deno.stdout.writeSync(new TextEncoder().encode("\x1b[0m\x1b[2J\x1b[H")); // Сброс и очистка
-      // Deno.stdout.writeSync(new TextEncoder().encode("\x1b[u\x1b[0m\x1b[J"));
-
       // @ts-ignore
       await apps[app][command]();
       Deno.exit();
