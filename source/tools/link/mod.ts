@@ -8,8 +8,12 @@ tool
   .alias("lk")
   .arguments("")
   .description("Quickly open a link in the browser")
+  .option("-h, --help", "Show help")
   .action(async (options: any, ...args: any) => {
-    tool.showHelp();
+    if (options.help) {
+      // tool.showHelp();
+    }
+
     Deno.exit();
   });
 
