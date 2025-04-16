@@ -16,6 +16,7 @@ import toolTerm from "$/tools/term/mod.ts";
 import toolLLM from "$/tools/llm/mod.ts";
 import toolShortcuts from "$/tools/shortcuts/mod.ts";
 import toolIntegrations from "$/tools/integrations/mod.ts";
+import toolLink from "$/tools/link/mod.ts";
 // Main commands
 import { dash } from "$/commands/dash/mod.ts";
 import { intro } from "$/commands/intro.ts";
@@ -37,6 +38,7 @@ const tools: Array<DxTool> = [
   toolLLM,
   toolShortcuts,
   toolIntegrations,
+  toolLink,
 ];
 
 const mainCommands: Array<Command<any>> = [

@@ -54,6 +54,9 @@ const baseCfg = Tuner.tune({
       shortcuts: {
         hidden: true,
       },
+      link: {
+        hidden: false,
+      },
     },
 
     integrations: {

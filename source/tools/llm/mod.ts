@@ -107,9 +107,9 @@ spotlight.push({
 });
 
 spotlight.push({
-  tag: "cmd",
-  name: "llm ask",
-  stringForSearch: "llm ask",
+  tag: "tool",
+  name: "llm",
+  stringForSearch: "llm",
   description: tool.getDescription(),
   handler: async () => {
     const prompt = await Input.prompt(`Type your prompt:`);
