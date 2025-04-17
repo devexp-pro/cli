@@ -62,6 +62,7 @@ support, and ideas.
 - 📧 **Add your email to wishlist**: [devexp.pro](devexp.pro)
 - 💬 **Join us on Telegram**: [t.me/devexppro](https://t.me/devexppro)
 - [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/U7U41DMKRG)
+- [![Support via Patreon](https://img.shields.io/badge/support-patreon-F96854.svg?logo=patreon)](https://www.patreon.com/devexp)
 - 💸 **Support the project**: Send USDT (TRC20) to
   `TNor9ovj5HDkLJqpyUkze6MMNsM8xDfBTR`
 
