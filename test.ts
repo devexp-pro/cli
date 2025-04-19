@@ -39,7 +39,7 @@ const draw = async () => {
   );
 
   await cleanWriteln(
-    `${colors.red("?:")} ${colors.bgBlue("Show help for some tool ")}`,
+    `${colors.red("¿?")} ${colors.bgBlue("Show help for some tool ")}`,
   );
 
   for (let i = 0; i < size.rows - 3; i++) {
