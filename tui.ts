@@ -219,6 +219,12 @@ export const clearScreen = async () => {
   await writer.write(encoder.encode("\x1b[2J")); // стирание всего экрана
 };
 
+export const cleanPage = () => {
+  const height = Deno.consoleSize().rows;
+  console.log("\n".repeat(height));
+  console.log(`\x1b[${height}A`);
+};
+
 export const clearScreenHard = async () => {
   await writer.write(encoder.encode("\x1b[2J\x1b[H"));
 };

@@ -1,5 +1,6 @@
 import { move } from "@std/fs";
 import {
+  cleanPage,
   cleanWriteln,
   clearChar,
   clearLine,
@@ -42,37 +43,41 @@ const draw = async () => {
     `${colors.red("¿?")} ${colors.bgBlue("Show help for some tool ")}`,
   );
 
-  for (let i = 0; i < size.rows - 3; i++) {
+  for (let i = 0; i < 10; i++) {
     await cleanWriteln(
       `   - строка ${i} ${Math.random()}`,
     );
   }
 };
 
-await draw();
-for await (const key of readKeys()) {
-  if (key.ctrl && key.name === "c") {
-    disable();
-    break;
-  }
+const main = async () => {
+  cleanPage();
 
-  if (key.name === "backspace") {
-    if (inputLine.length > 0) {
-      inputLine = inputLine.slice(0, -1);
-      await draw();
+  await draw();
+
+  for await (const key of readKeys()) {
+    if (key.ctrl && key.name === "c") {
+      disable();
+      break;
     }
-  } else if (key.name === "u" && key.ctrl) {
-    if (inputLine.length > 0) {
-      inputLine = "";
-      await draw();
-    }
-  } else {
-    if (key.type === "char" && key.ctrl === false) {
-      inputLine += key.name;
-      await draw();
+
+    if (key.name === "backspace") {
+      if (inputLine.length > 0) {
+        inputLine = inputLine.slice(0, -1);
+        await draw();
+      }
+    } else if (key.name === "u" && key.ctrl) {
+      if (inputLine.length > 0) {
+        inputLine = "";
+        await draw();
+      }
+    } else {
+      if (key.type === "char" && key.ctrl === false) {
+        inputLine += key.name;
+        await draw();
+      }
     }
   }
-}
+};
 
-// pos = await getCursorPosition();
-console.log("а вот тут уже пишем как раньше");
+await main();
