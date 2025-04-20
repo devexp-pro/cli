@@ -1,6 +1,5 @@
 import luminous from "@vseplet/luminous";
-import { InspectorPage } from "./pages/InspectorPage.ts";
-import { basic, morph } from "@vseplet/morph";
+import { serveFile } from "https://deno.land/std@0.203.0/http/file_server.ts";
 
 const log = new luminous.Logger(
   new luminous.OptionsBuilder().setName("TUNNEL_CLI_INSPECTOR").build(),
@@ -16,9 +15,9 @@ export function serveInspector(port = 5050) {
 
 async function handler(req: Request): Promise<Response> {
   const { pathname } = new URL(req.url);
+
   if (pathname === "/ws") {
     const { socket, response } = Deno.upgradeWebSocket(req);
-    socket.binaryType = "arraybuffer";
     clients.add(socket);
     socket.onclose = () => {
       clients.delete(socket);
@@ -29,14 +28,8 @@ async function handler(req: Request): Promise<Response> {
     };
     return response;
   }
-  return await morph.layout(basic({
-    title: "Tunnel Inspector",
-    alpine: true,
-    htmx: false,
-    bootstrapIcons: false,
-  }))
-    .page("/", InspectorPage)
-    .fetch(req);
+
+  return serveFile(req, `${import.meta.dirname}/inspector.html`);
 }
 
 type InspectorEntry = {
@@ -49,7 +42,6 @@ type InspectorEntry = {
 };
 
 export function postToInspector(entry: InspectorEntry) {
-  log.trc(JSON.stringify(entry));
   const payload = JSON.stringify({
     ...entry,
     time: new Date().toISOString(),
