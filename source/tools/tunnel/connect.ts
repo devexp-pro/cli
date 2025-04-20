@@ -1,4 +1,4 @@
-// source/tools/tunnel/connectTunnel.ts
+// source/tools/tunnel/connect.ts
 
 import { postToInspector } from "./inspector/inspector.ts";
 import { WebSocketTunnelState } from "./state.ts";
@@ -9,69 +9,100 @@ const log = new luminous.Logger(
 );
 
 export function connectTunnel(wsUrl: string, tunnelName: string, port: number) {
-  const ws = new WebSocket(wsUrl);
-  ws.binaryType = "arraybuffer";
+  let ws: WebSocket | null = null;
+  let reconnectAttempts = 0;
+
   const upstreamMap = WebSocketTunnelState.upstreamMap;
 
-  ws.onopen = () => {
-    log.inf(`[cli] ✅ Tunnel connected: ${wsUrl}`);
-    postToInspector({
-      type: "info",
-      source: "cli",
-      message: "Tunnel connected",
-      meta: { tunnelName, port },
-    });
-  };
+  function start() {
+    ws = new WebSocket(wsUrl);
+    ws.binaryType = "arraybuffer";
 
-  ws.onclose = () => log.inf(`[cli] 🔌 Tunnel closed`);
-  ws.onerror = (e) => log.err(`[cli] ❌ Tunnel error`, e);
+    ws.onopen = () => {
+      reconnectAttempts = 0;
+      log.inf(`[cli] ✅ Tunnel connected: ${wsUrl}`);
+      postToInspector({
+        type: "info",
+        source: "cli",
+        message: "Tunnel connected",
+        meta: { tunnelName, port },
+      });
+    };
 
-  ws.onmessage = async (e) => {
-    const raw = e.data instanceof Blob
-      ? new Uint8Array(await e.data.arrayBuffer())
-      : new Uint8Array(e.data);
+    ws.onclose = () => {
+      log.wrn(`[cli] 🔌 Tunnel closed`);
+      reconnect();
+    };
 
-    const newline = raw.indexOf(10);
-    if (newline === -1) {
-      log.wrn("[cli] ⚠️ Received raw WS message without metadata (unexpected)");
-      return;
-    }
+    ws.onerror = (e) => {
+      log.err(`[cli] ❌ Tunnel error`, e);
+      ws?.close();
+    };
 
-    const metaBytes = raw.slice(0, newline);
-    const body = raw.slice(newline + 1);
-    const metaStr = new TextDecoder().decode(metaBytes).trim();
+    ws.onmessage = async (e) => {
+      const raw = e.data instanceof Blob
+        ? new Uint8Array(await e.data.arrayBuffer())
+        : new Uint8Array(e.data);
 
-    let meta: any;
-    try {
-      meta = JSON.parse(metaStr);
-    } catch (err) {
-      log.err(`[cli] ❌ Invalid JSON meta from cloud`, err as {});
-      return;
-    }
+      const newline = raw.indexOf(10);
+      if (newline === -1) {
+        log.wrn(
+          "[cli] ⚠️ Received raw WS message without metadata (unexpected)",
+        );
+        return;
+      }
 
-    postToInspector({
-      type: "ws-message",
-      source: "cli",
-      direction: "cloud-to-local",
-      message: "Cloud ➜ Upstream",
-      meta,
-      body: new TextDecoder().decode(body),
-    });
+      const metaBytes = raw.slice(0, newline);
+      const body = raw.slice(newline + 1);
+      const metaStr = new TextDecoder().decode(metaBytes).trim();
 
-    if (meta.type === "ws-proxy" && meta.clientId && meta.url) {
-      return handleWebSocketProxy(ws, meta, body, port);
-    }
+      let meta: any;
+      try {
+        meta = JSON.parse(metaStr);
+      } catch (err) {
+        log.err(`[cli] ❌ Invalid JSON meta from cloud`, err as {});
+        return;
+      }
 
-    if (meta.clientId && meta.type !== "http") {
-      return handleWebSocketResponse(meta.clientId, body);
-    }
+      postToInspector({
+        type: "ws-message",
+        source: "cli",
+        direction: "cloud-to-local",
+        message: "Cloud ➜ Upstream",
+        meta,
+        body: new TextDecoder().decode(body),
+      });
 
-    if (meta.id && meta.method && meta.url) {
-      return handleHttpRequest(ws, meta, body, port);
-    }
+      if (meta.type === "ws-proxy" && meta.clientId && meta.url) {
+        if (ws) {
+          return handleWebSocketProxy(ws, meta, body, port);
+        } else {
+          log.err("[cli] ❌ WebSocket is null, cannot handle proxy");
+        }
+      }
 
-    log.wrn(`[cli] ⚠️ Unknown meta received`);
-  };
+      if (meta.clientId && meta.type !== "http") {
+        return handleWebSocketResponse(meta.clientId, body);
+      }
+
+      if (meta.id && meta.method && meta.url) {
+        if (ws) {
+          return handleHttpRequest(ws, meta, body, port);
+        } else {
+          log.err("[cli] ❌ WebSocket is null, cannot handle HTTP request");
+        }
+      }
+
+      log.wrn(`[cli] ⚠️ Unknown meta received`);
+    };
+  }
+
+  function reconnect() {
+    reconnectAttempts++;
+    const delay = Math.min(1000 * 2 ** reconnectAttempts, 10000);
+    log.inf(`[cli] 🔄 Reconnecting in ${delay}ms...`);
+    setTimeout(() => start(), delay);
+  }
 
   function handleWebSocketProxy(
     ws: WebSocket,
@@ -221,4 +252,6 @@ export function connectTunnel(wsUrl: string, tunnelName: string, port: number) {
       return new Uint8Array();
     }
   }
+
+  start();
 }
