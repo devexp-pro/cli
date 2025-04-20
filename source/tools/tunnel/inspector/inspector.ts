@@ -9,7 +9,7 @@ let clients = new Set<WebSocket>();
 
 export function serveInspector(port = 5050) {
   log.inf(`Starting Inspector server on port ${port}`);
-  Deno.serve({ port }, handler);
+  Deno.serve({ port: 0 }, handler);
   log.inf(`🔎 Inspector available at http://localhost:${port}`);
 }
 
