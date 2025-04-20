@@ -1,15 +1,35 @@
-import { connect } from "../connect.ts";
-import { WEBSOCKET_URL } from "$/constants";
+import { SERVICE_DOMAIN, WEBSOCKET_URL } from "$/constants";
 import { kv } from "$/repositories/kv.ts";
 import { Command } from "@cliffy/command";
 import { Select } from "@cliffy/prompt/select";
+import luminous from "@vseplet/luminous";
+import { serveInspector } from "$/tools/tunnel/inspector/inspector.ts";
+// Импортируем нашу объединённую функцию connectTunnel
+import { connectTunnel } from "../connect.ts";
 
+const log = new luminous.Logger(
+  new luminous.OptionsBuilder().setName("TUNNEL_CLI").build(),
+);
+
+async function startTunnel(alias: string) {
+  const info = await kv.get(["tool", "tunnel", "list", alias]);
+  const tunnel = info.value as { name: string; port: number };
+  const wsUrl = `${WEBSOCKET_URL}/wss/${tunnel.name}`; // 🔥 по сабдомену
+  const port = tunnel.port;
+
+  connectTunnel(wsUrl, tunnel.name, port);
+
+  log.inf(`🌐 HTTP:  http://${tunnel.name}.${SERVICE_DOMAIN}`);
+  log.inf(`🔌 WS:    ws://${tunnel.name}.${SERVICE_DOMAIN}`);
+}
+
+// CLI action с выбором из KV
 const action = async () => {
   const tunnels = await Array.fromAsync(
     kv.list({ prefix: ["tool", "tunnel", "list"] }),
   );
 
-  const aliasToStart: string = await Select.prompt({
+  const alias = await Select.prompt({
     message: "Please select tunnel:\n",
     options: tunnels.map((entry) => ({
       // @ts-ignore
@@ -19,18 +39,16 @@ const action = async () => {
     })),
   });
 
-  connect(WEBSOCKET_URL, aliasToStart);
+  await startTunnel(alias);
 };
 
+// CLI команда с передачей alias аргументом
 const command = new Command()
   .description("start a tunnel")
   .arguments("<alias:string>")
-  .action(
-    async (_options: any, ...args: any) => {
-      const [alias] = args;
-      connect(WEBSOCKET_URL, alias);
-    },
-  );
+  .action(async (_options: any, alias: string) => {
+    await startTunnel(alias);
+  });
 
 export default {
   command,
