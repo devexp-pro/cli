@@ -1,5 +1,6 @@
 import luminous from "@vseplet/luminous";
 import { serveFile } from "@std/fileserver";
+import { html } from "$/tools/tunnel/inspector/inspector-body.ts";
 
 const log = new luminous.Logger(
   new luminous.OptionsBuilder().setName("TUNNEL_CLI_INSPECTOR").build(),
@@ -29,7 +30,14 @@ async function handler(req: Request): Promise<Response> {
     return response;
   }
 
-  return serveFile(req, `${import.meta.dirname}/inspector.html`);
+  return new Response(
+    html,
+    {
+      headers: {
+        "Content-Type": "text/html",
+      },
+    },
+  ); // serveFile(req, `${import.meta.dirname}/inspector.html`);
 }
 
 type InspectorEntry = {

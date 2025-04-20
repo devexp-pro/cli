@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+export const html = `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -119,44 +119,44 @@
         if (!filters.has(type)) return;
 
         const wrapper = document.createElement("div");
-        wrapper.className = `log-entry ${
+        wrapper.className = \`log-entry \${
           type.startsWith("ws")
             ? "ws"
             : type === "http"
             ? "http"
             : "system"
-        }`;
+        }\`;
 
-        wrapper.innerHTML = `
+        wrapper.innerHTML = \`
         <div class="entry-header">
-          <div><strong>[${type.toUpperCase()}]</strong> ${message}</div>
-          <div>${new Date(time).toLocaleTimeString()}</div>
+          <div><strong>[\${type.toUpperCase()}]</strong> \${message}</div>
+          <div>\${new Date(time).toLocaleTimeString()}</div>
         </div>
-        <div class="dir ${
+        <div class="dir \${
           direction === "cloud-to-local" ? "dir-in" : "dir-out"
         }">
-          ${
+          \${
           direction === "cloud-to-local"
             ? "← Cloud ➜ Upstream"
             : "← Upstream ➜ Cloud"
         }
         </div>
-        ${
+        \${
           meta
-            ? `<details class="entry-meta" open><summary>Meta</summary><pre>${
+            ? \`<details class="entry-meta" open><summary>Meta</summary><pre>\${
               JSON.stringify(meta, null, 2)
-            }</pre></details>`
+            }</pre></details>\`
             : ""
         }
-        ${
+        \${
           body
-            ? `<details class="entry-body" open><summary>Body</summary><pre>${body}</pre></details>`
+            ? \`<details class="entry-body" open><summary>Body</summary><pre>\${body}</pre></details>\`
             : ""
         }
-      `;
+      \`;
 
         document.getElementById("log").prepend(wrapper);
       };
     </script>
   </body>
-</html>
+</html>`;
