@@ -64,21 +64,10 @@ export function connectTunnel(wsUrl: string, tunnelName: string, port: number) {
         return;
       }
 
-      postToInspector({
-        type: "ws-message",
-        source: "cli",
-        direction: "cloud-to-local",
-        message: "Cloud ➜ Upstream",
-        meta,
-        body: new TextDecoder().decode(body),
-      });
-
       if (meta.type === "ws-proxy" && meta.clientId && meta.url) {
-        if (ws) {
-          return handleWebSocketProxy(ws, meta, body, port);
-        } else {
-          log.err("[cli] ❌ WebSocket is null, cannot handle proxy");
-        }
+        if (ws) return handleWebSocketProxy(ws, meta, body, port);
+        log.err("[cli] ❌ WebSocket is null, cannot handle proxy");
+        return;
       }
 
       if (meta.clientId && meta.type !== "http") {
@@ -86,11 +75,9 @@ export function connectTunnel(wsUrl: string, tunnelName: string, port: number) {
       }
 
       if (meta.id && meta.method && meta.url) {
-        if (ws) {
-          return handleHttpRequest(ws, meta, body, port);
-        } else {
-          log.err("[cli] ❌ WebSocket is null, cannot handle HTTP request");
-        }
+        if (ws) return handleHttpRequest(ws, meta, body, port);
+        log.err("[cli] ❌ WebSocket is null, cannot handle HTTP request");
+        return;
       }
 
       log.wrn(`[cli] ⚠️ Unknown meta received`);
@@ -163,7 +150,7 @@ export function connectTunnel(wsUrl: string, tunnelName: string, port: number) {
         source: "cli",
         direction: "local-to-cloud",
         message: "Upstream ➜ Cloud",
-        meta,
+        meta: { clientId },
         body: new TextDecoder().decode(data),
       });
 
@@ -210,6 +197,8 @@ export function connectTunnel(wsUrl: string, tunnelName: string, port: number) {
     port: number,
   ) {
     try {
+      const start = performance.now();
+
       const init: RequestInit = {
         method: meta.method,
         headers: meta.headers,
@@ -217,6 +206,9 @@ export function connectTunnel(wsUrl: string, tunnelName: string, port: number) {
       };
 
       const resp = await fetch(`http://localhost:${port}${meta.url}`, init);
+      const end = performance.now();
+
+      const duration = end - start;
       const respBody = new Uint8Array(await resp.arrayBuffer());
       const headers: Record<string, string> = {};
       resp.headers.forEach((v, k) => (headers[k] = v));
@@ -231,6 +223,32 @@ export function connectTunnel(wsUrl: string, tunnelName: string, port: number) {
       full.set(metaBytes);
       full.set(respBody, metaBytes.length);
       ws.send(full);
+      postToInspector({
+        type: "http",
+        source: "cli",
+        direction: "local-to-cloud",
+        message: "Upstream ➜ Cloud",
+        meta: {
+          id: meta.id,
+          status: resp.status,
+          headers,
+          method: meta.method,
+          url: meta.url,
+        },
+        body: new TextDecoder().decode(respBody),
+      });
+      postToInspector({
+        type: "http",
+        source: "cli",
+        direction: "cloud-to-local",
+        message: "Cloud ➜ Upstream",
+        meta: {
+          ...meta,
+          __port: port,
+          __duration: duration,
+        },
+        body: new TextDecoder().decode(body),
+      });
 
       log.inf(`[cli] ⬅️ HTTP response sent (id=${meta.id})`);
     } catch (err) {
