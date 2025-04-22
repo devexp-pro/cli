@@ -237,6 +237,11 @@ export function connectTunnel(wsUrl: string, tunnelName: string, port: number) {
         },
         body: new TextDecoder().decode(respBody),
       });
+      const requestHeaders: Record<string, string> = {};
+      for (const [k, v] of Object.entries(meta.headers || {})) {
+        requestHeaders[k] = v as string;
+      }
+
       postToInspector({
         type: "http",
         source: "cli",
@@ -244,6 +249,7 @@ export function connectTunnel(wsUrl: string, tunnelName: string, port: number) {
         message: "Cloud ➜ Upstream",
         meta: {
           ...meta,
+          headers: requestHeaders,
           __port: port,
           __duration: duration,
         },

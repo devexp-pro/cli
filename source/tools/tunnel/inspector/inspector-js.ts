@@ -12,6 +12,18 @@ export const js = /* js */ `
     return 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2);
   }
 
+  function generateCurl(meta, body) {
+    const method = meta.method;
+    const url = \`http://localhost:\${meta.__port || 3000}\${meta.url}\`;
+    const headers = Object.entries(meta.headers || {})
+      .map(([k, v]) => \`-H "\${k}: \${v}"\`)
+      .join(" ");
+    const bodyArg = (method !== "GET" && method !== "HEAD")
+      ? \`--data '\${body}'\`
+      : "";
+    return \`curl -X \${method} \${headers} \${bodyArg} "\${url}"\`.trim();
+  }
+
   ws.onmessage = (e) => {
     const { type, meta, body, time, direction } = JSON.parse(e.data);
 
@@ -89,9 +101,15 @@ export const js = /* js */ `
 
       const method = httpStore[id].req?.meta?.method || "?";
       const url = httpStore[id].req?.meta?.url || "?";
-      const status = httpStore[id].res?.meta?.status || "...";
+      const status = httpStore[id].res?.meta?.status;
       const isRetry = id.startsWith("__retry__");
-      item.innerHTML = \`[\${isRetry ? "RETRY " : ""}\${method}] \${url} <span style="float:right;">\${status}</span>\`;
+
+      const statusIcon =
+        status >= 400 ? "🔴" :
+        status >= 300 ? "🟡" :
+        status >= 200 ? "🟢" : "...";
+
+      item.innerHTML = \`[\${isRetry ? "RETRY " : ""}\${method}] \${url} <span style="float:right;">\${statusIcon} \${status || "..."}</span>\`;
 
       if (item.classList.contains("active") || isRetry) {
         document.querySelectorAll(".item").forEach(el => el.classList.remove("active"));
@@ -133,47 +151,98 @@ export const js = /* js */ `
       return;
     }
 
-  const reqHeaders = Object.entries(req.meta.headers || {}).map(([k, v]) =>
-  \`<tr><td>\${k}</td><td>\${v}</td></tr>\`
-).join("");
+    const reqHeaders = Object.entries(req.meta.headers || {}).map(([k, v]) =>
+      \`<tr><td>\${k}</td><td>\${v}</td></tr>\`
+    ).join("");
 
-const reqSection = \`
-  <div class="log-entry">
-    <div><b>[\${req.meta.method}]</b> \${req.meta.url}</div>
-    <div class="dir dir-in">← Cloud ➜ Upstream</div>
-    <table>\${reqHeaders}</table>
-    <pre>\${req.body}</pre>
-    \${req.meta.__duration ? \`<small>⏱ Duration: \${req.meta.__duration.toFixed(1)}ms</small>\` : ""}
-  </div>
-\`;
+    const curlCmd = generateCurl(req.meta, req.body);
+
+    const reqSection = \`
+      <div class="log-entry">
+        <div><b>[\${req.meta.method}]</b> \${req.meta.url}</div>
+        <div class="dir dir-in">← Cloud ➜ Upstream</div>
+        <table>\${reqHeaders}</table>
+        <pre>\${req.body}</pre>
+        \${req.meta.__duration ? \`<small>⏱ Duration: \${req.meta.__duration.toFixed(1)}ms</small>\` : ""}
+        <div class="curl-copy">
+          <input type="text" class="curl-input" value="\${curlCmd.replace(/"/g, '&quot;')}" readonly>
+          <button class="copy-btn" data-cmd="\${curlCmd.replace(/"/g, '&quot;')}" onclick="copyCurl(event)">📋 Copy</button>
+        </div>
+      </div>
+    \`;
 
     let resSection = "";
     if (res) {
       const headers = Object.entries(res.meta.headers || {}).map(([k, v]) =>
         \`<tr><td>\${k}</td><td>\${v}</td></tr>\`
       ).join("");
+
+      let statusClass = "";
+      if (res.meta.status >= 400) statusClass = "error";
+      else if (res.meta.status >= 300) statusClass = "warn";
+      else if (res.meta.status >= 200) statusClass = "ok";
+
       resSection = \`
-        <div class="log-entry">
+        <div class="log-entry \${statusClass}">
           <div><b>Status:</b> \${res.meta.status}</div>
           <div class="dir dir-out">← Upstream ➜ Cloud</div>
           <table>\${headers}</table>
           <pre>\${res.body}</pre>
         </div>
       \`;
-    } else {
-      resSection = \`
-        <div class="log-entry">
-          <div><i>Waiting for response...</i></div>
-        </div>
-      \`;
     }
 
     const retry = (res && req.meta?.__port) ? \`
       <button class="retry-btn" onclick='toggleEditor(\${JSON.stringify(JSON.stringify({ meta: req.meta, body: req.body }))})'>
-        Edit & Retry
+        ✏️ Edit & Retry
       </button>\` : "";
 
-    details.innerHTML = reqSection + resSection + retry;
+    details.innerHTML = reqSection + (resSection || "") + retry;
+  }
+
+  window.copyCurl = function(event) {
+    const cmd = event.currentTarget.dataset.cmd;
+    if (!cmd) return showToast("Nothing to copy");
+    
+    // Try using the Clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(cmd)
+        .then(() => showToast("Copied curl!"))
+        .catch(err => {
+          fallbackCopy(cmd);
+        });
+    } else {
+      // Fallback for browsers that don't support Clipboard API
+      fallbackCopy(cmd);
+    }
+  };
+
+  function fallbackCopy(text) {
+    // Create a temporary textarea element
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    
+    // Make it non-editable to avoid focus and make it position outside the screen
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px';
+    
+    document.body.appendChild(textarea);
+    
+    // Check if document has selection capability
+    if (document.selection) {
+      // For IE
+      textarea.select();
+      document.execCommand('copy');
+    } else if (window.getSelection) {
+      // For modern browsers
+      textarea.select();
+      textarea.setSelectionRange(0, 99999); // For mobile devices
+      document.execCommand('copy');
+    }
+    
+    document.body.removeChild(textarea);
+    showToast("Copied curl!");
   }
 
   window.toggleEditor = function(payloadJson) {
@@ -195,10 +264,8 @@ const reqSection = \`
     try {
       const meta = JSON.parse(textareas[0].value);
       const body = textareas[1].value;
-
-      // Создаем новый ID для запроса retry
       const retryId = "__retry__" + generateUniqueId();
-      meta.id = retryId;  // Убедимся, что ID в meta совпадает с ID в httpStore
+      meta.id = retryId;
 
       httpStore[retryId] = {
         req: {

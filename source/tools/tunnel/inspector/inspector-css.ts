@@ -133,4 +133,49 @@ td {
   border-bottom: 1px solid #333;
   vertical-align: top;
 }
+/* Status Highlighting */
+.log-entry.ok {
+  border-left: 4px solid #00ff80;
+}
+.log-entry.warn {
+  border-left: 4px solid #ffaa00;
+}
+.log-entry.error {
+  border-left: 4px solid #ff4444;
+}
+.curl-copy {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+.curl-input {
+  flex: 1;
+  background: #111;
+  color: #eee;
+  border: 1px solid #444;
+  padding: 0.4rem;
+  font-family: monospace;
+  border-radius: 4px 0 0 4px;
+  cursor: text;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.curl-input:focus {
+  outline: none;
+  border-color: #00ff80;
+  box-shadow: 0 0 0 1px #00ff8033;
+}
+.copy-btn {
+  background: #444;
+  border: none;
+  color: white;
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  border-radius: 0 4px 4px 0;
+  white-space: nowrap;
+}
+.copy-btn:hover {
+  background: #555;
+}
 `;
