@@ -27,6 +27,7 @@ async function handler(req: Request): Promise<Response> {
   if (pathname === "/__replay__" && req.method === "POST") {
     try {
       const { meta, body } = await req.json();
+      if (!meta.id) meta.id = "__retry__" + crypto.randomUUID();
       const port = meta.__port || 3000;
 
       const init: RequestInit = {
@@ -36,24 +37,33 @@ async function handler(req: Request): Promise<Response> {
       };
 
       const retryUrl = `http://localhost:${port}${meta.url}`;
+      const start = performance.now();
       const retryResp = await fetch(retryUrl, init);
       const retryBody = await retryResp.text();
+      const end = performance.now();
+      const duration = end - start;
 
+      // Отправляем запрос в инспектор
       postToInspector({
         type: "http",
         source: "inspector",
         direction: "cloud-to-local",
         message: "Retry ➜ Upstream",
-        meta,
+        meta: {
+          ...meta,
+          __duration: duration,
+        },
         body,
       });
 
+      // Отправляем ответ в инспектор
       postToInspector({
         type: "http",
         source: "inspector",
         direction: "local-to-cloud",
         message: "Upstream ➜ Retry Response",
         meta: {
+          id: meta.id, // Используем тот же ID что и для запроса
           status: retryResp.status,
           headers: Object.fromEntries(retryResp.headers.entries()),
           method: meta.method,
