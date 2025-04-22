@@ -169,7 +169,7 @@ h2.pulsing {
         const block = document.createElement("div");
         block.className = "message-block ws";
         block.innerHTML = \`<pre>\${body}</pre>\`;
-        messagesEl.appendChild(block);
+        messagesEl.prepend(block);
         return;
       }
 
