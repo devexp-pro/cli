@@ -1,5 +1,6 @@
 import luminous from "@vseplet/luminous";
 import { html } from "$/tools/tunnel/inspector/inspector-body.ts";
+import { WebSocketTunnelState } from "$/tools/tunnel/state.ts";
 
 const log = new luminous.Logger(
   new luminous.OptionsBuilder().setName("TUNNEL_INSPECTOR").build(),
@@ -15,7 +16,11 @@ export function serveInspector(port = 5050) {
 
 async function handler(req: Request): Promise<Response> {
   const { pathname } = new URL(req.url);
-
+  if (pathname === "/tunnel-stats") {
+    return new Response(JSON.stringify(WebSocketTunnelState.tunnelStats), {
+      headers: { "Content-Type": "application/json" },
+    });
+  }
   if (pathname === "/ws") {
     const { socket, response } = Deno.upgradeWebSocket(req);
     clients.add(socket);
@@ -85,7 +90,14 @@ async function handler(req: Request): Promise<Response> {
 }
 
 type InspectorEntry = {
-  type: "http" | "info" | "error" | "ws-init" | "ws-message" | "ws-close";
+  type:
+    | "http"
+    | "info"
+    | "error"
+    | "ws-init"
+    | "ws-message"
+    | "ws-close"
+    | "tunnel-stats";
   source: string;
   message: string;
   meta?: any;

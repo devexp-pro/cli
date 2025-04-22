@@ -9,6 +9,43 @@ body {
   color: #eee;
   height: 100vh;
 }
+  .tunnel-stats {
+  background: #111;
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  border-bottom: 1px solid #333;
+}
+.stats-card {
+  background: #222;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  min-width: 150px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.3);
+}
+.stats-card h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #888;
+}
+.stats-card p {
+  margin: 0.2rem 0 0;
+  font-size: 1.1rem;
+}
+.stats-active {
+  color: #00ff80;
+  font-weight: bold;
+}
+.stats-inactive {
+  color: #ff4444;
+  font-weight: bold;
+}
+.stats-loading {
+  color: #888;
+  font-style: italic;
+}
 h2 {
   background: #111;
   color: #00ff80;

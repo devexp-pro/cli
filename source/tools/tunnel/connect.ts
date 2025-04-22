@@ -13,7 +13,15 @@ export function connectTunnel(wsUrl: string, tunnelName: string, port: number) {
   let reconnectAttempts = 0;
 
   const upstreamMap = WebSocketTunnelState.upstreamMap;
-
+  WebSocketTunnelState.tunnelStats = {
+    active: false,
+    accessible: false,
+    connectedUsers: 0,
+    tunnelName: tunnelName,
+    port: port,
+    startTime: Date.now(),
+    url: wsUrl,
+  };
   function start() {
     ws = new WebSocket(wsUrl);
     ws.binaryType = "arraybuffer";
@@ -21,16 +29,30 @@ export function connectTunnel(wsUrl: string, tunnelName: string, port: number) {
     ws.onopen = () => {
       reconnectAttempts = 0;
       log.inf(`[cli] ✅ Tunnel connected: ${wsUrl}`);
+      // Обновить статус туннеля
+      WebSocketTunnelState.tunnelStats.active = true;
+      WebSocketTunnelState.tunnelStats.accessible = true;
       postToInspector({
         type: "info",
         source: "cli",
         message: "Tunnel connected",
         meta: { tunnelName, port },
       });
+
+      // Периодически проверять доступность и отправлять статистику
+      setupTunnelStatsReporting(ws!);
     };
 
     ws.onclose = () => {
       log.wrn(`[cli] 🔌 Tunnel closed`);
+      WebSocketTunnelState.tunnelStats.active = false;
+      WebSocketTunnelState.tunnelStats.accessible = false;
+      postToInspector({
+        type: "tunnel-stats",
+        source: "cli",
+        message: "Tunnel stats updated",
+        meta: WebSocketTunnelState.tunnelStats,
+      });
       reconnect();
     };
 
@@ -275,6 +297,55 @@ export function connectTunnel(wsUrl: string, tunnelName: string, port: number) {
       log.wrn(`[cli] ❓ Unknown data type: ${typeof data}`);
       return new Uint8Array();
     }
+  }
+  function setupTunnelStatsReporting(ws: WebSocket) {
+    const checkInterval = setInterval(() => {
+      if (ws.readyState !== WebSocket.OPEN) {
+        clearInterval(checkInterval);
+        return;
+      }
+
+      // Проверить доступность туннеля
+      checkTunnelAccessibility().then((accessible) => {
+        WebSocketTunnelState.tunnelStats.accessible = accessible;
+        WebSocketTunnelState.tunnelStats.lastChecked = Date.now();
+
+        // Получить количество подключений (может быть запрос к серверу)
+        fetchConnectedUsers().then((count) => {
+          WebSocketTunnelState.tunnelStats.connectedUsers = count;
+
+          // Отправить обновленную статистику в инспектор
+          postToInspector({
+            type: "tunnel-stats",
+            source: "cli",
+            message: "Tunnel stats updated",
+            meta: WebSocketTunnelState.tunnelStats,
+          });
+        });
+      });
+    }, 10000); // Проверка каждые 10 секунд
+  }
+
+  // Вспомогательная функция для проверки доступности
+  async function checkTunnelAccessibility(): Promise<boolean> {
+    try {
+      // Используем pingUrl вместо wsUrl для HTTP-проверки
+      const pingUrl = wsUrl.replace("ws://", "http://").replace(
+        "wss://",
+        "https://",
+      );
+      const response = await fetch(pingUrl, { method: "HEAD" });
+      return response.ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Функция для получения количества подключенных пользователей
+  async function fetchConnectedUsers(): Promise<number> {
+    // В реальном сценарии это мог бы быть запрос к серверу туннеля
+    // Для простоты используем размер upstreamMap как приближение
+    return upstreamMap.size;
   }
 
   start();

@@ -10,6 +10,12 @@ export const html = `<!DOCTYPE html>
 </head>
 <body>
   <h2>📡 Tunnel Inspector</h2>
+  
+
+  <div class="tunnel-stats" id="tunnel-stats">
+    <div class="stats-loading">Loading tunnel status...</div>
+  </div>
+  
   <div class="container">
     <div class="sidebar" id="sidebar"></div>
     <div class="details" id="details">Click a client/request to view details</div>

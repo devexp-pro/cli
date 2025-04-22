@@ -3,10 +3,12 @@ export const js = /* js */ `
   const sidebar = document.getElementById("sidebar");
   const details = document.getElementById("details");
   const toast = document.getElementById("toast");
+  const tunnelStats = document.getElementById("tunnel-stats");
 
   const ws = new WebSocket("ws://" + location.host + "/ws");
   const clients = {};
   const httpStore = {};
+  let statsUpdateInterval;
 
   function generateUniqueId() {
     return 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2);
@@ -26,6 +28,11 @@ export const js = /* js */ `
 
   ws.onmessage = (e) => {
     const { type, meta, body, time, direction } = JSON.parse(e.data);
+
+    if (type === "tunnel-stats" && meta) {
+      updateTunnelStatsUI(meta);
+      return;
+    }
 
     if (type === "ws-message" && meta?.clientId) {
       const id = meta.clientId;
@@ -118,6 +125,88 @@ export const js = /* js */ `
       }
     }
   };
+
+  // Функция обновления UI статистики туннеля
+  function updateTunnelStatsUI(stats) {
+    const activeStatus = stats.active ? 
+      '<span class="stats-active">ACTIVE</span>' : 
+      '<span class="stats-inactive">INACTIVE</span>';
+    
+    const accessibleStatus = stats.accessible ? 
+      '<span class="stats-active">ACCESSIBLE</span>' : 
+      '<span class="stats-inactive">INACCESSIBLE</span>';
+    
+    tunnelStats.innerHTML = \`
+      <div class="stats-card">
+        <h4>Tunnel Status</h4>
+        <p>\${activeStatus}</p>
+      </div>
+      <div class="stats-card">
+        <h4>Accessibility</h4>
+        <p>\${accessibleStatus}</p>
+      </div>
+      <div class="stats-card">
+        <h4>Connected Users</h4>
+        <p>\${stats.connectedUsers}</p>
+      </div>
+      <div class="stats-card">
+        <h4>Tunnel Name</h4>
+        <p>\${stats.tunnelName || 'N/A'}</p>
+      </div>
+      <div class="stats-card">
+        <h4>Local Port</h4>
+        <p>\${stats.port || 'N/A'}</p>
+      </div>
+    \`;
+    
+    if (stats.url) {
+      tunnelStats.innerHTML += \`
+        <div class="stats-card" style="flex-grow: 1;">
+          <h4>URL</h4>
+          <p>\${stats.url}</p>
+        </div>
+      \`;
+    }
+    
+    if (stats.startTime) {
+      const uptime = Math.floor((Date.now() - stats.startTime) / 1000);
+      const hours = Math.floor(uptime / 3600);
+      const minutes = Math.floor((uptime % 3600) / 60);
+      const seconds = uptime % 60;
+      
+      tunnelStats.innerHTML += \`
+        <div class="stats-card">
+          <h4>Uptime</h4>
+          <p>\${hours}h \${minutes}m \${seconds}s</p>
+        </div>
+      \`;
+    }
+  }
+
+  // Запустить периодический опрос статистики
+  function startStatsPolling() {
+    // Сначала получим данные сразу
+    fetchTunnelStats();
+    
+    // Затем настроим интервал обновления
+    statsUpdateInterval = setInterval(fetchTunnelStats, 5000);
+  }
+
+  // Функция для получения статистики туннеля
+  function fetchTunnelStats() {
+    fetch("/tunnel-stats")
+      .then(res => res.json())
+      .then(stats => {
+        updateTunnelStatsUI(stats);
+      })
+      .catch(err => {
+        tunnelStats.innerHTML = '<div class="stats-loading">Failed to load tunnel stats</div>';
+        console.error("Failed to fetch tunnel stats:", err);
+      });
+  }
+
+  // Инициализировать получение статистики при загрузке страницы
+  startStatsPolling();
 
   function showClientMessages(id, item = null) {
     if (item) {
