@@ -1,7 +1,7 @@
 import { Command } from "@cliffy/command";
 
-export const update = new Command()
-  .description("Update the CLI")
+export const subscription = new Command()
+  .description("Manage your subscription")
   .action(async () => {
     Deno.exit(0);
   });

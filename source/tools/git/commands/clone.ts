@@ -3,6 +3,7 @@ import { kv } from "$/repositories/kv.ts";
 import { GitProfile } from "$/tools/git/types.ts";
 import { shelly } from "@vseplet/shelly";
 import { Select } from "@cliffy/prompt";
+import { time } from "node:console";
 
 const action = async (repoUrl: string) => {
   const profiles = await Array.fromAsync(
@@ -52,6 +53,7 @@ const inlineAction = async (slug: string, repoUrl: string) => {
     env: {
       GIT_SSH_COMMAND: `ssh -i ${profile?.value?.keyPath}`,
     },
+    timeout: 60 * 60, // 60 минут
   });
 
   if (res.code !== 0) {

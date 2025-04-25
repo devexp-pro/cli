@@ -1,5 +1,7 @@
 import { Command } from "@cliffy/command";
 import { config } from "$/providers/config.ts";
+import { tool } from "npm/@lmstudio/sdk";
+import { Input } from "@cliffy/prompt/input";
 
 const services: {
   [name: string]: {
@@ -25,9 +27,14 @@ const services: {
   "rate": {
     description: "Exploring (crypto)currencies exchange rates (http://rate.sx)",
     hidden: false,
-    handler: async (request: string) => {
+    handler: async (request: string | undefined) => {
+      let prompt = request;
+      if (prompt == undefined) {
+        prompt = await Input.prompt(`Type currency pair (e.g. BTC/USD):`);
+      }
+
       console.log(
-        await (await fetch(`https://rate.sx/${request}`, {
+        await (await fetch(`https://rate.sx/${prompt}`, {
           headers: {
             "User-Agent": "curl/7.81.0",
           },
@@ -65,6 +72,18 @@ const services: {
   },
 };
 
+const spotlight = [];
+
+for (const [name, service] of Object.entries(services)) {
+  spotlight.push({
+    tag: "its",
+    name: `${name}`,
+    stringForSearch: `integration ${name}`,
+    description: service.description,
+    handler: service["handler"],
+  });
+}
+
 const cmd = new Command();
 if (config.data.integrations.hidden) cmd.hidden();
 cmd
@@ -96,4 +115,7 @@ cmd
     Deno.exit();
   });
 
-export default cmd;
+export default {
+  tool: cmd,
+  spotlight,
+};

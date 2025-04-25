@@ -77,7 +77,9 @@ const chatgpt = {
       end tell
     `;
 
-    return await shelly(["osascript", "-e", script]);
+    console.log(await shelly(["osascript", "-e", script]));
+
+    return;
   },
 };
 
