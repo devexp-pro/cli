@@ -7,6 +7,8 @@ import { config } from "$/providers/config.ts";
 import api from "./api.ts";
 import { addMAN } from "$/helpers";
 
+const spotlight = [];
+
 const createClient = async () => {
   const session = await getSession();
   if (session === null) {
@@ -99,6 +101,18 @@ tool
 
 addMAN(tool);
 
+spotlight.push({
+  tag: "cmd",
+  name: "clip help",
+  stringForSearch: "clip help",
+  description: "Show help for clip tool",
+  handler: async () => {
+    tool.showHelp();
+    Deno.exit();
+  },
+});
+
 export default {
+  spotlight,
   tool,
 };

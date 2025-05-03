@@ -50,16 +50,14 @@ const GroupedEntries = (
       <tr>
         <td colspan="4"><strong>${group}</strong></td>
       </tr>
-      ${
-      groupEntries.map((entry, index) =>
+      ${groupEntries.map((entry, index) =>
         Row({
           index: index + 1,
           key: entry.key,
           value: entry.value,
           versionstamp: entry.versionstamp,
         })
-      )
-    }
+      )}
     `;
   });
 };
@@ -136,7 +134,12 @@ const ListOfEntries = island<{ interval: number }, { entries: null }>({
             <th scope="col">versionstamp</th>
           </tr>
         </thead>
-        <tbody ${rpc.hx.entries()} hx-trigger="load, every ${props.interval}s" hx-target="this" style="overflow-y: auto;">
+        <tbody
+          ${rpc.hx.entries()}
+          hx-trigger="load, every ${props.interval}s"
+          hx-target="this"
+          style="overflow-y: auto;"
+        >
         </tbody>
       </table>
     `;
@@ -153,7 +156,15 @@ const ListOfEntries = island<{ interval: number }, { entries: null }>({
 });
 
 const Alert = (type: "success" | "danger" | "warning", message: string) => {
-  return html`<div class="alert alert-${type}" role="alert" _="on load wait 4s then remove me">${message}</div>`;
+  return html`
+    <div
+      class="alert alert-${type}"
+      role="alert"
+      _="on load wait 4s then remove me"
+    >
+      ${message}
+    </div>
+  `;
 };
 
 const SubmitValue = island<
@@ -162,7 +173,8 @@ const SubmitValue = island<
 >({
   template: ({ rpc, props }) => {
     return html`
-      <form ${rpc.hx.submit()} hx-target="#${props.alertsId}" class="form-group">
+      <form ${rpc.hx.submit()} hx-target="#${props
+        .alertsId}" class="form-group">
         <div class="row mb-3">
           <div class="col">
             <label for="key" class="form-label">KEY</label>
@@ -174,7 +186,12 @@ const SubmitValue = island<
           </div>
           <div class="col d-flex flex-column align-items-start">
             <div class="form-check mb-2">
-              <input type="checkbox" name="isJSON" id="isJSON" class="form-check-input" />
+              <input
+                type="checkbox"
+                name="isJSON"
+                id="isJSON"
+                class="form-check-input"
+              />
               <label for="isJSON" class="form-check-label">JSON?</label>
             </div>
             <button type="submit" class="btn btn-primary w-100">Submit</button>
@@ -221,7 +238,9 @@ const EntryPage = component(() => {
       </div>
       <hr class="my-5" />
       <div id="alerts"></div>
-      <button class="btn btn-danger mt-3" hx-post="/clear-db" hx-target="#alerts">Clear Database</button>
+      <button class="btn btn-danger mt-3" hx-post="/clear-db" hx-target="#alerts">
+        Clear Database
+      </button>
     </div>
   `;
 });
