@@ -53,8 +53,6 @@ export const write = async (text: string) => {
 };
 
 export default {
-  clipboard: {
-    read,
-    write,
-  },
+  read,
+  write,
 };

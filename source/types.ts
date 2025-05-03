@@ -15,7 +15,13 @@ export type SpotlightItem = {
   handler?: () => Promise<any>;
 };
 
+export type DxAction = {
+  name: string;
+  description: string;
+  handler: (args: any, options?: any) => Promise<any>;
+};
+
 export type DxTool = {
-  tool: Command;
+  tool: Command<any, any, any, any, any, any, any, any>;
   spotlight?: Array<SpotlightItem>;
 };
