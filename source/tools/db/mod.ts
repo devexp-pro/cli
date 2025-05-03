@@ -1,6 +1,8 @@
 import { Command } from "@cliffy/command";
 import { config } from "$/providers/config.ts";
 
+const spotlight = [];
+
 const tool = new Command();
 if (config.data.tools.db.hidden) tool.hidden();
 tool
@@ -15,6 +17,18 @@ tool
     Deno.exit();
   });
 
+spotlight.push({
+  tag: "cmd",
+  name: "db help",
+  stringForSearch: "db help",
+  description: "Show help for db tool",
+  handler: async () => {
+    tool.showHelp();
+    Deno.exit();
+  },
+});
+
 export default {
+  spotlight,
   tool,
 };

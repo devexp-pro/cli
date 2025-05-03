@@ -10,7 +10,10 @@ const baseCfg = Tuner.tune({
         },
       },
     },
-    providers: {},
+    providers: {
+      log: {},
+      session: {},
+    },
     repositories: {},
     commands: {
       dash: {
@@ -53,6 +56,9 @@ const baseCfg = Tuner.tune({
       },
       shortcuts: {
         hidden: true,
+      },
+      link: {
+        hidden: false,
       },
     },
 

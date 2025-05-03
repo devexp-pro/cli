@@ -24,10 +24,6 @@ export const read = async (): Promise<string | null> => {
   }
 };
 
-export const hello = () => {
-  console.log("Hello!");
-};
-
 export const write = async (text: string) => {
   try {
     const cmd = {

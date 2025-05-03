@@ -10,6 +10,8 @@ import secretCommand from "./commands/secret_commands.ts";
 import inviteCommand from "./commands/invite_commands.ts";
 import integrationCommand from "./commands/integration.ts";
 
+const spotlight: any[] = [];
+
 const tool = new Command();
 if (config.data.tools.vault.hidden) tool.hidden();
 
@@ -29,6 +31,18 @@ tool
 
 addMAN(tool);
 
+spotlight.push({
+  tag: "cmd",
+  name: "vault help",
+  stringForSearch: "vault help",
+  description: "Show help for vault tool",
+  handler: async () => {
+    tool.showHelp();
+    Deno.exit();
+  },
+});
+
 export default {
+  spotlight,
   tool,
 };

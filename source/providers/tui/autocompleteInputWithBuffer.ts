@@ -1,4 +1,4 @@
-type AutocompleteInputItem = {
+export type AutocompleteInputItem = {
   name: string;
   stringForSearch?: string;
   description?: string;
@@ -7,14 +7,14 @@ type AutocompleteInputItem = {
   suffix?: string;
 };
 
-type AutocompleteInputList = Array<AutocompleteInputItem>;
+export type AutocompleteInputList = Array<AutocompleteInputItem>;
 
-type AutocompleteInputOptions = {
+export type AutocompleteInputOptions = {
   searchPrompt?: string;
   pageSize?: number;
 };
 
-type AutocompleteInputResult =
+export type AutocompleteInputResult =
   | { isItem: true; value: any; index: number; exit: false }
   | { isItem: false; value: string; index: -1; exit: false }
   | { isItem: false; value: null; index: -1; exit: true };

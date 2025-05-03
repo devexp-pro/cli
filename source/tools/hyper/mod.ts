@@ -2,6 +2,8 @@ import { Command } from "@cliffy/command";
 import { config } from "$/providers/config.ts";
 import hev from "$/shared-modules/hev/mod.ts";
 
+const spotlight = [];
+
 const add = new Command()
   .name("add")
   .alias("a")
@@ -105,6 +107,18 @@ tool
 
 // addMAN(tool);
 
+spotlight.push({
+  tag: "cmd",
+  name: "hyper help",
+  stringForSearch: "hyper help",
+  description: "Show help for hyper tool",
+  handler: async () => {
+    tool.showHelp();
+    Deno.exit();
+  },
+});
+
 export default {
+  spotlight,
   tool,
 };

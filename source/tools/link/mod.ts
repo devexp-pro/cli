@@ -4,22 +4,26 @@ import { config } from "$/providers/config.ts";
 const spotlight = [];
 
 const tool = new Command();
-if (config.data.tools.db.hidden) tool.hidden();
+if (config.data.tools.link.hidden) tool.hidden();
 tool
-  .name("term")
+  .name("link")
+  .alias("lk")
   .arguments("")
-  .description("Web terminal for remote access (unsafe)")
+  .description("Quickly open a link in the browser")
+  .option("-h, --help", "Show help")
   .action(async (options: any, ...args: any) => {
-    tool.showHelp();
+    if (options.help) {
+      // tool.showHelp();
+    }
 
     Deno.exit();
   });
 
 spotlight.push({
   tag: "cmd",
-  name: "term help",
-  stringForSearch: "term help",
-  description: "Show help for term tool",
+  name: "link help",
+  stringForSearch: "link help",
+  description: "Show help for link tool",
   handler: async () => {
     tool.showHelp();
     Deno.exit();

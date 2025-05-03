@@ -15,8 +15,8 @@ import toolClip from "$/tools/clip/mod.ts";
 import toolTerm from "$/tools/term/mod.ts";
 import toolLLM from "$/tools/llm/mod.ts";
 import toolShortcuts from "$/tools/shortcuts/mod.ts";
-// Integrations
-import integrations from "$/integrations/mod.ts";
+import toolIntegrations from "$/tools/integrations/mod.ts";
+import toolLink from "$/tools/link/mod.ts";
 // Main commands
 import { dash } from "$/commands/dash/mod.ts";
 import { intro } from "$/commands/intro.ts";
@@ -37,9 +37,11 @@ const tools: Array<DxTool> = [
   toolTerm,
   toolLLM,
   toolShortcuts,
+  toolIntegrations,
+  toolLink,
 ];
 
-const mainCommands: Array<Command<any>> = [
+const commands: Array<Command<any>> = [
   dash,
   intro,
   setup,
@@ -72,11 +74,8 @@ tools.forEach((tool) => {
   dx.command(tool.tool.getName(), tool.tool);
 });
 
-// integrations
-dx.command(integrations.getName(), integrations);
-
 // main commands
-mainCommands.forEach((command) => {
+commands.forEach((command) => {
   dx.command(command.getName(), command);
 });
 
