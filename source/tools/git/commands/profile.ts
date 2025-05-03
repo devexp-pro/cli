@@ -5,7 +5,7 @@ import { HOME } from "$/constants";
 import { kv } from "$/repositories/kv.ts";
 import { GitProfile } from "$/tools/git/types.ts";
 import { Table } from "@cliffy/table";
-import clip from "$/tools/clip/api.ts";
+import clipboard from "$/providers/clipboard.ts";
 
 const create = new Command()
   .name("create")
@@ -64,7 +64,7 @@ const create = new Command()
         `  Git profile created successfully, profile public key added to your clipboard:\n\n ${publicKey}`,
       );
 
-      await clip.clipboard.write(publicKey);
+      await clipboard.write(publicKey);
 
       Deno.exit(0);
     } else {
