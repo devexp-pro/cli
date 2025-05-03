@@ -41,7 +41,7 @@ const tools: Array<DxTool> = [
   toolLink,
 ];
 
-const mainCommands: Array<Command<any>> = [
+const commands: Array<Command<any>> = [
   dash,
   intro,
   setup,
@@ -75,7 +75,7 @@ tools.forEach((tool) => {
 });
 
 // main commands
-mainCommands.forEach((command) => {
+commands.forEach((command) => {
   dx.command(command.getName(), command);
 });
 

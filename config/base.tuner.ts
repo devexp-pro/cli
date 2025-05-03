@@ -10,7 +10,10 @@ const baseCfg = Tuner.tune({
         },
       },
     },
-    providers: {},
+    providers: {
+      log: {},
+      session: {},
+    },
     repositories: {},
     commands: {
       dash: {

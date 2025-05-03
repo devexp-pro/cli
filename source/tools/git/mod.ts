@@ -8,6 +8,8 @@ import fix from "./commands/fix.ts";
 import release from "./commands/release.ts";
 import { addMAN } from "$/helpers";
 
+const spotlight = [];
+
 const action = async () => {
   tool.showHelp();
   Deno.exit(0);
@@ -35,7 +37,19 @@ tool
 
 addMAN(tool);
 
+spotlight.push({
+  tag: "cmd",
+  name: "git help",
+  stringForSearch: "git help",
+  description: "Show help for git tool",
+  handler: async () => {
+    tool.showHelp();
+    Deno.exit();
+  },
+});
+
 export default {
+  spotlight,
   tool,
   action,
 };

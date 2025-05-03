@@ -7,6 +7,8 @@ import { Select } from "@cliffy/prompt";
 import { config } from "$/providers/config.ts";
 import { addMAN } from "$/helpers";
 
+const spotlight = [];
+
 // https://www.asciiart.eu/text-to-ascii-art font Pagga
 const tool = new Command();
 if (config.data.tools.tunnel.hidden) tool.hidden();
@@ -51,6 +53,18 @@ tool
 
 addMAN(tool);
 
+spotlight.push({
+  tag: "cmd",
+  name: "tunnel help",
+  stringForSearch: "tunnel help",
+  description: "Show help for tunnel tool",
+  handler: async () => {
+    tool.showHelp();
+    Deno.exit();
+  },
+});
+
 export default {
+  spotlight,
   tool,
 };

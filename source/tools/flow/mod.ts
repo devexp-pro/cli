@@ -6,6 +6,8 @@ import { Select } from "@cliffy/prompt/select";
 import { config } from "$/providers/config.ts";
 import { addMAN } from "$/helpers";
 
+const spotlight = [];
+
 const tool = new Command();
 if (config.data.tools.flow.hidden) tool.hidden();
 
@@ -50,7 +52,19 @@ tool
 
 addMAN(tool);
 
+spotlight.push({
+  tag: "cmd",
+  name: "flow help",
+  stringForSearch: "flow help",
+  description: "Show help for flow tool",
+  handler: async () => {
+    tool.showHelp();
+    Deno.exit();
+  },
+});
+
 export default {
+  spotlight,
   tool,
   action,
 };
