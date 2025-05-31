@@ -14,6 +14,10 @@ const services: {
     description: "UNIX/Linux commands cheat sheets (http://cheat.sh)",
     hidden: false,
     handler: async (request: string) => {
+      if (request == undefined) {
+        request = await Input.prompt(`Type command (e.g. ls):`);
+      }
+
       console.log(
         await (await fetch(`http://cheat.sh/${request}`, {
           headers: {
@@ -47,6 +51,10 @@ const services: {
     description: "Check the weather (https://wttr.in)",
     hidden: false,
     handler: async (request: string = "") => {
+      if (request == undefined) {
+        request = await Input.prompt(`Type city (e.g. Moscow):`);
+      }
+
       console.log(
         await (await fetch(`https://wttr.in/${request}`, {
           headers: {
