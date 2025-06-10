@@ -8,10 +8,9 @@ const log = new luminous.Logger(
 
 let clients = new Set<WebSocket>();
 
-export function serveInspector(port = 5050) {
-  log.inf(`Starting Inspector server on port ${port}`);
-  Deno.serve({ port }, handler);
-  log.inf(`🔎 Inspector available at http://localhost:${port}`);
+export function serveInspector() {
+  const server = Deno.serve({ port: 0 }, handler);
+  log.inf(`🔎 Inspector available at http://localhost:${server.addr.port}`);
 }
 
 async function handler(req: Request): Promise<Response> {
